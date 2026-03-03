@@ -12,3 +12,6 @@
 
 ## Package Management & Environment
 - **`pip` (`requirements.txt`):** Dependency management for the Python environment.
+
+## Testing
+- **pytest & pytest-nbmake:** For automated validation of interactive Jupyter notebooks.
