@@ -26,10 +26,10 @@
     - [ ] Update `book/_toc.yml`
 - [x] Task: Conductor - User Manual Verification 'Phase 3: Python API Executable Examples' (Protocol in workflow.md) [4523efd]
 
-## Phase 4: Quizzes and Exercises
+## Phase 4: Quizzes and Exercises [checkpoint: c1e10ca]
 - [x] Task: Create self-assessment exercises [d8f17be]
     - [ ] Create `book/gee_intro/exercises.md` with Sphinx exercise directives
     - [ ] Add questions related to both JS and Python APIs
 - [x] Task: Include Exercises in TOC [22fb6a4]
     - [ ] Update `book/_toc.yml`
-- [ ] Task: Conductor - User Manual Verification 'Phase 4: Quizzes and Exercises' (Protocol in workflow.md)
+- [x] Task: Conductor - User Manual Verification 'Phase 4: Quizzes and Exercises' (Protocol in workflow.md) [c1e10ca]
