@@ -16,7 +16,7 @@
     - [ ] Update `book/_toc.yml`
 - [x] Task: Conductor - User Manual Verification 'Phase 2: JavaScript Code Editor Examples' (Protocol in workflow.md) [37ec692]
 
-## Phase 3: Python API Executable Examples
+## Phase 3: Python API Executable Examples [checkpoint: 4523efd]
 - [x] Task: Draft Python API interactive notebook [603e034]
     - [ ] Create `book/gee_intro/python_api.ipynb`
     - [ ] Write Python code cells initializing `ee` and visualizing a basic map
@@ -24,7 +24,7 @@
     - [ ] Write test scripts or use `pytest` for notebooks (if configured) to ensure cells run without error
 - [x] Task: Include Python API in TOC [7b674ed]
     - [ ] Update `book/_toc.yml`
-- [ ] Task: Conductor - User Manual Verification 'Phase 3: Python API Executable Examples' (Protocol in workflow.md)
+- [x] Task: Conductor - User Manual Verification 'Phase 3: Python API Executable Examples' (Protocol in workflow.md) [4523efd]
 
 ## Phase 4: Quizzes and Exercises
 - [ ] Task: Create self-assessment exercises
