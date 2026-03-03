@@ -4,5 +4,5 @@ This file tracks all major tracks for the project. Each track has its own detail
 
 ---
 
-- [ ] **Track: Implement introductory Google Earth Engine module**
+- [x] **Track: Implement introductory Google Earth Engine module**
   *Link: [./tracks/gee_intro_20260302/](./tracks/gee_intro_20260302/)*
