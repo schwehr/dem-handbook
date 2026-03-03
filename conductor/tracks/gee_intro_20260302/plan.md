@@ -20,7 +20,7 @@
 - [x] Task: Draft Python API interactive notebook [603e034]
     - [ ] Create `book/gee_intro/python_api.ipynb`
     - [ ] Write Python code cells initializing `ee` and visualizing a basic map
-- [ ] Task: Add testing/validation for the notebook
+- [x] Task: Add testing/validation for the notebook [fc72626]
     - [ ] Write test scripts or use `pytest` for notebooks (if configured) to ensure cells run without error
 - [ ] Task: Include Python API in TOC
     - [ ] Update `book/_toc.yml`
