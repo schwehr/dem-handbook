@@ -22,7 +22,7 @@
     - [ ] Write Python code cells initializing `ee` and visualizing a basic map
 - [x] Task: Add testing/validation for the notebook [fc72626]
     - [ ] Write test scripts or use `pytest` for notebooks (if configured) to ensure cells run without error
-- [ ] Task: Include Python API in TOC
+- [x] Task: Include Python API in TOC [7b674ed]
     - [ ] Update `book/_toc.yml`
 - [ ] Task: Conductor - User Manual Verification 'Phase 3: Python API Executable Examples' (Protocol in workflow.md)
 
