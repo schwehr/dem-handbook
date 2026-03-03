@@ -27,7 +27,7 @@
 - [x] Task: Conductor - User Manual Verification 'Phase 3: Python API Executable Examples' (Protocol in workflow.md) [4523efd]
 
 ## Phase 4: Quizzes and Exercises
-- [ ] Task: Create self-assessment exercises
+- [x] Task: Create self-assessment exercises [d8f17be]
     - [ ] Create `book/gee_intro/exercises.md` with Sphinx exercise directives
     - [ ] Add questions related to both JS and Python APIs
 - [ ] Task: Include Exercises in TOC
