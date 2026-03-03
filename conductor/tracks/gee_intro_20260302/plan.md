@@ -30,6 +30,6 @@
 - [x] Task: Create self-assessment exercises [d8f17be]
     - [ ] Create `book/gee_intro/exercises.md` with Sphinx exercise directives
     - [ ] Add questions related to both JS and Python APIs
-- [ ] Task: Include Exercises in TOC
+- [x] Task: Include Exercises in TOC [22fb6a4]
     - [ ] Update `book/_toc.yml`
 - [ ] Task: Conductor - User Manual Verification 'Phase 4: Quizzes and Exercises' (Protocol in workflow.md)
