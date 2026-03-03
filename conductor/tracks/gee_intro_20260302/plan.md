@@ -12,7 +12,7 @@
 - [x] Task: Draft JS Code Editor content [b92bafa]
     - [ ] Create `book/gee_intro/javascript_api.md`
     - [ ] Write academic theory on the JS API and provide conceptual snippets
-- [ ] Task: Include JS API in TOC
+- [x] Task: Include JS API in TOC [44ba46c]
     - [ ] Update `book/_toc.yml`
 - [ ] Task: Conductor - User Manual Verification 'Phase 2: JavaScript Code Editor Examples' (Protocol in workflow.md)
 
