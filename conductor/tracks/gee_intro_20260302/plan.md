@@ -17,7 +17,7 @@
 - [x] Task: Conductor - User Manual Verification 'Phase 2: JavaScript Code Editor Examples' (Protocol in workflow.md) [37ec692]
 
 ## Phase 3: Python API Executable Examples
-- [ ] Task: Draft Python API interactive notebook
+- [x] Task: Draft Python API interactive notebook [603e034]
     - [ ] Create `book/gee_intro/python_api.ipynb`
     - [ ] Write Python code cells initializing `ee` and visualizing a basic map
 - [ ] Task: Add testing/validation for the notebook
