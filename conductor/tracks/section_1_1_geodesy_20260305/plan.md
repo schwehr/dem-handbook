@@ -15,7 +15,7 @@
 - [x] Task: Write failing test (e.g., verify correct rendering of advanced MyST directives). 0c5eb46
 - [x] Task: Integrate the "Satellite Gravimetry" concept, detailing missions like GRACE and GOCE. 722906f
 - [x] Task: Integrate the "Relativistic Timekeeping" concept and its necessity for modern spatial positioning. 722906f
-- [ ] Task: Conductor - User Manual Verification 'Content Integration - Advanced Concepts' (Protocol in workflow.md)
+- [~] Task: Conductor - User Manual Verification 'Content Integration - Advanced Concepts' (Protocol in workflow.md)
 
 ## Phase 4: Interactive Elements Implementation
 - [ ] Task: Write failing test (e.g., notebook execution test via pytest-nbmake).
