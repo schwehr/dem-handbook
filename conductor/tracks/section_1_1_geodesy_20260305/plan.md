@@ -11,11 +11,11 @@
 - [x] Task: Integrate the "History of Geodesy" section, summarizing the evolution of measurement. 2d63101
 - [x] Task: Conductor - User Manual Verification 'Content Integration - Foundational Concepts' 7983cd1 (Protocol in workflow.md)
 
-## Phase 3: Content Integration - Advanced Concepts
+## Phase 3: Content Integration - Advanced Concepts [checkpoint: f8e46a0]
 - [x] Task: Write failing test (e.g., verify correct rendering of advanced MyST directives). 0c5eb46
 - [x] Task: Integrate the "Satellite Gravimetry" concept, detailing missions like GRACE and GOCE. 722906f
 - [x] Task: Integrate the "Relativistic Timekeeping" concept and its necessity for modern spatial positioning. 722906f
-- [~] Task: Conductor - User Manual Verification 'Content Integration - Advanced Concepts' (Protocol in workflow.md)
+- [x] Task: Conductor - User Manual Verification 'Content Integration - Advanced Concepts' f8e46a0 (Protocol in workflow.md)
 
 ## Phase 4: Interactive Elements Implementation
 - [ ] Task: Write failing test (e.g., notebook execution test via pytest-nbmake).
