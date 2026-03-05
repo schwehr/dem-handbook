@@ -18,7 +18,7 @@
 - [x] Task: Conductor - User Manual Verification 'Content Integration - Advanced Concepts' f8e46a0 (Protocol in workflow.md)
 
 ## Phase 4: Interactive Elements Implementation
-- [ ] Task: Write failing test (e.g., notebook execution test via pytest-nbmake).
+- [x] Task: Write failing test (e.g., notebook execution test via pytest-nbmake). f963f73
 - [ ] Task: Create and embed a Python code cell demonstrating a basic geodetic calculation (e.g., flattening factor or coordinate conversion).
 - [ ] Task: Embed an interactive visualization (e.g., a 3D widget or interactive plot) related to the Geoid or gravity anomalies.
 - [ ] Task: Conductor - User Manual Verification 'Interactive Elements Implementation' (Protocol in workflow.md)
