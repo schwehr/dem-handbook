@@ -5,11 +5,11 @@
 - [x] Task: Scaffold the basic MyST Markdown structure, including the title and top-level headings (e.g., The Shape of the Earth, Gravity Modeling, Relativistic Timekeeping, History). 90ff6ae
 - [x] Task: Conductor - User Manual Verification 'Environment and Setup' a5c0641 (Protocol in workflow.md)
 
-## Phase 2: Content Integration - Foundational Concepts
+## Phase 2: Content Integration - Foundational Concepts [checkpoint: 7983cd1]
 - [x] Task: Write failing test (if applicable for content validation, e.g., link checking or build success) or proceed to implementation. c00c7c6
 - [x] Task: Integrate the "Geoid vs. Ellipsoid" concept from `research/0001-geodesy-earth-shape-and-measurement.md`. 04ff845
 - [x] Task: Integrate the "History of Geodesy" section, summarizing the evolution of measurement. 2d63101
-- [~] Task: Conductor - User Manual Verification 'Content Integration - Foundational Concepts' (Protocol in workflow.md)
+- [x] Task: Conductor - User Manual Verification 'Content Integration - Foundational Concepts' 7983cd1 (Protocol in workflow.md)
 
 ## Phase 3: Content Integration - Advanced Concepts
 - [ ] Task: Write failing test (e.g., verify correct rendering of advanced MyST directives).
