@@ -1,0 +1,8 @@
+{
+  "track_id": "section_1_1_geodesy_20260305",
+  "type": "feature",
+  "status": "new",
+  "created_at": "2026-03-05T00:00:00Z",
+  "updated_at": "2026-03-05T00:00:00Z",
+  "description": "Create chapter 1's section 1.1. Geodesy and the Shape of the Earth as defined in research/dr-outline.md. research/0001-geodesy-earth-shape-and-measurement.md has material on the topic, but please add anything necessary to the material."
+}
