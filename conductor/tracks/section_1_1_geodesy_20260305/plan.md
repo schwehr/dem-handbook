@@ -23,8 +23,8 @@
 - [x] Task: Embed an interactive visualization (e.g., a 3D widget or interactive plot) related to the Geoid or gravity anomalies. 6c08d31
 - [x] Task: Conductor - User Manual Verification 'Interactive Elements Implementation' 4a460dc (Protocol in workflow.md)
 
-## Phase 5: Build and Validation
-- [~] Task: Run the Jupyter Book build process locally to ensure the new section compiles without errors.
-- [ ] Task: Run automated tests (e.g., `pytest-nbmake` for code cells) to verify the Python code executes correctly.
-- [ ] Task: Review the generated HTML to ensure formatting, interactive widgets, and static content render as expected.
-- [ ] Task: Conductor - User Manual Verification 'Build and Validation' (Protocol in workflow.md)
+## Phase 5: Build and Validation [checkpoint: be3f1cc]
+- [x] Task: Run the Jupyter Book build process locally to ensure the new section compiles without errors. be3f1cc
+- [x] Task: Run automated tests (e.g., `pytest-nbmake` for code cells) to verify the Python code executes correctly. be3f1cc
+- [x] Task: Review the generated HTML to ensure formatting, interactive widgets, and static content render as expected. be3f1cc
+- [x] Task: Conductor - User Manual Verification 'Build and Validation' be3f1cc (Protocol in workflow.md)
