@@ -21,7 +21,7 @@
 - [x] Task: Write failing test (e.g., notebook execution test via pytest-nbmake). f963f73
 - [x] Task: Create and embed a Python code cell demonstrating a basic geodetic calculation (e.g., flattening factor or coordinate conversion). 6c08d31
 - [x] Task: Embed an interactive visualization (e.g., a 3D widget or interactive plot) related to the Geoid or gravity anomalies. 6c08d31
-- [ ] Task: Conductor - User Manual Verification 'Interactive Elements Implementation' (Protocol in workflow.md)
+- [~] Task: Conductor - User Manual Verification 'Interactive Elements Implementation' (Protocol in workflow.md)
 
 ## Phase 5: Build and Validation
 - [ ] Task: Run the Jupyter Book build process locally to ensure the new section compiles without errors.
