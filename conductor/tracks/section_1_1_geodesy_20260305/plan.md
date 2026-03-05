@@ -6,7 +6,7 @@
 - [x] Task: Conductor - User Manual Verification 'Environment and Setup' a5c0641 (Protocol in workflow.md)
 
 ## Phase 2: Content Integration - Foundational Concepts
-- [~] Task: Write failing test (if applicable for content validation, e.g., link checking or build success) or proceed to implementation.
+- [x] Task: Write failing test (if applicable for content validation, e.g., link checking or build success) or proceed to implementation. c00c7c6
 - [ ] Task: Integrate the "Geoid vs. Ellipsoid" concept from `research/0001-geodesy-earth-shape-and-measurement.md`.
 - [ ] Task: Integrate the "History of Geodesy" section, summarizing the evolution of measurement.
 - [ ] Task: Conductor - User Manual Verification 'Content Integration - Foundational Concepts' (Protocol in workflow.md)
