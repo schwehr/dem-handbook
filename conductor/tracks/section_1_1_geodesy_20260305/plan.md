@@ -8,7 +8,7 @@
 ## Phase 2: Content Integration - Foundational Concepts
 - [x] Task: Write failing test (if applicable for content validation, e.g., link checking or build success) or proceed to implementation. c00c7c6
 - [x] Task: Integrate the "Geoid vs. Ellipsoid" concept from `research/0001-geodesy-earth-shape-and-measurement.md`. 04ff845
-- [ ] Task: Integrate the "History of Geodesy" section, summarizing the evolution of measurement.
+- [x] Task: Integrate the "History of Geodesy" section, summarizing the evolution of measurement. 2d63101
 - [ ] Task: Conductor - User Manual Verification 'Content Integration - Foundational Concepts' (Protocol in workflow.md)
 
 ## Phase 3: Content Integration - Advanced Concepts
