@@ -4,6 +4,9 @@ format: jb-book
 root: intro.md
 
 parts:
+  - caption: The Geodetic Foundation
+    chapters:
+    - file: ch1_geodetic_foundation/01-01-geodesy.md
   - caption: Google Earth Engine Introduction
     chapters:
     - file: gee_intro/overview.md
