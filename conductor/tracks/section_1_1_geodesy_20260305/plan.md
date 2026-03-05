@@ -12,7 +12,7 @@
 - [x] Task: Conductor - User Manual Verification 'Content Integration - Foundational Concepts' 7983cd1 (Protocol in workflow.md)
 
 ## Phase 3: Content Integration - Advanced Concepts
-- [ ] Task: Write failing test (e.g., verify correct rendering of advanced MyST directives).
+- [x] Task: Write failing test (e.g., verify correct rendering of advanced MyST directives). 0c5eb46
 - [ ] Task: Integrate the "Satellite Gravimetry" concept, detailing missions like GRACE and GOCE.
 - [ ] Task: Integrate the "Relativistic Timekeeping" concept and its necessity for modern spatial positioning.
 - [ ] Task: Conductor - User Manual Verification 'Content Integration - Advanced Concepts' (Protocol in workflow.md)
