@@ -14,9 +14,9 @@
     - [x] Author the introduction to GNSS.
     - [x] Implement detailed descriptions for GPS, GLONASS, and Galileo.
     - [x] Explain L-band signals and their role in measurement.
-- [ ] **Task: Author Trilateration & Visuals**
-    - [ ] Write the conceptual explanation of 3D trilateration.
-    - [ ] **Implement Mermaid Diagrams:** Create at least one diagram showing satellite intersection spheres.
+- [x] **Task: Author Trilateration & Visuals** f66b3bd
+    - [x] Write the conceptual explanation of 3D trilateration.
+    - [x] **Implement Mermaid Diagrams:** Create at least one diagram showing satellite intersection spheres.
 - [ ] **Task: Implement Interactive Elements**
     - [ ] Embed a Python-based interactive widget or a clear placeholder using MyST syntax.
 - [ ] **Task: Conductor - User Manual Verification 'Phase 2: Content Authoring' (Protocol in workflow.md)**
