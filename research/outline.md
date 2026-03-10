@@ -28,21 +28,21 @@ Before we can model the Earth's surface, we must understand its underlying physi
   * Measuring Gravity: Gravimeters, satellite gravity missions (GRACE, GOCE), and how gravity anomalies define the Geoid.
   * Measuring Time: Atomic clocks, relativistic effects, and why precise timekeeping is the bedrock of spatial measurement.
 * **1.2 Global Navigation Satellite Systems (GNSS)**
-  * How GNSS works: Constellations (GPS, GLONASS, Galileo), signals, and trilateration.
-  * Positioning techniques: PPP, RTK, PPK, and network adjustments.
-  * Encoding systems: NMEA, Rinex, Binex.
-  * GNSS Receiver hardware: Options and tradeoffs.
-  * Continuously Operating Reference Station (CORS) Network
-  * Other location systems: Radio beacons, Wifi, Bluetooth, Celltowers, LORAN, etc.
-  * Intertial Navigation Systems (INS): Dead reckoning and improving other systems.
+  * 1.2.1 How GNSS works: Constellations (GPS, GLONASS, Galileo), signals, and trilateration.
+  * 1.2.2 Positioning techniques: PPP, RTK, PPK, and network adjustments.
+  * 1.2.3 Encoding systems: NMEA, Rinex, Binex.
+  * 1.2.4 GNSS Receiver hardware: Options and tradeoffs.
+  * 1.2.5 Continuously Operating Reference Station (CORS) Network
+  * 1.2.6 Other location systems: Radio beacons, Wifi, Bluetooth, cell towers, LORAN, etc.
+  * 1.2.7 Inertial Navigation Systems (INS): Dead reckoning and improving other systems.
 * **1.3 Coordinate Reference Systems & Projections**
-  * Geographic vs. Projected coordinate systems.
-  * Distortion in projections (conformal, equal-area, equidistant) and choosing the right one for your DEM.
+  * 1.3.1 Geographic vs. Projected coordinate systems.
+  * 1.3.2 Distortion in projections (conformal, equal-area, equidistant) and choosing the right one for your DEM.
 * **1.4 Understanding Datums**
-  * Horizontal Datums: NAD83, WGS84, ITRF.
-  * Vertical Datums: Orthometric heights (NAVD88) vs. Ellipsoidal heights. EGM96 versus EGM2008.
-  * Tidal Datums: MLLW, MSL, HAT, and the complexity of the coastal transition zone.
-  * Datum transformations and Geoid models.
+  * 1.4.1 Horizontal Datums: NAD83, WGS84, ITRF.
+  * 1.4.2 Vertical Datums: Orthometric heights (NAVD88) vs. Ellipsoidal heights. EGM96 versus EGM2008.
+  * 1.4.3 Tidal Datums: MLLW, MSL, HAT, and the complexity of the coastal transition zone.
+  * 1.4.4 Datum transformations and Geoid models.
 
 ---
 
@@ -188,4 +188,3 @@ What are the open source packages related to DEMs?
    * Wildlife
    * Ice
  * Sea and water surface w.r.t. DEMs
- 
