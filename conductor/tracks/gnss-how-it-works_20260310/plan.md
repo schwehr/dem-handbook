@@ -26,6 +26,6 @@
     - [x] Verify all technical terms against the geodetic foundations in the research paper.
     - [x] Ensure consistent use of MyST Markdown syntax.
     - [x] Run formatting/linting tools (e.g., `mdformat`) on the new file.
-- [ ] **Task: Cross-Reference & Linkage**
-    - [ ] Update the table of contents or index to include the new subpart.
+- [x] **Task: Cross-Reference & Linkage** 44293cc
+    - [x] Update the table of contents or index to include the new subpart.
 - [ ] **Task: Conductor - User Manual Verification 'Phase 3: Quality Assurance & Integration' (Protocol in workflow.md)**
