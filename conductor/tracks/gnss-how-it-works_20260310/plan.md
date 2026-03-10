@@ -1,7 +1,7 @@
 ### Implementation Plan: GNSS Constellations, Signals, and Trilateration
 
 #### **Phase 1: Research & Scaffolding**
-- [ ] **Task: Review Research Material & Existing Structure**
+- [~] **Task: Review Research Material & Existing Structure**
     - [ ] Analyze `@research/0002-gnss-for-digital-elevation-models.md` for specific technical details on constellations and trilateration.
     - [ ] Review the existing book structure to determine the exact path for the new section.
 - [ ] **Task: Create Section Scaffolding**
