@@ -1,13 +1,13 @@
 ### Implementation Plan: GNSS Constellations, Signals, and Trilateration
 
-#### **Phase 1: Research & Scaffolding**
+#### **Phase 1: Research & Scaffolding** [checkpoint: d1e9aaa]
 - [x] **Task: Review Research Material & Existing Structure** db6b80d
     - [x] Analyze `@research/0002-gnss-for-digital-elevation-models.md` for specific technical details on constellations and trilateration.
     - [x] Review the existing book structure to determine the exact path for the new section.
 - [x] **Task: Create Section Scaffolding** 37f3296
     - [x] Create the new Markdown file `book/ch1_geodetic_foundation/01-02-gnss.md`.
     - [x] Add the MyST header and frontmatter.
-- [ ] **Task: Conductor - User Manual Verification 'Phase 1: Research & Scaffolding' (Protocol in workflow.md)**
+- [x] **Task: Conductor - User Manual Verification 'Phase 1: Research & Scaffolding' (Protocol in workflow.md)**
 
 #### **Phase 2: Content Authoring**
 - [ ] **Task: Draft Constellation & Signal Sections**
