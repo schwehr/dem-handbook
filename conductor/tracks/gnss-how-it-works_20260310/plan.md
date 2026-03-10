@@ -10,10 +10,10 @@
 - [x] **Task: Conductor - User Manual Verification 'Phase 1: Research & Scaffolding' (Protocol in workflow.md)**
 
 #### **Phase 2: Content Authoring**
-- [ ] **Task: Draft Constellation & Signal Sections**
-    - [ ] Author the introduction to GNSS.
-    - [ ] Implement detailed descriptions for GPS, GLONASS, and Galileo.
-    - [ ] Explain L-band signals and their role in measurement.
+- [x] **Task: Draft Constellation & Signal Sections** 52e2e23
+    - [x] Author the introduction to GNSS.
+    - [x] Implement detailed descriptions for GPS, GLONASS, and Galileo.
+    - [x] Explain L-band signals and their role in measurement.
 - [ ] **Task: Author Trilateration & Visuals**
     - [ ] Write the conceptual explanation of 3D trilateration.
     - [ ] **Implement Mermaid Diagrams:** Create at least one diagram showing satellite intersection spheres.
