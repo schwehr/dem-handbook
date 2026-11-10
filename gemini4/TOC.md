@@ -20,10 +20,10 @@ To ensure pedagogical rigor and practical utility, every chapter in this handboo
 # Front Matter
 
 * **[Notation, Coordinate Conventions, and Master Symbol Reference](book/00-front-matter/notation-and-symbols.md):** Unified mathematical notation, coordinate conventions (ECEF, ENU, NED, Body, Sensor), sign conventions (elevation $+z \uparrow$ vs. depth $+d \downarrow$), operators, and disciplinary disambiguations across geodesy, acoustics, photogrammetry, SAR, and statistics.
-* **[GIS, Geodesy, and Hydrography Historical Milestones Timeline](book/00-front-matter/gis-history-timeline.md):** Chronological synthesis anchoring all 35 chapters to `schwehr/gis-history`, spanning antiquity (~3000 BCE Egyptian plumb lines) through the acoustic revolution, space geodesy, open-source GIS, and petabyte cloud-native pipelines.
+* **[GIS, Geodesy, and Hydrography Historical Milestones Timeline](book/00-front-matter/gis-history-timeline.md):** Chronological synthesis anchoring all 35 chapters to `schwehr/gis-history`, spanning antiquity (~2600 BC Egyptian plumb lines) through the acoustic revolution, space geodesy, open-source GIS, and petabyte cloud-native pipelines.
 * **[Acronyms, Abbreviations, and Glossary](book/00-front-matter/acronyms-and-glossary.md):** Exhaustive master glossary defining over 400 specialized terms and standard acronyms across terrestrial and marine geospatial disciplines.
-* **[Master Bibliography and Curated Citation Index](book/00-front-matter/master-bibliography.md):** Deduplicated master catalog of 362 foundational works, international standards (IHO, ASPRS, ISO, OGC, FGDC), and seminal papers cross-referenced across all 35 chapters with verified DOIs and URLs.
-* **[Master Subject, Sensor, and Term Index](book/00-front-matter/master-index.md):** Alphabetical index cross-referencing over 200 foundational concepts, instruments, algorithms, and historical figures to their primary defining handbook sections.
+* **[Master Bibliography and Curated Citation Index](book/00-front-matter/master-bibliography.md):** Deduplicated master catalog of 645 foundational works (545 DOI-verified publications and 100 international standards, manuals, and classical treatises) cross-referenced across all 35 chapters with verified DOIs and URLs.
+* **[Master Subject, Sensor, and Term Index](book/00-front-matter/master-index.md):** Alphabetical index cross-referencing 261 foundational concepts, instruments, standards, algorithms, and historical figures to their defining handbook sections.
 
 ---
 
@@ -98,7 +98,7 @@ To ensure pedagogical rigor and practical utility, every chapter in this handboo
 * Reprojection artifacts in gridded DEMs: nearest-neighbor stair-stepping, bilinear smoothing, cubic overshoot, and non-invertibility of repeated reprojections.
 
 ### 2.3 Custom, Local, and Assumed Datums: What Happens When People Create Their Own Datums?
-* Engineering plant grids, mine coordinates, local construction site "0,0,100" benchmarks, low-distortion projections (LDPs), and ground-level vs. grid-level scaling (combined scale factor $CSF = k_0 \cdot \frac{R}{R+h}$).
+* Engineering plant grids, mine coordinates, local construction site "0,0,100" benchmarks, low-distortion projections (LDPs), and ground-level vs. grid-level scaling (combined scale factor $\text{CSF} = k \cdot \frac{R_\oplus}{R_\oplus + h}$, using the local point scale factor $k$).
 * Missing or broken PROJ/WKT definitions, undocumented false eastings/northings, and U.S. Survey Foot ($1200/3937\text{ m}$) vs. International Foot ($0.3048\text{ m}$) disasters.
 * Reconciling orphan/local surveys with global reference frames.
 
@@ -121,7 +121,7 @@ To ensure pedagogical rigor and practical utility, every chapter in this handboo
 
 ### 2.8 Curated Key References
 * Snyder, J. P. (1987). *Map Projections—A Working Manual*. USGS Professional Paper 1395.
-* Torge, W., & Müller, J. (2012). *Geodesy* (4th ed.). De Gruyter.
+* Torge, W., & Müller, J. (2012). *Geodesy* (4th ed.; 5th ed., 2023 with R. Pail). De Gruyter.
 * Karney, C. F. F. (2013). Algorithms for geodesics. *Journal of Geodesy*, 87(1), 43–55.
 
 ---
@@ -131,7 +131,7 @@ To ensure pedagogical rigor and practical utility, every chapter in this handboo
 
 ### 3.1 What Are Vertical Datums?
 * **Ellipsoidal Heights ($h$):** Purely geometric height above the reference ellipsoid (measured directly by GNSS), where water can flow "uphill."
-* **Geopotential Numbers ($C$) and Gravity Models:** Equipotential surfaces of the Earth's gravity field ($W = U + V$), geoid undulation ($N$), deflection of the vertical ($\xi, \eta$), and global geopotential models (EGM84, EGM96, EGM2008, XGM2019e, GEOID18, GEOID2022).
+* **Geopotential Numbers ($C$) and Gravity Models:** Equipotential surfaces of the Earth's gravity field ($W = V + \Phi_c = U + T$, decomposing gravity potential into gravitational $V$ + centrifugal $\Phi_c$, or normal potential $U$ + disturbing potential $T$), geoid undulation ($N$), deflection of the vertical ($\xi, \eta$), and global geopotential models (EGM84, EGM96, EGM2008, XGM2019e, GEOID18, GEOID2022).
 * **Orthometric ($H$) vs. Normal ($H^*$) vs. Dynamic Heights:** Helmert orthometric height vs. Molodensky normal height; why hydraulic head depends on geopotential rather than geometric height.
 * **Legacy vs. Modern Terrestrial Vertical Datums:** Spirit-leveled datums (NGVD29, NAVD88—and its ~1.5 m coast-to-coast tilt relative to the geoid) vs. gravimetric geoid datums (CGVD2013, NAPGD2022) and dynamic lake datums (IGLD85).
 * **Tidal Datums (Chart Datums):** National Tidal Datum Epoch (NTDE, 18.6-year lunar nodal cycle); Lowest Astronomical Tide (LAT), Mean Lower Low Water (MLLW), Mean Low Water (MLW), Local Mean Sea Level (LMSL), Mean Tide Level (MTL), Mean High Water (MHW), Mean Higher High Water (MHHW), Highest Astronomical Tide (HAT).
@@ -169,7 +169,7 @@ To ensure pedagogical rigor and practical utility, every chapter in this handboo
 ### 3.8 Curated Key References
 * Parker, B. B. (2007). *Tidal Analysis and Prediction*. NOAA Special Publication NOS CO-OPS 3.
 * Pavlis, N. K., et al. (2012). The development and evaluation of the Earth Gravitational Model 2008 (EGM2008). *Journal of Geophysical Research: Solid Earth*, 117(B4).
-* Hess, K. W., et al. (2012). *Application of VDatum to Coastal Elevation Models*. NOAA Technical Report.
+* Hess, K. W., White, S. A., Sellars, J., et al. (2004/2012). *North Carolina Sea Level Rise Project / Application of VDatum to Coastal Elevation Models* (NOAA Technical Memoranda NOS CS 5 / CS 29 / CS 30).
 
 ---
 
@@ -408,8 +408,8 @@ To ensure pedagogical rigor and practical utility, every chapter in this handboo
 * **Wavelength Physics:** Why topographic NIR lasers ($1064\text{ nm}$ or eye-safe $1550\text{ nm}$) are absorbed within millimeters of the water surface, whereas green lasers ($532\text{ nm}$, frequency-doubled Nd:YAG) penetrate the Jerlov coastal/ocean optical window.
 * **Dual-Wavelength & Raman Architecture:** Using $1064\text{ nm}$ + $532\text{ nm}$ (and $647\text{ nm}$ water Raman return) to robustly detect the air-water interface even over glassy calm water (where specular dropout occurs) or whitecaps.
 * **Refraction and Propagation in Water:**
-  * Speed of light slowdown ($v = c / n_w$, with refractive index $n_w \approx 1.334$ depending on temperature, salinity, and wavelength).
-  * Snell's law ray bending at the tilted, wave-roughened water surface ($\sin\theta_{\text{air}} = n_w \sin\theta_{\text{water}}$)—why Palmer conical scanners maintain a constant $\sim 20^\circ$ incidence angle.
+  * Speed of light slowdown ($v_g = c_0 / n_g$, governed by the group refractive index $n_g = n_p - \lambda\frac{\partial n_p}{\partial\lambda} \approx 1.357\text{–}1.365$ at $532\text{ nm}$ rather than the phase index $n_p \approx 1.335\text{–}1.342$, avoiding a $+1.6\%\text{–}1.8\%$ systematic depth bias).
+  * Snell's law ray bending at the tilted, wave-roughened water surface ($n_{\text{air}}\sin\theta_{\text{air}} = n_p \sin\theta_{\text{water}}$, governed by the phase refractive index $n_p$)—why Palmer conical scanners maintain a constant $\sim 15^\circ\text{–}20^\circ$ incidence angle.
 * **The Bathymetric Waveform & Extinction Limits:** Water surface return, Bragg/volume backscatter wedge, and benthic bottom return; Diffuse Attenuation Coefficient ($K_d$) and Secchi depth limits (typically $1.5\text{–}3\times$ Secchi depth, or $K_d d_{\max} \approx 4\text{–}6$).
 * **Very Shallow Water ("White Ribbon") Ambiguity:** Overlapping surface and bottom waveforms when depth $d < 30\text{ cm}$, and forward-scattering beam spreading on the seafloor (which causes a systematic shoal bias on steep slopes).
 
@@ -422,7 +422,7 @@ To ensure pedagogical rigor and practical utility, every chapter in this handboo
 ### 9.5 Mathematical Foundations
 * The LiDAR Range Equation and Full-Waveform Convolution Model:
   $$P_r(t) = P_t(t) * \left[ \frac{D_r^2}{4\pi R^4 \beta_t^2} \sigma_{\text{eff}}(t) \exp\left(-2\int_0^R \alpha(r)\,dr\right) \right] + P_{\text{bg}}$$
-* 3D Refractive Ray-Tracing across a tilted wave facet with upward unit normal $\hat{\mathbf{n}}$ (where $\cos\theta_i = -\hat{\mathbf{v}}_{\text{air}} \cdot \hat{\mathbf{n}} > 0$):
+* 3D Refractive Ray-Tracing across a tilted wave facet with upward unit normal $\hat{\mathbf{n}}$ and relative phase index $n_w = n_p / n_{\text{air}}$ (where $\cos\theta_i = -\hat{\mathbf{v}}_{\text{air}} \cdot \hat{\mathbf{n}} > 0$):
   $$\hat{\mathbf{v}}_{\text{water}} = \frac{1}{n_w}\hat{\mathbf{v}}_{\text{air}} + \left(\frac{1}{n_w}\cos\theta_i - \sqrt{1 - \frac{1}{n_w^2}(1 - \cos^2\theta_i)}\right)\hat{\mathbf{n}}$$
 
 ### 9.6 Software Ecosystem
@@ -435,7 +435,7 @@ To ensure pedagogical rigor and practical utility, every chapter in this handboo
 
 ### 9.8 Curated Key References
 * Shan, J., & Toth, C. K. (Eds.). (2018). *Topographic Laser Ranging and Scanning: Principles and Processing* (2nd ed.). CRC Press.
-* Philpot, W. (2019). *Bathymetric Lidar*. Morgan & Claypool.
+* Philpot, W. (Ed.). (2019). *Airborne Laser Hydrography II*. Cornell University Library eCommons.
 * Wagner, W., et al. (2006). Gaussian decomposition and calibration of a novel small-footprint full-waveform digitising airborne laser scanner. *ISPRS Journal of Photogrammetry and Remote Sensing*, 60(2), 100–112.
 
 ---
@@ -488,7 +488,7 @@ To ensure pedagogical rigor and practical utility, every chapter in this handboo
 * Radar geometry (side-looking slant range) and geometric distortions: foreshortening, layover (where mountain peaks return before bases), and radar shadow.
 * Wavelength penetration: X-band ($\sim 3\text{ cm}$, TanDEM-X, SRTM X-SAR—reflects near top of canopy) vs. C-band ($\sim 5.6\text{ cm}$, SRTM C-band, Sentinel-1) vs. L-band ($\sim 24\text{ cm}$, ALOS PALSAR, NISAR) vs. P-band ($\sim 70\text{ cm}$, ESA Biomass 2025—penetrates dense tropical forest to near-ground) and Polarimetric InSAR (PolInSAR) for separating ground from canopy phase centers.
 * **Single-Pass (Bistatic) vs. Repeat-Pass InSAR:** Why single-pass systems (SRTM, TanDEM-X) eliminate atmospheric water vapor delay and temporal decorrelation to build global DEMs, while repeat-pass InSAR measures millimeter-scale surface deformation ($\Delta z(t)$).
-* Phase wrapping ($\Delta \phi \in [-\pi, \pi)$), height of ambiguity ($h_a = \frac{\lambda R \sin\theta}{2 B_\perp}$), coherence ($\gamma$), and 2D/3D phase unwrapping errors (branch cuts, minimum-cost network flow).
+* Phase wrapping ($\Delta \phi \in [-\pi, \pi)$), height of ambiguity ($h_a = \frac{\lambda R \sin\theta_i}{p B_\perp}$, with $p = 1$ for single-pass bistatic SRTM/TanDEM-X and $p = 2$ for repeat-pass InSAR), coherence ($\gamma$), and 2D/3D phase unwrapping errors (branch cuts, minimum-cost network flow).
 * Radargrammetry (stereo SAR amplitude matching) for steep terrain where phase unwrapping fails.
 
 ### 11.2 Satellite Radar Altimetry and Swath Interferometric Altimetry
@@ -505,7 +505,7 @@ To ensure pedagogical rigor and practical utility, every chapter in this handboo
 ### 11.4 Using Other Data to Help Mapping: Gravity, Magnetics, and Seismic
 * **Marine Bathymetry from Satellite Altimetry Gravity (Smith & Sandwell Method):**
   * How seafloor seamounts, ridges, and trenches create gravitational attraction anomalies that pull ocean water into $1\text{–}20\text{ m}$ sea-surface bumps/troughs measured by radar altimeters.
-  * Downward continuation limitations: upward attenuation of short-wavelength gravity ($\exp(-2\pi k d)$) restricts gravity-predicted bathymetry to wavelengths $\sim 12\text{–}160\text{ km}$ (where lithospheric flexural isostasy takes over), requiring shipboard multibeam soundings to constrain short wavelengths and sediment thickness.
+  * Downward continuation limitations: upward attenuation of short-wavelength gravity ($\exp(-|\mathbf{k}| d) = \exp(-2\pi d / \lambda)$ for angular wavenumber $|\mathbf{k}| = 2\pi / \lambda$) restricts gravity-predicted bathymetry to wavelengths $\sim 12\text{–}160\text{ km}$ (where lithospheric flexural isostasy takes over), requiring shipboard multibeam soundings to constrain short wavelengths and sediment thickness.
 * **Airborne Gravimetry (e.g., NOAA GRAV-D):** Measuring gravity from aircraft to define the $1\text{ cm}$ gravimetric geoid for orthometric height DEMs.
 * **Magnetics and Paleomagnetism:** Using aeromagnetic and marine magnetic anomalies (1797 Humboldt, 1956 Blackett magnetometer, seafloor magnetic stripes, Curie depth) to map depth-to-crystalline-basement, buried volcanic dikes/seamounts, and unexploded ordnance (UXO) / pipelines.
 * **Seismic Reflection, GPR, and Airborne EM:** Ground-Penetrating Radar (GPR) for ice thickness/subglacial bed DEMs and pavement layers; Airborne Electromagnetics (AEM) for depth to bedrock and coastal saltwater intrusion.
@@ -514,8 +514,8 @@ To ensure pedagogical rigor and practical utility, every chapter in this handboo
 * 350 mya / 200 mya oldest seafloor & Jurassic/Cretaceous magnetic quiet zones, 0.78 mya Brunhes-Matuyama reversal, 1797 Humboldt rock magnetization, 1904 Radar beginnings, 1951 SAR concept (Carl Wiley), 1956 Blackett magnetometer, 1960/62 Vine-Matthews-Morley magnetic stripes, 1972 Landsat 1, 1985 GEOSAT, 1988 GMT (Gravity, Magnetics, Topography), 1992 TOPEX/Poseidon, 1997 Smith & Sandwell *Science* paper, 2000 SRTM & EO-1 Hyperion, 2009 WorldView-2, 2014 WorldView-3 & Sentinel-1, 2015 Sentinel-2, 2022 EMIT, 2024 PACE, 2025 Biomass P-band radar.
 
 ### 11.6 Mathematical Foundations
-* InSAR Interferometric Phase to Elevation sensitivity:
-  $$\Delta \phi = -\frac{4\pi}{\lambda} \frac{B_\perp}{R \sin\theta} \Delta z + \Delta \phi_{\text{flat}} + \Delta \phi_{\text{defo}} + \Delta \phi_{\text{atm}} + \Delta \phi_{\text{noise}}$$
+* InSAR Interferometric Phase to Elevation sensitivity ($p = 1$ single-pass bistatic, $p = 2$ repeat-pass):
+  $$\Delta \phi = -\frac{2\pi p}{\lambda} \frac{B_\perp}{R \sin\theta_i} \Delta z + \Delta \phi_{\text{flat}} + \Delta \phi_{\text{defo}} + \Delta \phi_{\text{atm}} + \Delta \phi_{\text{noise}}$$
 * Stumpf (2003) Log-Ratio SDB Equation (insensitive to uniform bottom albedo changes):
   $$z = m_1 \frac{\ln(n R_w(\lambda_{\text{blue}}))}{\ln(n R_w(\lambda_{\text{green}}))} - m_0$$
 * Parker-Oldenburg Fourier relation between Sea-Surface Gravity Anomaly $\Delta g(\mathbf{k})$ and Seafloor Topography $H(\mathbf{k})$ at mean ocean depth $d$:
@@ -659,8 +659,8 @@ To ensure pedagogical rigor and practical utility, every chapter in this handboo
   $$\frac{dh}{\tan\alpha} = a \cos(b - \psi) + \frac{c}{\tan\alpha}$$
 * Robust Accuracy Estimators (Höhle & Höhle 2009):
   $$\text{NMAD} = 1.4826 \cdot \text{median}_j(| \Delta h_j - m_{\Delta h} |)$$
-* Directional slope error variance on a $3\times 3$ Horn/Zevenbergen-Thorne stencil with spatial autocorrelation $\rho(d)$:
-  $$\sigma_{\partial z/\partial x}^2 = \frac{\sigma_z^2}{2 \Delta x^2} (1 - \rho(2\Delta x)), \quad \sigma_{\|\nabla z\|}^2 = \frac{\sigma_z^2}{\Delta x^2} (1 - \rho(2\Delta x))$$
+* Directional slope error variance with spatial autocorrelation $\rho(d)$ for Zevenbergen–Thorne central differences ($\sigma_{p,\text{ZT}}^2$, white-noise $\frac{1}{2}\frac{\sigma_z^2}{\Delta x^2}$) vs. Horn's $3\times 3$ weighted stencil ($\sigma_{p,\text{Horn}}^2$, white-noise $\frac{3}{16}\frac{\sigma_z^2}{\Delta x^2}$):
+  $$\sigma_{p,\text{ZT}}^2 = \frac{\sigma_z^2}{2 \Delta x^2} \big(1 - \rho(2\Delta x)\big), \quad \sigma_{\|\nabla z\|,\text{ZT}}^2 = \frac{\sigma_z^2}{\Delta x^2} \big(1 - \rho(2\Delta x)\big), \quad \sigma_{p,\text{Horn}}^2\Big|_{\rho=0} = \frac{3}{16}\frac{\sigma_z^2}{\Delta x^2}$$
 
 ### 14.6 Software Ecosystem
 * *Open-Source:* `xdem` (Python package for DEM co-registration, bias correction, and heteroscedastic uncertainty), PDAL, CloudCompare (M3C2), HydrOffice QC Tools, SciPy (`fft2`, variograms in `scikit-gstat`).
@@ -709,8 +709,8 @@ To ensure pedagogical rigor and practical utility, every chapter in this handboo
 
 ### 15.7 Mathematical Foundations
 * Minimum Curvature / Spline in Tension PDE (Smith & Wessel 1990):
-  $$(1 - T)\nabla^4 z - T \nabla^2 z = 0$$
-  where tension $T \in [0, 1]$ suppresses artificial spline overshoots/undershoots near steep scarps or canyons.
+  $$(1 - T) L_c^2 \nabla^4 z - T \nabla^2 z = 0$$
+  where characteristic length scale $L_c$ (typically grid spacing $\Delta x$) ensures dimensional homogeneity and tension $T \in [0, 1]$ suppresses artificial spline overshoots/undershoots near steep scarps or canyons.
 * CUBE Bayesian sequential Kalman updating of multiple competing depth hypotheses $h_k$ at a grid node given sounding $z_i$ with propagated vertical variance $\sigma_{z,i}^2$ and horizontal distance $d_i$:
   $$\sigma_{\text{eff},i}^2 = \sigma_{z,i}^2 \left(1 + \left(\frac{d_i + S_{\text{offset}}\sigma_{xy,i}}{S_{\text{scale}}}\right)^\alpha\right)^2$$
 
@@ -1025,8 +1025,8 @@ To ensure pedagogical rigor and practical utility, every chapter in this handboo
 ### 21.5 Mathematical Foundations
 * Morphological Opening Operator $\gamma_B(z) = (z \ominus B) \oplus B$ and Zhang's slope-dependent height threshold:
   $$dh_{T,k} = s (w_k - w_{k-1}) c + dh_0$$
-* Kriging / Gaussian Process Variance Inflation across an occluded building/canopy footprint of diameter $D$:
-  $$\sigma_{\text{DTM}}^2(\mathbf{x}_0) = C(0) - \mathbf{c}^T \mathbf{C}^{-1} \mathbf{c} \xrightarrow{\text{center of void}} \sigma_{\text{sill}}^2 \text{ as } D \gg L_{\text{corr}}$$
+* Kriging / Gaussian Process Variance Inflation across an occluded building/canopy footprint of diameter $D$ (Simple Kriging approaches $\sigma_{\text{sill}}^2$, while Ordinary Kriging adds mean-estimation variance $\big(1 - \mathbf{1}^\top\mathbf{C}^{-1}\mathbf{c}\big)^2 / \big(\mathbf{1}^\top\mathbf{C}^{-1}\mathbf{1}\big)$):
+  $$\sigma_{\text{SK}}^2(\mathbf{x}_0) = C(0) - \mathbf{c}^T \mathbf{C}^{-1} \mathbf{c} \xrightarrow{\text{center of void}} \sigma_{\text{sill}}^2, \quad \sigma_{\text{OK}}^2(\mathbf{x}_0) \xrightarrow{\text{center of void}} \sigma_{\text{sill}}^2 + \frac{1}{\mathbf{1}^\top \mathbf{C}^{-1} \mathbf{1}} \text{ as } D \gg L_{\text{corr}}$$
 
 ### 21.6 Software Ecosystem
 * *Open-Source:* PDAL (`filters.smrf` Simple Morphological Filter, `filters.csf` Cloth Simulation Filter, `filters.pmf`), WhiteboxTools (`RemoveOffTerrainObjects`), CloudCompare, GDAL (`gdal_fillnodata.py`), Kazhdan Screened Poisson (`PoissonRecon`).
@@ -1082,8 +1082,8 @@ To ensure pedagogical rigor and practical utility, every chapter in this handboo
 * 1929 submarine cable breakage by turbidity current, 1973 ATCRBS, 1981 RANSAC, 1998 AIS M.1371-0 specification, 2002 AIS mandated for large ships, 2010 Deepwater Horizon & `libais` by Kurt Schwehr, 2012 WhaleAlert, 2013 *All the Ships* Google I/O & Earth Engine Timelapse, 2015 TensorFlow, 2016 TPU & Global Fishing Watch, 2018 MovingPandas, 2021 TorchGeo, 2022 Dynamic World, 2024 Clay 1.0 foundation model.
 
 ### 22.6 Mathematical Foundations
-* Apparent Elevation Error of a Moving Object (velocity $\mathbf{v} = (v_x, v_y)$) in Along-Track Stereo with time lag $\Delta t = B/v_{\text{sat}}$ and base-to-height ratio $B/H$:
-  $$z_{\text{apparent}} = z_{\text{true}} + \frac{H}{B} v_{\text{along-track}} \Delta t \approx z_{\text{true}} + \frac{v_{\text{along-track}}}{v_{\text{sat}}} H$$
+* Apparent Elevation Error of a Moving Object (velocity $\mathbf{v} = (v_x, v_y)$, with $v_{\text{along-track}} > 0$ in the satellite flight direction) in Along-Track Stereo with time lag $\Delta t \approx B/v_{\text{ground-track}}$ and base-to-height ratio $B/H_{\text{sat}}$:
+  $$z_{\text{apparent}} = z_{\text{true}} - \frac{H_{\text{sat}}}{B} v_{\text{along-track}} \Delta t \approx z_{\text{true}} - \frac{v_{\text{along-track}}}{v_{\text{ground-track}}} H_{\text{sat}}$$
 * M3C2 3D Normal Change Confidence Interval at normal scale $D$ and projection scale $d$ with sample sizes $n_1, n_2$, variances $s_1^2, s_2^2$, and registration uncertainty $\text{reg}$:
   $$\text{LoD}_{95\%}(d) = \pm 1.96 \left( \sqrt{\frac{s_1(d)^2}{n_1} + \frac{s_2(d)^2}{n_2}} + \text{reg} \right)$$
 
@@ -1293,8 +1293,8 @@ To ensure pedagogical rigor and practical utility, every chapter in this handboo
 * 1551 Plane table, 1569 Mercator, 1807 US Coast Survey, 1879 USGS formed, 1884 International Meridian Conference, 1903 GEBCO, 1942 UTM, 1952/1957/1977 Marie Tharp physiographic ocean maps, 1982 PostScript, 1988 GMT, 1991 USGS Alacarte, 1993 PDF 1.0, 2005 *USS San Francisco* grounding, 2011 CalTopo founded.
 
 ### 26.5 Mathematical Foundations
-* Hydrographic Shoal-Safe Contour Offset Constraint: for a raw depth contour $C(z_0) = \{\mathbf{x} : z(\mathbf{x}) = z_0\}$, any smoothed/generalized cartographic contour $\tilde{C}(z_0)$ bounding the safe navigable region $\Omega_{\text{safe}}$ must satisfy the one-sided inequality constraint:
-  $$\forall \mathbf{x} \in \Omega_{\text{safe}}(\tilde{C}(z_0)), \quad z_{\text{depth}}(\mathbf{x}) - \text{TVU}_{95\%}(\mathbf{x}) \ge z_0$$
+* Hydrographic Shoal-Safe Contour Offset Constraint: for a raw positive-downward depth contour $C(d_0) = \{\mathbf{x} : d(\mathbf{x}) = d_0\}$ (equivalent to positive-up IHO S-102 elevation $z(\mathbf{x}) = -d(\mathbf{x})$), any smoothed/generalized cartographic contour $\tilde{C}(d_0)$ bounding the safe navigable region $\Omega_{\text{safe}}$ must satisfy the one-sided inequality constraint:
+  $$\forall \mathbf{x} \in \Omega_{\text{safe}}\big(\tilde{C}(d_0)\big), \quad d(\mathbf{x}) - \text{TVU}_{95\%}(\mathbf{x}) \ge d_0 \iff z(\mathbf{x}) + \text{TVU}_{95\%}(\mathbf{x}) \le -d_0$$
 * Terrain-Relative Navigation (TRN) Bayesian Particle Filter measurement update for particle $k$ with hypothesis pose $\mathbf{x}_k$ and $M$ altimeter/sonar beams $y_m$:
   $$w_k^{(t)} \propto w_k^{(t-1)} \exp\left( -\frac{1}{2}\sum_{m=1}^M \frac{\left(y_m - h_{\text{DEM}}(\mathbf{x}_k, \boldsymbol{\theta}_m)\right)^2}{\sigma_{\text{sensor}}^2 + \sigma_{\text{DEM}}^2(\mathbf{x}_k)} \right)$$
 
@@ -1309,7 +1309,7 @@ To ensure pedagogical rigor and practical utility, every chapter in this handboo
 ### 26.8 Curated Key References
 * Imhof, E. (1982/2007). *Cartographic Relief Presentation*. Esri Press.
 * Wessel, P., Luis, J. F., Uieda, L., et al. (2019). The Generic Mapping Tools version 6. *Geochemistry, Geophysics, Geosystems*, 20(11), 5556–5564.
-* Peters, R., Ledoux, H., & Biljecki, F. (2014). Visibility-based generalization of bathymetric contours. *Marine Geodesy*, 37(2), 145–166.
+* Peters, R., Ledoux, H., & Meijers, M. (2014). A Voronoi-based approach to generating depth-contours for hydrographic charts. *Marine Geodesy*, 37(2), 145–166.
 
 ---
 
@@ -1371,7 +1371,7 @@ To ensure pedagogical rigor and practical utility, every chapter in this handboo
 ### 27.9 Curated Key References
 * United Nations (1982). *United Nations Convention on the Law of the Sea (UNCLOS)*, Article 76.
 * International Hydrographic Organization (2022). *Guidance on Crowdsourced Bathymetry (IHO Publication B-12)* (Ed. 3.0.0).
-* Snyder, G. I. (2013). *The 3D Elevation Program: Summary of Program Direction*. USGS Fact Sheet 2013-3081.
+* Snyder, G. I. (2012). *The 3D Elevation Program: Summary of Program Direction*. U.S. Geological Survey Fact Sheet 2012-3089.
 
 ---
 
@@ -1508,8 +1508,8 @@ To ensure pedagogical rigor and practical utility, every chapter in this handboo
 * 1785/1918 Galactic coordinate system, 1962 JPL Image Processing Lab (Bob Nathan), 1964 Ranger 7 lunar images, 1966 JPL VICAR, 1972 Apollo 17 (Jack Schmitt), 1981 FITS format, 1982 JPL SPICE system, 1996 NASA Ames Stereo Pipeline (ASP), 1997 NASA Ames Viz.
 
 ### 31.5 Mathematical Foundations
-* Effective Geopotential (Gravity + Centrifugal) and "Dynamic Elevation" on a rotating irregular asteroid with angular velocity $\boldsymbol{\omega}$:
-  $$U(\mathbf{r}) = -G \iiint_{\mathcal{B}} \frac{\rho(\mathbf{r}')}{\|\mathbf{r} - \mathbf{r}'\|} dV' - \frac{1}{2}\|\boldsymbol{\omega} \times \mathbf{r}\|^2, \quad H_{\text{dynamic}}(\mathbf{r}) = \frac{U(\mathbf{r}) - U_0}{g_{\text{ref}}}$$
+* Effective Geopotential Energy per Unit Mass (Jacobi / Roche Potential: Polyhedral Gravity + Centrifugal, with geodetic attraction potential $V_{\text{poly}}(\mathbf{r}) = +G\iiint_{\mathcal{B}}\frac{\rho(\mathbf{r}')}{\|\mathbf{r}-\mathbf{r}'\|}\,dV' > 0$) and "Dynamic Elevation" above a reference equipotential $U_{\text{ref}}$ on a rotating irregular asteroid with angular velocity $\boldsymbol{\omega}$:
+  $$U(\mathbf{r}) = -V_{\text{poly}}(\mathbf{r}) - \frac{1}{2}\|\boldsymbol{\omega} \times \mathbf{r}\|^2, \quad H_{\text{dynamic}}(\mathbf{r}) = \frac{U(\mathbf{r}) - U_{\text{ref}}}{g_{\text{ref}}}$$
 
 ### 31.6 Software Ecosystem
 * *Open-Source:* USGS ISIS3 (Integrated Software for Imagers and Spectrometers), NASA Ames Stereo Pipeline (ASP), SpiceyPy / NAIF SPICE, ALE (Abstraction Layer for Ephemerides), Blender planet plugins.
@@ -1538,17 +1538,17 @@ To ensure pedagogical rigor and practical utility, every chapter in this handboo
 * Network Time Protocol (NTP—1979, millisecond accuracy, insufficient for attitude/ranging) vs. **Precision Time Protocol (PTP / IEEE 1588v2)** with hardware timestamping PHY chips (sub-microsecond synchronization across multi-LiDAR/camera/sonar Ethernet networks).
 
 ### 32.3 Relativistic and Atmospheric Propagation Physics
-* Special and General Relativity (Einstein 1915) in GNSS ranging: satellite velocity time dilation ($-7\text{ \mu s/day}$) + gravitational blueshift ($+45\text{ \mu s/day}$), plus orbit eccentricity relativistic clock correction $\Delta t_{\text{rel}} = -\frac{2\mathbf{r}\cdot\mathbf{v}}{c^2}$ and Sagnac effect due to Earth rotation during signal flight time.
-* Atmospheric group refractive index $n_g(P, T, e, \lambda)$ (Ciddor / Marini-Murray equations) for airborne and spaceborne laser altimetry: why laser pulses slow down by $\sim 2.3\text{ m}$ at nadir through Earth's atmosphere and bend along curved paths at off-nadir angles.
+* Special and General Relativity (Einstein 1915) in GNSS ranging: satellite velocity time dilation ($-7.2\text{ \mu s/day}$) + gravitational blueshift ($+45.6\text{ \mu s/day}$), plus orbit eccentricity relativistic clock correction $\Delta t_{\text{rel}} = -\frac{2\mathbf{r}\cdot\mathbf{v}}{c^2}$ and Sagnac effect due to Earth rotation during signal flight time.
+* Atmospheric group refractive index $n_g(P, T, e, \lambda)$ (Ciddor / Marini–Murray / Mendes–Pavlis equations) for airborne and spaceborne laser altimetry: why spaceborne laser pulses slow down by $\sim 2.34\text{–}2.45\text{ m}$ at nadir through Earth's full atmospheric column and bend along curved paths at off-nadir angles.
 
 ### 32.4 Historical Evolution (`gis-history` Context)
 * 1656 Pendulum clock, 1676 Rømer speed of light, 1761 Harrison H4 chronometer, 1915 Einstein General Relativity, 1917 Nautical time, 1928 Universal Time, 1949/1955 Atomic clocks, 1960 UTC, 1970 Unix time 0, 1979 NTP, 1984 NMEA 0183.
 
 ### 32.5 Mathematical Foundations
 * Relativistic GNSS Clock Eccentricity & Sagnac Range Corrections:
-  $$\Delta \rho_{\text{rel}} = -\frac{2 (\mathbf{r}^s \cdot \mathbf{v}^s)}{c}, \quad \Delta \rho_{\text{Sagnac}} = \frac{\boldsymbol{\omega}_E \cdot (\mathbf{r}^s \times \mathbf{r}_r)}{c}$$
-* Ciddor Group Refractivity Delay for Topographic/Spaceborne LiDAR (with surface pressure $P_0$ in $\text{hPa}$ and $\Delta R_{\text{atm}}$ in $\text{m}$):
-  $$\Delta R_{\text{atm}} = 10^{-6} \int_0^H N_g(z) \sec\theta(z)\,dz \approx \frac{0.002277}{\cos\theta} P_0$$
+  $$\Delta \rho_{\text{rel}} = -\frac{2 (\mathbf{X}^s \cdot \mathbf{V}^s)}{c_0}, \quad \Delta \rho_{\text{Sagnac}} = \frac{\boldsymbol{\omega}_\oplus \cdot (\mathbf{X}^s \times \mathbf{X}_r)}{c_0}$$
+* Ciddor / Mendes–Pavlis Group Refractivity Delay for Topographic/Spaceborne LiDAR (with surface pressure $P_0$ and aircraft static pressure $P(H)$ in $\text{hPa}$, where $P(H) = 0$ for spaceborne altimeters):
+  $$\Delta R_{\text{atm}} = 10^{-6} \int_{z_0}^H N_g(z) \sec\theta(z)\,dz \approx \frac{0.0024166\,f_h(\lambda)}{f_s(\varphi, z_0)\cos\theta}\big(P_0 - P(H)\big)$$
 
 ### 32.6 Software Ecosystem
 * *Open-Source:* `linuxptp` (`ptp4l`, `phc2sys`), `chrony`, AstroPy / SOFA time conversion libraries, `gpsd`.
@@ -1576,7 +1576,7 @@ To ensure pedagogical rigor and practical utility, every chapter in this handboo
   * Generating an ensemble of $N = 100\text{–}1000$ realizations $\{z^{(k)}(x,y)\}_{k=1}^N$ where every realization honors both the measured check points, the local TVU uncertainty band, and the spatial autocorrelation variogram.
 
 ### 33.3 Propagating DEM Ensembles Through Non-Linear Downstream Models
-* **Probabilistic Flood Inundation Mapping:** Running hydrodynamic or bathtub surge models across the DEM ensemble to output $P(\text{flood depth} > 0.3\text{ m}) \in [0, 1]$ instead of a single deceptive binary flood line.
+* **Probabilistic Flood Inundation Mapping:** Running 2D hydrodynamic or hydrologically connected surge models across the DEM ensemble to output $P(\text{flood depth} \ge 0.3\text{ m}) \in [0, 1]$ instead of a single deceptive binary flood line.
 * **Probabilistic Viewsheds and Line-of-Sight:** Computing fuzzy viewsheds where ridge-crest elevation uncertainty controls target visibility probability.
 * **Probabilistic Stream Networks, Watershed Boundaries, and Landslide Factor of Safety:** Quantifying how small elevation errors on flat floodplains cause catastrophic topological avulsions (stream piracy between adjacent basins).
 
@@ -1586,20 +1586,20 @@ To ensure pedagogical rigor and practical utility, every chapter in this handboo
 ### 33.5 Mathematical Foundations
 * Spectral / FFT synthesis of a spatially correlated 2D error field $e(x,y)$ with target covariance kernel $C(\mathbf{h})$ and local heteroscedastic standard deviation $\sigma_z(x,y)$:
   $$e(x,y) = \sigma_z(x,y) \cdot \mathcal{F}^{-1}\left\{ \sqrt{\mathcal{F}\{C(\mathbf{h})\}(\mathbf{k})} \cdot \mathcal{F}\{W(x,y)\}(\mathbf{k}) \right\}, \quad W(x,y) \sim \mathcal{N}(0, 1)$$
-* Slope-coupled total vertical variance from horizontal uncertainty ($\sigma_{\text{THU}}$) and vertical uncertainty ($\sigma_{\text{TVU}}$) on terrain slope $\alpha$:
-  $$\sigma_{z,\text{total}}^2 = \sigma_{\text{TVU}}^2 + \tan^2\alpha \cdot \sigma_{\text{THU}}^2$$
+* Slope-coupled total $1\sigma$ vertical variance from $1\sigma$ horizontal uncertainty ($\sigma_{\text{horiz}} = \text{THU}_{95\%}/2.4477$) and $1\sigma$ vertical uncertainty ($\sigma_{\text{vert}} = \text{TVU}_{95\%}/1.9600$) on terrain slope $S$ ($\equiv \alpha$):
+  $$\sigma_{z,\text{total}}^2 = \sigma_{\text{vert}}^2 + \tan^2\alpha \cdot \sigma_{\text{horiz}}^2 = \left(\frac{\text{TVU}_{95\%}}{1.9600}\right)^2 + \tan^2\alpha\,\left(\frac{\text{THU}_{95\%}}{2.4477}\right)^2$$
 
 ### 33.6 Software Ecosystem
 * *Open-Source:* `xdem`, `gstools` (GeoStatFramework Python), R `gstat`, SGeMS, GRASS `r.random.surface`.
 * *Closed-Source:* Esri ArcGIS Geostatistical Analyst (`Gaussian Geostatistical Simulations`), Isatis.neo.
 
 ### 33.7 Common Pitfalls & Key Takeaways
-* *Pitfalls:* Using uncorrelated pixel noise in Monte Carlo DEM simulations; ignoring the cross-correlation between horizontal error (THU) and vertical error (TVU) on steep slopes ($\sigma_{z,\text{total}}^2 = \sigma_{\text{TVU}}^2 + \tan^2\alpha \cdot \sigma_{\text{THU}}^2$).
+* *Pitfalls:* Using uncorrelated pixel noise in Monte Carlo DEM simulations; ignoring the cross-correlation between horizontal error ($\sigma_{\text{horiz}}$) and vertical error ($\sigma_{\text{vert}}$) on steep slopes ($\sigma_{z,\text{total}}^2 = \sigma_{\text{vert}}^2 + \tan^2\alpha \cdot \sigma_{\text{horiz}}^2$).
 * *Key Takeaways:* Any non-linear threshold decision made on a DEM (flood/no-flood, visible/occluded, grounding/safe) requires spatially correlated ensemble propagation to quantify decision confidence.
 
 ### 33.8 Curated Key References
 * Heuvelink, G. B. M. (1998). *Error Propagation in Environmental Modelling with GIS*. Taylor & Francis.
-* Hugonnet, R., et al. (2022). Description of surface elevation changes and their uncertainty: `xdem` framework. *The Cryosphere*, 16.
+* Hugonnet, R., Brun, F., Berthier, E., Dehecq, A., Mannerfelt, E. S., Eckert, N., & Farinotti, D. (2022). Uncertainty analysis of digital elevation models by spatial inference from stable terrain. *IEEE Journal of Selected Topics in Applied Earth Observations and Remote Sensing*, 15, 6456–6472.
 
 ---
 
@@ -1680,6 +1680,6 @@ To ensure pedagogical rigor and practical utility, every chapter in this handboo
 
 # End Matter & Master Indexes
 
-* **[Master Bibliography and Curated Citation Index](book/00-front-matter/master-bibliography.md):** Comprehensive deduplicated master bibliography covering all 362 curated citations and standards across Chapters 1–35 with verified DOIs, ISBNs, and cross-chapter citation matrices.
-* **[Master Subject, Sensor, and Term Index](book/00-front-matter/master-index.md):** Master index cross-referencing over 200 foundational concepts, sensors, standards, equations, and historical figures to their primary handbook sections.
+* **[Master Bibliography and Curated Citation Index](book/00-front-matter/master-bibliography.md):** Comprehensive deduplicated master bibliography covering all 645 curated master works (545 DOI-verified publications and 100 standards, manuals, and classical treatises) across Chapters 1–35 with verified DOIs, ISBNs, and cross-chapter citation matrices.
+* **[Master Subject, Sensor, and Term Index](book/00-front-matter/master-index.md):** Master index cross-referencing 261 foundational concepts, sensors, standards, equations, and historical figures to their defining handbook sections.
 

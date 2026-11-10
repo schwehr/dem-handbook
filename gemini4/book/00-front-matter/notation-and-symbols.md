@@ -140,7 +140,7 @@ $$
 | Symbol | Name / Meaning | Definition / Formula | SI Unit | Primary Chapters |
 | :--- | :--- | :--- | :--- | :--- |
 | $\mathbf{R}_a^b \in \text{SO}(3)$ | Direction Cosine / Rotation Matrix | Orthogonal transformation matrix ($\mathbf{R}^\top\mathbf{R} = \mathbf{I}_3, \det\mathbf{R}=+1$) mapping coordinates from frame $a$ to frame $b$ | dimensionless | Ch. 2, 5, 6, 8–10, 13 |
-| $\mathbf{T}_a^b \in \text{SE}(3)$ | Rigid-body pose transformation matrix | $4\times 4$ homogeneous matrix $\begin{bmatrix} \mathbf{R}_a^b & \mathbf{t}_a^b \\ \mathbf{0}^\top & 1 \end{bmatrix}$ in Special Euclidean group $\text{SE}(3)$ | $\text{m}$ (translation block) | Ch. 5, 6, 8 |
+| $\mathbf{T}_a^b \in \text{SE}(3)$ | Rigid-body pose transformation matrix | $4\times 4$ homogeneous matrix $\begin{bmatrix} \mathbf{R}_a^b & \mathbf{t}_a^b \\ \mathbf{0}^\top & 1 \end{bmatrix}$ in Special Euclidean group $\text{SE}(3)$ | $\text{m}$ (translation block) | Ch. 5, 6, 8, 35 |
 | $[\mathbf{r}]_\times$ | Skew-symmetric cross-product matrix | $3\times 3$ antisymmetric matrix ($[\mathbf{r}]_\times^\top = -[\mathbf{r}]_\times$) satisfying $[\mathbf{r}]_\times \mathbf{v} = \mathbf{r} \times \mathbf{v}$ | Same as $\mathbf{r}$ | Ch. 4, 5, 6, 9, 10, 13 |
 | $\|\mathbf{r}\|_{\mathbf{\Sigma}}^2$ | Squared Mahalanobis distance | Covariance-weighted quadratic form $\mathbf{r}^\top \mathbf{\Sigma}^{-1} \mathbf{r}$ in Kalman filtering, factor graphs, and bundle adjustment | dimensionless | Ch. 5, 6, 8, 14 |
 | $\mathbf{J}$ | Jacobian matrix | Matrix of first-order partial derivatives $J_{ij} = \partial f_i / \partial x_j$ of a vector-valued transformation $\mathbf{f}(\mathbf{x})$ | varies ($[f_i]/[x_j]$) | Ch. 2, 5, 6, 8, 13, 14, 25, 33 |
@@ -181,7 +181,7 @@ $$
 
 ### 3.2 Physical Geodesy, the Geoid, and Vertical Datum Transformations
 
-The Earth's true gravity potential $W(\mathbf{X})$ is the sum of the gravitational potential $V(\mathbf{X})$ and the centrifugal potential $\Phi_c(\mathbf{X}) = \frac{1}{2}\omega_\oplus^2(X^2 + Y^2)$. The reference ellipsoid generates a normal gravity potential $U(\mathbf{X})$, and their difference is the **disturbing potential** $T(\mathbf{X}) = W(\mathbf{X}) - U(\mathbf{X})$. By **Bruns' formula**, the **geoid undulation** $N_{\text{geoid}}$ (written simply as $N$ when not accompanied by latitude argument $\varphi$) and the **geopotential number** $C$ are:
+The Earth's true gravity potential $W(\mathbf{X})$ (using the standard geodetic positive-potential convention $V(\mathbf{X}) = G\iiint \frac{\rho}{r}\,d\mathcal{V} > 0$ so that $\mathbf{g} = +\nabla W$ and $C = W_0 - W > 0$ above the geoid) is the sum of the gravitational potential $V(\mathbf{X})$ and the centrifugal potential $\Phi_c(\mathbf{X}) = \frac{1}{2}\omega_\oplus^2(X^2 + Y^2)$. The reference ellipsoid generates a normal gravity potential $U(\mathbf{X})$, and their difference is the **disturbing potential** $T(\mathbf{X}) = W(\mathbf{X}) - U(\mathbf{X})$. By **Bruns' formula**, the **geoid undulation** $N_{\text{geoid}}$ (written simply as $N$ when not accompanied by latitude argument $\varphi$) and the **geopotential number** $C$ are:
 
 $$
 N = \frac{T}{\gamma_0}, \qquad C = W_0 - W = \int_0^H g\,dH, \qquad H = \frac{C}{\bar{g}}, \qquad H^* = \frac{C}{\bar{\gamma}}
@@ -238,14 +238,14 @@ Modern airborne, terrestrial mobile, satellite, and hydrographic surveying platf
 For a GNSS satellite $s$ and receiver $r$ operating at carrier frequency $f_{\text{GNSS}}$ (wavelength $\lambda_{\text{GNSS}} = c_0 / f_{\text{GNSS}}$), the fundamental code **pseudorange** observation $P_r^s$ (in meters) and **carrier-phase** observation $\Phi_r^s$ (expressed in meters, or $\phi_r^s = \Phi_r^s / \lambda_{\text{GNSS}}$ in cycles) are governed by:
 
 $$
-P_r^s = \rho_r^s + c_0\left(\delta t_r - \delta t^s + \Delta t_{\text{rel}}\right) + T_r^s + I_r^s + b_{r,P} - b_P^s + M_{P} + \epsilon_P
+P_r^s = \rho_r^s + c_0\big(\delta t_r - (\delta t^s + \Delta t_{\text{rel}})\big) + T_r^s + I_r^s + b_{r,P} - b_P^s + M_{P} + \epsilon_P
 $$
 
 $$
-\Phi_r^s = \rho_r^s + c_0\left(\delta t_r - \delta t^s + \Delta t_{\text{rel}}\right) + T_r^s - I_r^s + \lambda_{\text{GNSS}}\left(N_r^s + b_{r,\Phi} - b_\Phi^s\right) + m_{\Phi} + \epsilon_\Phi
+\Phi_r^s = \rho_r^s + c_0\big(\delta t_r - (\delta t^s + \Delta t_{\text{rel}})\big) + T_r^s - I_r^s + \lambda_{\text{GNSS}}\left(N_r^s + b_{r,\Phi} - b_\Phi^s\right) + m_{\Phi} + \epsilon_\Phi
 $$
 
-where $\rho_r^s = \|\mathbf{X}^s(t_{\text{tx}}) - \mathbf{X}_r(t_{\text{rx}})\|_2 + \Delta\rho_{\text{Sagnac}}$ is the geometric range between the satellite antenna phase center at transmission epoch $t_{\text{tx}}$ and the receiver antenna phase center at reception epoch $t_{\text{rx}}$ (including the Sagnac Earth-rotation correction $\Delta\rho_{\text{Sagnac}} = \frac{\boldsymbol{\omega}_\oplus \cdot (\mathbf{X}^s \times \mathbf{X}_r)}{c_0}$), and note the opposite sign of the dispersive **ionospheric delay** ($+I_r^s$ group delay in pseudorange vs. $-I_r^s$ phase advance in carrier phase).
+where $\rho_r^s = \|\mathbf{X}^s(t_{\text{tx}}) - \mathbf{X}_r(t_{\text{rx}})\|_2 + \Delta\rho_{\text{Sagnac}}$ is the geometric range between the satellite antenna phase center at transmission epoch $t_{\text{tx}}$ and the receiver antenna phase center at reception epoch $t_{\text{rx}}$ (including the Sagnac Earth-rotation correction $\Delta\rho_{\text{Sagnac}} = \frac{\boldsymbol{\omega}_\oplus \cdot (\mathbf{X}^s \times \mathbf{X}_r)}{c_0}$), $\delta t^s$ is the broadcast polynomial satellite clock offset, $\Delta t_{\text{rel}} = -\frac{2\,\mathbf{X}^s \cdot \mathbf{V}^s}{c_0^2}$ is the periodic eccentricity relativistic clock offset (so true satellite clock time relative to system time is $\delta t^s + \Delta t_{\text{rel}}$, entering the observation equations as $-c_0\Delta t_{\text{rel}}$), and note the opposite sign of the dispersive **ionospheric delay** ($+I_r^s$ group delay in pseudorange vs. $-I_r^s$ phase advance in carrier phase).
 
 ### 4.2 Direct Georeferencing, Lever Arms, Boresight, and Latency
 
@@ -322,7 +322,7 @@ $$
 p_{\text{ray}} = \frac{\sin\theta(d)}{c(d)} = \frac{\sin\theta_0}{c_0^{\text{sound}}} = \text{constant}
 $$
 
-In a linear constant-gradient layer $c(d) = c_i + g_i(d - d_i)$ with vertical sound-speed gradient $g_i = dc/dd$, the ray traces a circular arc of radius of curvature $R_c = -\frac{1}{p_{\text{ray}} g_i}$ (with magnitude $|R_c| = \frac{1}{p_{\text{ray}} |g_i|}$).
+In a linear constant-gradient layer $c(d) = c_i + g_i(d - d_i)$ with vertical sound-speed gradient $g_i = dc/dd$, the ray angle $\theta$ (from vertical) evolves with arc length $s$ as $\frac{d\theta}{ds} = p_{\text{ray}} g_i$, tracing a circular arc of signed radius of curvature $R_c = \frac{1}{p_{\text{ray}} g_i}$ (magnitude $|R_c| = \frac{1}{p_{\text{ray}} |g_i|}$, bending toward the vertical when $g_i < 0$ and toward the horizontal when $g_i > 0$).
 
 > [!WARNING]
 > **Incidence Angle ($\theta_i$) vs. Grazing Angle ($\theta_g$) in Radar and Sonar**
@@ -335,10 +335,10 @@ In a linear constant-gradient layer $c(d) = c_i + g_i(d - d_i)$ with vertical so
 In repeat-pass or single-pass bistatic **InSAR** (Chapter 11), the unwrapped interferometric phase difference $\Delta\phi_{\text{InSAR}}$ at slant range $R$ and look/incidence angle $\theta_i$ is related to the **perpendicular baseline** $B_\perp$, radar wavelength $\lambda_{\text{SAR}}$, topographic elevation change $\Delta z$, and line-of-sight surface displacement $\Delta r_{\text{disp}}$ by:
 
 $$
-\Delta\phi_{\text{InSAR}} = -\frac{4\pi}{\lambda_{\text{SAR}} m_{\text{mode}}} \frac{B_\perp}{R \sin\theta_i} \Delta z - \frac{4\pi}{\lambda_{\text{SAR}}} \Delta r_{\text{disp}} + \Delta\phi_{\text{atm}} + \Delta\phi_{\text{noise}}, \qquad h_a = \frac{\lambda_{\text{SAR}} m_{\text{mode}} R \sin\theta_i}{2 B_\perp}
+\Delta\phi_{\text{InSAR}} = -\frac{2\pi p}{\lambda_{\text{SAR}}} \frac{B_\perp}{R \sin\theta_i} \Delta z - \frac{4\pi}{\lambda_{\text{SAR}}} \Delta r_{\text{disp}} + \Delta\phi_{\text{atm}} + \Delta\phi_{\text{noise}}, \qquad h_a = \frac{\lambda_{\text{SAR}} R \sin\theta_i}{p B_\perp}
 $$
 
-where $m_{\text{mode}} = 1$ for bistatic ping-pong / single-transmit mode (e.g., SRTM, TanDEM-X standard) and $m_{\text{mode}} = 2$ for monostatic repeat-pass mode, and $h_a$ is the **height of ambiguity** (the elevation change corresponding to one $2\pi$ phase cycle).
+where $p = 1$ for single-pass bistatic single-transmit mode (e.g., SRTM, TanDEM-X standard bistatic, where only one antenna transmits while both receive) and $p = 2$ for monostatic repeat-pass or alternating ping-pong mode (two-way path difference), and $h_a$ is the **height of ambiguity** (the elevation change corresponding to one $2\pi$ phase cycle).
 
 ### 5.5 Master Table: Photogrammetry, LiDAR, Sonar, Radar, Radiometry, and Geophysical Inversion
 
@@ -358,11 +358,11 @@ where $m_{\text{mode}} = 1$ for bistatic ping-pong / single-transmit mode (e.g.,
 | $c(d)$ or $c(z)$ | Acoustic sound speed in water | Speed of sound in water ($\approx 1450\text{–}1550\text{ m}\cdot\text{s}^{-1}$), function of temperature $T_w$, salinity $S_w$, and pressure/depth $d$ | $\text{m}\cdot\text{s}^{-1}$ | Ch. 5, 10, 13 |
 | $p_{\text{ray}}$ | Acoustic ray parameter (Snell's invariant) | $p_{\text{ray}} = \frac{\sin\theta(d)}{c(d)} = \text{constant}$ along a ray in a horizontally stratified medium | $\text{s}\cdot\text{m}^{-1}$ | Ch. 10 |
 | $\alpha_{\text{ac}}$ | Acoustic absorption coefficient | Frequency- and chemistry-dependent acoustic attenuation in water (Francois-Garrison equation, in $\text{dB}\cdot\text{km}^{-1}$) | $\text{dB}\cdot\text{m}^{-1}$ (or $\text{Np}\cdot\text{m}^{-1}$) | Ch. 10, 28 |
-| $\text{SL}, \text{EL}, \text{TL}, \text{BS}(\theta_g)$ | Sonar equation terms | Source Level $\text{SL}$, Echo Level $\text{EL}$, Transmission Loss $2\text{TL}(R) = 40\log_{10}R + 2\alpha_{\text{ac}}R$, and Bottom Backscatter Strength $\text{BS}(\theta_g)$ | $\text{dB re } 1\,\mu\text{Pa}$ ($\text{dB re } 1\text{ m}^2$) | Ch. 10, 28 |
+| $\text{SL}, \text{EL}, \text{TL}, \text{BS}(\theta_g)$ | Sonar equation terms | Source Level $\text{SL}$, Echo Level $\text{EL}$, Transmission Loss $2\text{TL}(R) = 40\log_{10}R + 2\alpha_{\text{ac}}R$, and Bottom Backscatter Strength per unit area $\text{BS}(\theta_g)$ (or $S_b(\theta_g)$) | $\text{dB re } 1\,\mu\text{Pa}$ ($\text{dB re } 1\text{ m}^2\cdot\text{m}^{-2}$ for $\text{BS}$) | Ch. 10, 28 |
 | $\psi_{\text{tx}}, \psi_{\text{rx}}$ | Mills Cross transmit and receive beamwidths | Angular $-3\text{ dB}$ beamwidths of MBES projector (along-track $\psi_{\text{tx}}$) and hydrophone array (across-track $\psi_{\text{rx}}$) | $\text{rad}$ (or $^\circ$) | Ch. 10, 18 |
 | $\theta_i, \theta_g$ | Incidence angle and grazing angle | $\theta_i$ measured from surface normal (or nadir); $\theta_g = \frac{\pi}{2} - \theta_i$ measured from tangent plane (or horizontal) | $\text{rad}$ (or $^\circ$) | Ch. 8–11, 28 |
 | $B_\perp, B_\parallel$ | InSAR perpendicular and parallel baselines | Components of the spatial baseline vector $\mathbf{B}$ perpendicular and parallel to the radar line of sight | $\text{m}$ | Ch. 11 |
-| $h_a$ | InSAR height of ambiguity | Elevation difference producing a $2\pi$ interferometric phase change: $h_a = \frac{\lambda_{\text{SAR}} m_{\text{mode}} R \sin\theta_i}{2 B_\perp}$ | $\text{m}$ | Ch. 11 |
+| $h_a$ | InSAR height of ambiguity | Elevation difference producing a $2\pi$ interferometric phase change: $h_a = \frac{\lambda_{\text{SAR}} R \sin\theta_i}{p B_\perp}$ ($p=1$ bistatic single-transmit, $p=2$ repeat-pass) | $\text{m}$ | Ch. 11 |
 | $\gamma_{\text{coh}}$ | Complex interferometric coherence | Cross-correlation magnitude $\gamma_{\text{coh}} = \frac{|\mathbb{E}[s_1 s_2^*]|}{\sqrt{\mathbb{E}[|s_1|^2]\mathbb{E}[|s_2|^2]}} \in [0, 1]$ between two SAR images | dimensionless | Ch. 11 |
 | $\sigma^0, \gamma^0, \beta^0$ | Radar backscatter coefficients | Normalized radar cross-section per unit ground area ($\sigma^0$), per unit area perpendicular to look direction ($\gamma^0 = \sigma^0 / \cos\theta_i = \beta^0\tan\theta_i$), and in slant range ($\beta^0 = \sigma^0 / \sin\theta_i$) | $\text{m}^2\cdot\text{m}^{-2}$ (or $\text{dB}$) | Ch. 11, 28 |
 | $\rho_w, \rho_c, \rho_{\text{mud}}, \rho_{\text{ice}}$ | Bulk mass densities of water, crust, fluid mud, and ice | Seawater ($\rho_w \approx 1025\text{ kg}\cdot\text{m}^{-3}$), oceanic crust ($\rho_c \approx 2700\text{–}2900$), PIANC nautical-bottom fluid mud ($\rho_{\text{mud}} = 1200$), glacier ice ($\rho_{\text{ice}} \approx 917$) | $\text{kg}\cdot\text{m}^{-3}$ | Ch. 11, 29, 30, 31 |
@@ -510,7 +510,7 @@ To illustrate how the coordinate frames, vertical datum conventions, and confide
 
 ## Curated Key References for Notation, Metrology, and Standards
 
-* **ASPRS** (2015/2023). *ASPRS Positional Accuracy Standards for Digital Geospatial Data* (Edition 1, Version 1.0, 2015; Edition 2, Version 1.0, 2023). *Photogrammetric Engineering & Remote Sensing*, 81(3), A1–A26. https://doi.org/10.14358/PERS.81.3.A1-A26
+* **ASPRS** (2015). *ASPRS Positional Accuracy Standards for Digital Geospatial Data* (Edition 1, Version 1.0). *Photogrammetric Engineering & Remote Sensing*, 81(3), A1–A26. https://doi.org/10.14358/PERS.81.3.A1-A26 (Updated as *Edition 2, Version 1.0*, 2023; *Version 2*, 2024).
 * **BIPM** (2019). *The International System of Units (SI)* (9th ed., v3.01, 2024 update). Bureau International des Poids et Mesures. ISBN 978-92-822-2272-0.
 * **Höhle, J., & Höhle, M.** (2009). Accuracy assessment of digital elevation models by means of robust statistical methods. *ISPRS Journal of Photogrammetry and Remote Sensing*, 64(4), 398–406. https://doi.org/10.1016/j.isprsjprs.2009.02.003
 * **IHO** (2020/2022). *IHO Standards for Hydrographic Surveys* (Special Publication No. 44, S-44, 6th ed.). International Hydrographic Organization, Monaco.
