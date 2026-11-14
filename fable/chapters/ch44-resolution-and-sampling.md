@@ -52,7 +52,7 @@ The following products are widely used, and in each the effective resolution dif
 
 ### 44.3.1 Estimating effective resolution
 
-Three methods are in use. **Spectral analysis** computes the power spectrum of the DEM (or of its difference from a finer reference) and finds the wavelength at which the spectrum departs from the terrain's characteristic power law and flattens into a noise floor, or at which coherence with the reference drops below 0.5 (Smith & Sandwell 2003); Grohmann (2015) used spectral and slope-based comparisons to show that products posted at the same spacing differ in information content. **Feature-based tests** measure the smallest features (gullies, roads, buildings, bedforms) detectable against a finer reference, which is how the GDEM team estimated ~72 m. **Geomorphometric intercomparison** (DEMIX; Guth et al. 2021, 2024; Bielski et al. 2024) scores DEMs on a battery of criteria—elevation, slope, roughness, and derived channel networks against lidar reference—over hundreds of tiles with a ranked block design, giving a statistical ranking rather than a single resolution number; its practical output is that Copernicus DEM is the best 1″ global product and that none of them resolves what their post spacing suggests in low-relief terrain.
+Three methods are in use (Polidori & El Hage 2020 review quality and resolution assessment methods). **Spectral analysis** computes the power spectrum of the DEM (or of its difference from a finer reference) and finds the wavelength at which the spectrum departs from the terrain's characteristic power law and flattens into a noise floor, or at which coherence with the reference drops below 0.5 (Smith & Sandwell 2003); Grohmann (2015) used spectral and slope-based comparisons to show that products posted at the same spacing differ in information content. **Feature-based tests** measure the smallest features (gullies, roads, buildings, bedforms) detectable against a finer reference, which is how the GDEM team estimated ~72 m. **Geomorphometric intercomparison** (DEMIX; Guth et al. 2021, 2024; Bielski et al. 2024) scores DEMs on a battery of criteria—elevation, slope, roughness, and derived channel networks against lidar reference—over hundreds of tiles with a ranked block design, giving a statistical ranking rather than a single resolution number; its practical output is that Copernicus DEM is the best 1″ global product and that none of them resolves what their post spacing suggests in low-relief terrain.
 
 > **Try it.** Estimate the effective resolution of a DEM by its radially averaged power spectrum. Expected outcome: a log–log spectrum that follows an approximate $1/f^{\beta}$ law at long wavelengths (β typically 2–3 for terrain) and flattens or rolls off at short wavelengths; the roll-off wavelength is a lower bound on effective resolution. Run on a lidar DTM and on SRTM over the same area and compare roll-offs.
 >
@@ -104,9 +104,9 @@ Every quantity derived from a DEM by differencing or neighbourhood analysis is a
 > | Cell size $h$ | Sampling factor $\frac{\sin(2\pi h/L)}{2\pi h/L}$ | Max slope | With box footprint of width $h$ (× $\frac{\sin(\pi h/L)}{\pi h/L}$) |
 > |---|---|---|---|
 > | 1 m | 0.999 | 0.314 (17.4°) | 0.314 (17.4°) |
-> | 5 m | 0.984 | 0.309 (17.2°) | 0.304 (16.9°) |
+> | 5 m | 0.984 | 0.309 (17.2°) | 0.308 (17.1°) |
 > | 10 m | 0.935 | 0.294 (16.4°) | 0.289 (16.1°) |
-> | 30 m | 0.505 | 0.159 (9.0°) | 0.136 (7.8°) |
+> | 30 m | 0.505 | 0.159 (9.0°) | 0.136 (7.7°) |
 > | 50 m | 0.000 | 0.000 (0°) | 0.000 (0°) |
 >
 > At 30 m—the nominal spacing of SRTM and Copernicus—the slope of a 100 m-wavelength ridge is halved by sampling alone and reduced to 43 % when the sensor footprint also averages; at 50 m, the Nyquist limit, the ridges vanish. Real terrain superposes many wavelengths, so the slope loss is a weighted average of these factors over the terrain spectrum; steep, finely dissected terrain (power at short wavelengths) loses most, which is Grohmann's result. The arithmetic also shows why a slope map from a 30 m DEM must not be compared with one from a 1 m DTM without stating the scale.
@@ -123,7 +123,7 @@ Resolution is bought per unit area, roughly as $1/\Delta^2$ in storage and proce
 
 **Change detection** needs the finer of the two epochs' effective resolutions to be degraded to the coarser before differencing, and the minimum detectable change computed at that scale ([Chapter 41](ch41-change-detection.md)).
 
-The practical procedure is: list the features that must be represented and their widths; divide the smallest width by three to four for the required cell size; check that the acquisition footprint and density support it (§44.1); confirm that the vertical accuracy at that cell size still resolves the heights that matter; and cost it. Where the answer is unaffordable, choose a coarser product and enforce the critical features as vectors rather than pretending the grid contains them.
+The practical procedure is: list the features that must be represented and their widths; divide the smallest width by three to four for the required cell size (Hengl 2006); check that the acquisition footprint and density support it (§44.1); confirm that the vertical accuracy at that cell size still resolves the heights that matter; and cost it. Where the answer is unaffordable, choose a coarser product and enforce the critical features as vectors rather than pretending the grid contains them.
 
 ## 44.7 Multi-resolution representation
 
@@ -147,7 +147,7 @@ What to report with any gridded elevation product, then: cell size and its units
 - **Contour interval as the resolution surrogate ⟨H⟩.** On paper maps the vertical interval and the map scale together implied what terrain could be shown: a 1:24,000 sheet with a 20-ft (6.1 m) interval resolved features of roughly that height and of widths near the plotting limit (~0.2 mm at scale, 5 m on the ground). "Resolution" was a cartographic property, and users read it from the legend.
 - **Raster post spacing ⟨H⟩.** DTED (US Defense Mapping Agency, 1970s onward) fixed the vocabulary of posts: Level 0 at 30″ (~1 km), Level 1 at 3″ (~90 m), Level 2 at 1″ (~30 m); the USGS DEM series followed with 30 m and later 10 m products. Post spacing became the number everyone quoted, and the distinction from information content was lost for a generation.
 - **Shannon's theorem ⟨H⟩ (1949)** gave the formal limit—two samples per shortest wavelength—and the signal-processing community applied it to images; its application to terrain grids came later and is still not routine in metadata.
-- **Point density specifications (2000s–).** Airborne lidar made density the primary specification: the USGS LBS (2012; current 2024 rev. A) defined NPS/NPD and the QL0–QL3 ladder; IHO S-44 defined bathymetric coverage and feature detection by order rather than by grid.
+- **Point density specifications (2000s–).** Airborne lidar made density the primary specification: the USGS LBS (2012; 2024 rev. A; 2025 rev. A current) defined NPS/NPD and the QL0–QL3 ladder; IHO S-44 defined bathymetric coverage and feature detection by order rather than by grid.
 - **Effective-resolution metrics (2003–).** Smith & Sandwell's spectral coherence analysis of SRTM (2003), the GDEM validation team's ~72 m estimate (2011), Grohmann's slope-based comparison (2015), and the DEMIX intercomparison (2021–2024) made effective resolution a measured quantity—one that still rarely appears in product metadata.
 
 ## Mathematics
@@ -200,10 +200,10 @@ Resolution errors are errors of *claim*: the product is correct about the values
 
 ## Standards & guides
 
-- **USGS Lidar Base Specification, 2024 rev. A (or current revision).** NPS/NPD definitions, QL0–QL3 density table, spatial-uniformity test, DEM cell size per QL.
+- **USGS Lidar Base Specification, 2024 rev. A / 2025 rev. A (current).** NPS/NPD definitions, QL0–QL3 density table, spatial-uniformity test, DEM cell size per QL.
 - **IHO S-44 Ed. 6.1.0 (2022).** Feature-detection sizes (0.5 / 1 / 2 m cubes) and coverage by order; resolution expressed as detection, not grid.
 - **ICAO Annex 15 and PANS-AIM (Doc 10066).** eTOD Areas 1–4 post spacings (3″, 1″, 0.6″, 0.3″) and accuracy/integrity requirements.
-- **ASPRS Positional Accuracy Standards, Ed. 2 (2023).** Relationships between accuracy class, recommended cell size, and point density for lidar and photogrammetric products.
+- **ASPRS Positional Accuracy Standards, Ed. 2** (2023; v2, 2024). Relationships between accuracy class, recommended cell size, and point density for lidar and photogrammetric products.
 - **OGC GeoTIFF 1.1 (OGC 19-008r4).** `GTRasterTypeGeoKey` (RasterPixelIsArea = 1, RasterPixelIsPoint = 2) and raster-space definitions.
 - **ISO 19115-1:2014.** `MD_Resolution` (`equivalentScale`, `distance`, `vertical`, `angularDistance`, `levelOfDetail`) and lineage.
 - **MIL-PRF-89020B (DTED).** Levels 0/1/2 post spacings and the latitude-dependent longitude spacing.
@@ -236,20 +236,20 @@ Resolution errors are errors of *claim*: the product is correct about the values
 ## References
 
 - Bielski, C., López-Vázquez, C., Grohmann, C. H., Guth, P. L., Hawker, L., Gesch, D., Trevisani, S., Herrera-Cruz, V., Riazanoff, S., Corseaux, A., Reuter, H. & Strobl, P. (2024). Novel approach for ranking DEMs: Copernicus DEM improves one arc second open global topography. *IEEE Transactions on Geoscience and Remote Sensing* 62:4503922. doi:10.1109/TGRS.2024.3368015
-- Florinsky, I. V. & Kuryakova, G. A. (2000). Determination of grid size for digital terrain modelling in landscape investigations—exemplified by soil moisture distribution at a micro-scale. *International Journal of Geographical Information Science* 14(8):815–832.
-- Grohmann, C. H. (2015). Effects of spatial resolution on slope and aspect derivation for regional-scale analysis. *Computers & Geosciences* 77:111–117.
-- Guth, P. L., Van Niekerk, A., Grohmann, C. H., Muller, J.-P., Hawker, L., Florinsky, I. V., Gesch, D., Reuter, H. I., Herrera-Cruz, V., Riazanoff, S., López-Vázquez, C., Carabajal, C. C., Albinet, C. & Strobl, P. (2021). Digital elevation models: Terminology and definitions. *Remote Sensing* 13(18):3581.
-- Guth, P. L., Trevisani, S., Grohmann, C. H., Lindsay, J., Gesch, D., Hawker, L. & Bielski, C. (2024). Ranking of 10 global one-arc-second DEMs reveals limitations in terrain morphology representation. *Remote Sensing* 16(17):3273.
-- Hengl, T. (2006). Finding the right pixel size. *Computers & Geosciences* 32(9):1283–1298.
-- Horn, B. K. P. (1981). Hill shading and the reflectance map. *Proceedings of the IEEE* 69(1):14–47.
-- International Hydrographic Organization (2022). *IHO Standards for Hydrographic Surveys*, Special Publication S-44, Edition 6.1.0. IHO, Monaco.
-- Kienzle, S. (2004). The effect of DEM raster resolution on first order, second order and compound terrain derivatives. *Transactions in GIS* 8(1):83–111.
-- Nyquist, H. (1928). Certain topics in telegraph transmission theory. *Transactions of the American Institute of Electrical Engineers* 47(2):617–644.
-- Open Geospatial Consortium (2019). *OGC GeoTIFF Standard*, version 1.1. OGC 19-008r4.
-- Polidori, L. & El Hage, M. (2020). Digital elevation model quality assessment methods: A critical review. *Remote Sensing* 12(21):3522.
-- Shannon, C. E. (1949). Communication in the presence of noise. *Proceedings of the IRE* 37(1):10–21.
-- Smith, B. & Sandwell, D. (2003). Accuracy and resolution of shuttle radar topography mission data. *Geophysical Research Letters* 30(9):1467.
+- Florinsky, I. V. & Kuryakova, G. A. (2000). Determination of grid size for digital terrain modelling in landscape investigations—exemplified by soil moisture distribution at a micro-scale. *International Journal of Geographical Information Science* 14(8):815–832. doi:10.1080/136588100750022804
+- Grohmann, C. H. (2015). Effects of spatial resolution on slope and aspect derivation for regional-scale analysis. *Computers & Geosciences* 77:111–117. doi:10.1016/j.cageo.2015.02.003
+- Guth, P. L., Van Niekerk, A., Grohmann, C. H., Muller, J.-P., Hawker, L., Florinsky, I. V., Gesch, D., Reuter, H. I., Herrera-Cruz, V., Riazanoff, S., López-Vázquez, C., Carabajal, C. C., Albinet, C. & Strobl, P. (2021). Digital elevation models: Terminology and definitions. *Remote Sensing* 13(18):3581. doi:10.3390/rs13183581
+- Guth, P. L., Trevisani, S., Grohmann, C. H., Lindsay, J., Gesch, D., Hawker, L. & Bielski, C. (2024). Ranking of 10 global one-arc-second DEMs reveals limitations in terrain morphology representation. *Remote Sensing* 16(17):3273. doi:10.3390/rs16173273
+- Hengl, T. (2006). Finding the right pixel size. *Computers & Geosciences* 32(9):1283–1298. doi:10.1016/j.cageo.2005.11.008
+- Horn, B. K. P. (1981). Hill shading and the reflectance map. *Proceedings of the IEEE* 69(1):14–47. doi:10.1109/PROC.1981.11918
+- International Hydrographic Organization (IHO) (2022). *IHO Standards for Hydrographic Surveys*, Special Publication S-44, Edition 6.1.0. IHO, Monaco.
+- Kienzle, S. (2004). The effect of DEM raster resolution on first order, second order and compound terrain derivatives. *Transactions in GIS* 8(1):83–111. doi:10.1111/j.1467-9671.2004.00169.x
+- Nyquist, H. (1928). Certain topics in telegraph transmission theory. *Transactions of the American Institute of Electrical Engineers* 47(2):617–644. doi:10.1109/T-AIEE.1928.5055024
+- Open Geospatial Consortium (OGC) (2019). *OGC GeoTIFF Standard*, version 1.1. OGC 19-008r4.
+- Polidori, L. & El Hage, M. (2020). Digital elevation model quality assessment methods: A critical review. *Remote Sensing* 12(21):3522. doi:10.3390/rs12213522
+- Shannon, C. E. (1949). Communication in the presence of noise. *Proceedings of the IRE* 37(1):10–21. doi:10.1109/JRPROC.1949.232969
+- Smith, B. & Sandwell, D. (2003). Accuracy and resolution of shuttle radar topography mission data. *Geophysical Research Letters* 30(9):1467. doi:10.1029/2002GL016643
 - Tachikawa, T., Kaku, M., Iwasaki, A., Gesch, D., Oimoen, M., Zhang, Z., Danielson, J., Krieger, T., Curtis, B., Haase, J., Abrams, M., Crippen, R. & Carabajal, C. (2011). *ASTER Global Digital Elevation Model Version 2 – Summary of Validation Results*. NASA/METI/USGS.
-- Tarolli, P. (2014). High-resolution topography for understanding Earth surface processes: Opportunities and challenges. *Geomorphology* 216:295–312.
-- U.S. Geological Survey (2024). *Lidar Base Specification 2024 rev. A*. USGS National Geospatial Program.
-- Zhang, W. & Montgomery, D. R. (1994). Digital elevation model grid size, landscape representation, and hydrologic simulations. *Water Resources Research* 30(4):1019–1028.
+- Tarolli, P. (2014). High-resolution topography for understanding Earth surface processes: Opportunities and challenges. *Geomorphology* 216:295–312. doi:10.1016/j.geomorph.2014.03.008
+- U.S. Geological Survey (USGS) (2024, 2025). *Lidar Base Specification 2024 rev. A* and *2025 rev. A*. USGS National Geospatial Program.
+- Zhang, W. & Montgomery, D. R. (1994). Digital elevation model grid size, landscape representation, and hydrologic simulations. *Water Resources Research* 30(4):1019–1028. doi:10.1029/93WR03553

@@ -55,7 +55,7 @@ Terms used across the handbook, in alphabetical order (acronyms sorted as spelle
 - **Crowdsourced bathymetry (CSB)** — depths logged by volunteer vessels under IHO B-12 — *Ch. 20, 70*
 - **CRS** — coordinate reference system; datum plus coordinate system (and, when kinematic, epoch) — *Ch. 8*
 - **CSDGM** — FGDC Content Standard for Digital Geospatial Metadata (1994/1998) — *Ch. 49*
-- **CUBE** — Combined Uncertainty and Bathymetry Estimator; hypothesis-based sounding-to-grid estimator with per-node uncertainty — *Ch. 20, 31*
+- **CUBE** — Combined Uncertainty and Bathymetry Estimator (with **CHRT** its variable-resolution successor); hypothesis-based sounding-to-grid estimator with per-node uncertainty — *Ch. 20, 31, 46*
 - **Curvature (profile/plan)** — second derivative of the surface along and across the slope direction — *Ch. 57, App. B*
 
 ## D
@@ -183,7 +183,7 @@ Terms used across the handbook, in alphabetical order (acronyms sorted as spelle
 - **Levelling (spirit/geodetic)** — measuring height differences with a horizontal line of sight — *Ch. 9, 72*
 - **Lever arm** — offset vector between sensor, IMU, and GNSS antenna reference points — *Ch. 13, 25*
 - **Lidar** — light detection and ranging; laser pulse ranging — *Ch. 18, 19*
-- **Lidar Base Specification (LBS)** — USGS requirements for lidar deliverables (QL0–QL3) — *Ch. 70*
+- **Lidar Base Specification (LBS)** — USGS requirements for 3DEP lidar deliverables (`2024 rev. A`, Jan 2024; `2025 rev. A`, June 2025; QL0–QL3) — *Ch. 70*
 - **Lineage** — documented history of a dataset's sources and processing — *Ch. 49, 50*
 
 ## M
@@ -208,9 +208,9 @@ Terms used across the handbook, in alphabetical order (acronyms sorted as spelle
 
 - **NAD27 / NAD83** — North American Datums of 1927 and 1983 (with realizations) — *Ch. 8*
 - **NADCON / VERTCON** — NGS grid transformations between US horizontal / vertical datums — *Ch. 8, 9*
-- **NAPGD2022** — North American-Pacific Geopotential Datum of 2022; geoid-based vertical datum replacing NAVD88 — *Ch. 9, 73*
+- **NAPGD2022** — North American-Pacific Geopotential Datum of 2022; geoid-based vertical datum (`GEOID2022`; final public beta Sept 2026, operational adoption targeted for 2027) replacing NAVD88 — *Ch. 9, 73*
 - **NASADEM** — reprocessed SRTM with improved void filling and ICESat control — *Ch. 55*
-- **NATRF2022** — North American Terrestrial Reference Frame of 2022; plate-fixed frame replacing NAD83 — *Ch. 8, 73*
+- **NATRF2022** — North American Terrestrial Reference Frame of 2022; plate-fixed frame (final public beta Sept 2026, operational adoption targeted for 2027) replacing NAD83 — *Ch. 8, 73*
 - **NAVD88** — North American Vertical Datum of 1988; levelling-based, tied to Father Point/Rimouski — *Ch. 9*
 - **NBS** — NOAA National Bathymetric Source; living compilation with supersession — *Ch. 48*
 - **nDSM** — normalized DSM; DSM minus DTM (object heights above ground) — *Ch. 4, 32*
@@ -223,7 +223,7 @@ Terms used across the handbook, in alphabetical order (acronyms sorted as spelle
 - **NSRS** — US National Spatial Reference System — *Ch. 8*
 - **NSSDA** — FGDC National Standard for Spatial Data Accuracy (1998) — *Ch. 53*
 - **Nuth–Kääb co-registration** — DEM shift estimation from the aspect-dependence of elevation differences on slopes — *Ch. 41, App. B*
-- **NVA / VVA** — non-vegetated / vegetated vertical accuracy (ASPRS Positional Accuracy Standards Ed. 1, 2014, and USGS Lidar Base Specification); NVA = 1.96 × RMSE$_z$, VVA = 95th percentile of absolute errors — ⚠ ASPRS Ed. 2 (2023) keeps NVA/VVA only as checkpoint strata and reports both as RMSE$_V$ (with RMSE$_H$ horizontally), dropping the 1.96× and 95th-percentile statistics and the VVA pass/fail — *Ch. 53, 70*
+- **NVA / VVA** — non-vegetated / vegetated vertical accuracy (ASPRS Positional Accuracy Standards Ed. 1, 2014, and pre-2024 USGS Lidar Base Specification); NVA = 1.96 × RMSE$_z$, VVA = 95th percentile of absolute errors — ⚠ ASPRS Ed. 2 (2023/2024) and USGS LBS 2024/2025 rev. A keep NVA/VVA only as checkpoint strata and report both as RMSE$_V$ (with RMSE$_H$ horizontally), dropping the 1.96× and 95th-percentile statistics and the VVA pass/fail — *Ch. 53, 70*
 - **Nyquist frequency** — half the sampling rate; the highest representable spatial frequency — *Ch. 44*
 
 ## O
@@ -258,7 +258,7 @@ Terms used across the handbook, in alphabetical order (acronyms sorted as spelle
 
 ## Q
 
-- **QL0–QL3** — USGS lidar quality levels by density and vertical accuracy (e.g., QL1: ≥ 8 pls/m², 10 cm RMSE$_z$ NVA) — *Ch. 70*
+- **QL0–QL3** — USGS lidar quality levels by density and vertical accuracy (e.g., QL1: ≥ 8 pls/m², ≤ 10 cm RMSE$_z$ NVA) — *Ch. 70*
 - **Quadtree / octree** — hierarchical 2D / 3D spatial subdivision — *Ch. 46*
 - **Quantization noise** — error from rounding to a step $q$; σ = $q/\sqrt{12}$ — *Ch. 5, App. B*
 - **Quasi-geoid** — reference surface for normal heights; coincides with the geoid at sea — *Ch. 7*
@@ -287,7 +287,7 @@ Terms used across the handbook, in alphabetical order (acronyms sorted as spelle
 - **SBES** — single-beam echo sounder — *Ch. 20*
 - **SBET** — smoothed best estimate of trajectory (GNSS/INS post-processing output) — *Ch. 13*
 - **SDB** — satellite-derived bathymetry from optical imagery — *Ch. 23*
-- **Seabed 2030** — Nippon Foundation–GEBCO project to map the ocean floor by 2030 — *Ch. 66, 73*
+- **Seabed 2030** — Nippon Foundation–GEBCO project to map the ocean floor by 2030 (26.1 % in `GEBCO_2024`, 27.3 % in `GEBCO_2025`, 28.7 % in `GEBCO_2026`) — *Ch. 66, 73*
 - **Selective Availability** — intentional GPS degradation, ended 2000-05-02 — *Ch. 12*
 - **SfM** — structure from motion; photogrammetry from unordered images — *Ch. 22*
 - **Shadow (radar/lidar)** — region unobserved because the terrain blocks the line of sight — *Ch. 21, 35*

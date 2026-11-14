@@ -26,11 +26,7 @@
 - **Reading paths.** Validator: 1→3→4→5→9→52→53→54→55→56. Hydrographer:
   2→9→13→20→25→26→34→48→62→70. Lidar/photogrammetry: 12→13→18→22→30→31→32→53.
   Data engineer: 4→44→46→47→48→49→50→51. Decision maker: 1→2→3→54→55→68→69.
-- **Conventions.** Items marked "(verify)" are citations or edition numbers to be
-  confirmed in the bibliography pass. In Appendix C, ⟨H⟩ marks entries taken from
-  gis-history and ⟨+⟩ marks entries added for this handbook. Product accuracy
-  figures in Appendix E are indicative seeds, to be re-checked against the current
-  product handbooks when the chapters are written.
+- **Conventions.** Items originally marked "(verify)" in draft 0.1 were resolved against primary sources, Crossref DOIs, and issuer registries in the 2026 verification pass. In Appendix C, ⟨H⟩ marks entries taken from gis-history and ⟨+⟩ marks entries added for this handbook. Product accuracy figures in Appendix E were cross-checked against current product handbooks and published benchmarks.
 
 ## Skeleton
 
@@ -65,20 +61,20 @@
 20. Sonar: the many types and how they make bathymetry
 21. Radar, SAR, InSAR, radar altimetry, and ice-penetrating radar
 22. Photogrammetry, stereo, and structure from motion
-23. Optical satellite-derived bathymetry, wave-kinematics bathymetry, altimetry-predicted bathymetry
+23. Optical satellite-derived bathymetry, wave-kinematics bathymetry, and altimetry-predicted bathymetry
 24. Gravity, magnetics, and other geophysics as mapping aids
 25. Calibration: targets, stations, networks, benchmarks, reference surfaces
 
 **Part VI — Planning and operating surveys**
 26. Survey planning for calibration, error reduction, and error monitoring
-27. Moving and transient objects during collection (cars, ships, cranes, smoke, steam; AIS/ADS-B)
+27. Moving and transient objects during collection
 28. Reducing cost across collection, processing, validation, and use
 
 **Part VII — From sensor data to products**
 29. Processing pipelines: levels, lineage, and what gets lost
 30. Point-cloud cleaning, classification, and ground extraction
 31. Interpolation, gridding, and grid registration
-32. DSM → DTM: removing objects, and the definitions problem (buildings, roads, bridges, pipes, panels)
+32. DSM → DTM: removing objects, and the definitions problem
 33. Wires, power lines, antennas, and other thin or moving structures
 34. Water in DEMs: surfaces, shorelines, hydro-flattening / -enforcement / -conditioning
 35. Voids, occlusion, shadows, overhangs, and multi-valued surfaces
@@ -140,10 +136,10 @@
 73. Open problems and the next decade
 
 **Appendices**
-A. Glossary · B. Mathematical reference · C. Timeline (seeded from gis-history) ·
+A. Glossary · B. Mathematical reference · C. Timeline ·
 D. Standards and guide documents index · E. Public products comparison tables ·
 F. Software index · G. Checklists · H. Datasets for exercises and benchmarks ·
-I. Gap review — what else should be included, and what could be trimmed
+I. Gap review: what else should be included, and what could be trimmed
 
 ---
 
@@ -348,7 +344,7 @@ I. Gap review — what else should be included, and what could be trimmed
 **Math.** Scale factor k; Transverse Mercator (Krüger/Karney series); Tissot indicatrix; bilinear/cubic kernels; area of a geographic cell.
 **Software.** PROJ; GDAL (`gdalwarp -r`); GMT; rasterio; QGIS/ArcGIS; GeographicLib.
 **Standards.** EPSG; ISO 19111; OGC Two-Dimensional Tile Matrix Set; Snyder 1987 as de-facto reference.
-**Key references.** Snyder 1987 USGS PP 1395 ⟨H⟩; Snyder 1993 *Flattening the Earth*; Karney 2011 *J. Geod.* (TM to nanometers); Evenden 1990 (PROJ) ⟨H⟩; Dennis 2023 NOAA Manual NOS NGS 13 (SPCS2022); Iliffe & Lott 2008.
+**Key references.** Snyder 1987 USGS PP 1395 ⟨H⟩; Snyder 1993 *Flattening the Earth*; Karney 2011 *J. Geod.* (TM to nanometers); Evenden 1990 (PROJ) ⟨H⟩; Dennis 2018 NOAA SP NOS NGS 13 (SPCS2022); Iliffe & Lott 2008.
 **Pitfalls.** Slope on a lat/lon grid without separate x/y scaling; cubic resampling overshoot creating new pits/peaks and smearing nodata; Web Mercator in area/volume computations; UTM zone mismatch at seams; forgetting the half-cell shift when converting registration conventions.
 **Key takeaways.** Every projection and resampling changes elevations slightly and derivatives a lot; stay in the native grid as long as possible and record each resampling in metadata.
 
@@ -386,7 +382,7 @@ I. Gap review — what else should be included, and what could be trimmed
 **Math.** Pseudorange and carrier-phase observation equations; single/double differences; DOP from the geometry matrix; tropospheric mapping functions (sketch).
 **Software.** Open: RTKLIB, PRIDE PPP-AR, gLAB, GNSS-SDR, GAMIT/GLOBK (academic license). Services: OPUS, CSRS-PPP, AUSPOS. Closed: Trimble Business Center, Leica Infinity, NovAtel Inertial Explorer, Bernese.
 **Standards & guides.** RINEX 3/4; RTCM 10403.x; NMEA 0183/2000; NGS-58/59; NGS RTN guidelines; ASPRS Ed. 2 Addendum II; IGS conventions.
-**Key references.** Teunissen & Montenbruck (eds.) 2017 *Springer Handbook of GNSS*; Misra & Enge 2011; Kaplan & Hegarty 2017; Hofmann-Wellenhof et al. 2008; Zumberge et al. 1997 *JGR* (PPP); Dow, Neilan & Rizos 2009 (IGS); Soler et al. 2006 (OPUS); Takasu & Yasuda 2009 (RTKLIB); Geng et al. 2019 (PRIDE); Williams et al. 2024 *Nature* ⟨H⟩; Leick, Rapoport & Tatarnikov 2015.
+**Key references.** Teunissen & Montenbruck (eds.) 2017 *Springer Handbook of GNSS*; Misra & Enge 2011; Kaplan & Hegarty 2017; Hofmann-Wellenhof et al. 2008; Zumberge et al. 1997 *JGR* (PPP); Dow, Neilan & Rizos 2009 (IGS); Soler et al. 2006 (OPUS); Takasu & Yasuda 2009 (RTKLIB); Geng et al. 2019 (PRIDE); Smith et al. 2024 *Nature* ⟨H⟩; Leick, Rapoport & Tatarnikov 2015.
 **Pitfalls.** Antenna height to the wrong reference (ARP vs phase center; slant vs vertical); ellipsoidal and orthometric heights mixed in one checkpoint file; short occupations under canopy; RTK fixed to a base with wrong coordinates (whole-survey offset); NRTK datum differing from the project datum; ignoring the CORS coordinate epoch.
 **Key takeaways.** GNSS vertical accuracy is bounded by troposphere, geometry, and multipath, not receiver price; every GNSS survey needs documented base coordinates, datum/epoch, antenna model, and redundancy.
 
@@ -408,7 +404,7 @@ I. Gap review — what else should be included, and what could be trimmed
 **Pitfalls.** Vendor-specific lever-arm sign conventions; heave-filter settling after turns (artefacts at line starts); magnetometer heading near steel; induced heave applied at the wrong point; trajectory and base station in different frames/epochs.
 **Key takeaways.** Attitude error scales with range — 0.01° of roll is 17 cm at 1 km; the trajectory, not the sensor, usually limits DEM accuracy from moving platforms.
 
-### Chapter 14 — Positioning without (or beyond) GNSS
+### Chapter 14 — Positioning without (or beyond) GNSS: acoustic, terrain-aided, radio, barometric
 **Scope.** Methods that complement GNSS or replace it where it fails.
 **Sections.**
 - 14.1 Acoustic positioning: LBL, SBL, USBL, inverted USBL; sound-speed dependence; calibration (box-in)
@@ -425,7 +421,7 @@ I. Gap review — what else should be included, and what could be trimmed
 **Pitfalls.** Drone missions flown at "400 ft AGL" on SRTM in mountainous terrain; USBL without a sound-speed profile; barometric drift over a long survey day.
 **Key takeaways.** Without GNSS, position error grows with time or inherits map quality — plan for it explicitly.
 
-### Chapter 15 — SLAM: solving the map and the trajectory together
+### Chapter 15 — SLAM: solving the map and the trajectory together (and mapping innerspace)
 **Scope.** Simultaneous localization and mapping as the unifying modern formulation; indoor, underground, and "innerspace" mapping.
 **Sections.**
 - 15.1 Origins (Smith & Cheeseman 1986 ⟨H⟩) → EKF-SLAM → particle filters → graph SLAM and factor graphs (g2o, GTSAM, Ceres)
@@ -443,7 +439,7 @@ I. Gap review — what else should be included, and what could be trimmed
 
 ## Part V — Sensors and platforms
 
-### Chapter 16 — Platforms
+### Chapter 16 — Platforms: feet, cars, boats, drones, kites, aircraft, satellites, fixed infrastructure
 **Scope.** Where sensors sit and what each vantage point implies for coverage, resolution, accuracy, cost, and regulation.
 **Sections.**
 - 16.1 Humans on foot: GNSS rovers, total stations, levelling, backpack lidar/SLAM, handheld photogrammetry, phone lidar
@@ -463,7 +459,7 @@ I. Gap review — what else should be included, and what could be trimmed
 **Pitfalls.** Platform chosen by availability rather than requirement; drones in wind (blur, IMU noise); satellite revisit ≠ cloud-free revisit; hull-mounted sonars blinded by aeration; crowd data without provenance.
 **Key takeaways.** The platform sets the error envelope before the sensor is switched on; fixed infrastructure and the crowd are under-used, cheap, and continuous — but need trust models.
 
-### Chapter 17 — Measurement physics: a unified view
+### Chapter 17 — Measurement physics: a unified view (ranging, parallax, interferometry, inversion)
 **Scope.** The handful of physical principles behind every elevation sensor, and what "the surface" means to each.
 **Sections.**
 - 17.1 Ranging: pulsed time-of-flight, phase, FMCW; range = c·t/2; speed of light vs sound; refraction
@@ -477,7 +473,7 @@ I. Gap review — what else should be included, and what could be trimmed
 - 17.9 Noise, detection thresholds, and false alarms as the origin of outliers
 **Math.** Two-way travel time; Snell's law (air–water n ≈ 1.33–1.34; sound-speed gradients); beam footprint; InSAR height of ambiguity; Nyquist preview.
 **Key references.** Lurton 2010 *Introduction to Underwater Acoustics*; Shan & Toth 2018; Hanssen 2001; Jensen 2007 *Remote Sensing of the Environment*; Elachi & van Zyl 2006 *Introduction to the Physics and Techniques of Remote Sensing*.
-**Pitfalls.** Assuming the measured surface is the ground (X-band DEMs sit meters above snow-covered ice); comparing sensors whose "surface" definitions differ and calling the difference "error"; ignoring refraction in bathy lidar.
+**Pitfalls.** Assuming the measured surface is the ground (X-band DEMs sit meters below snow-covered ice); comparing sensors whose "surface" definitions differ and calling the difference "error"; ignoring refraction in bathy lidar.
 **Key takeaways.** Each sensor measures a physically defined surface at a physically defined resolution; DEM comparison across sensors is a comparison of definitions first and errors second.
 
 ### Chapter 18 — Topographic lidar
@@ -513,7 +509,7 @@ I. Gap review — what else should be included, and what could be trimmed
 **Then & now.** First airborne laser bathymetry experiments late 1960s–70s → SHOALS 1990s → CZMIL/Chiroptera 2010s → UAV bathy lidar and ICESat-2 2018+.
 **Math.** Snell refraction correction; depth-dependent TVU model; Kd attenuation.
 **Software.** Open: PDAL (refraction scripts), CloudCompare, SlideRule (ICESat-2), OpenAltimetry, `icepyx`. Closed: Leica LSS, Teledyne Optech HydroFusion, Riegl RiHYDRO, Fugro proprietary, CARIS/Qimera for products.
-**Standards & guides.** IHO S-44 Ed. 6; NOAA HSSD (lidar bathymetry annex); USACE EM 1110-2-1003; USGS LBS (topobathy addendum).
+**Standards & guides.** IHO S-44 Ed. 6.1.0 (2022); NOAA HSSD (lidar bathymetry annex); USACE EM 1110-2-1003; USGS LBS (topobathy addendum).
 **Key references.** Guenther 1985 NOAA Prof. Paper 1; Guenther et al. 2000 (accuracy challenge); Philpot (ed.) 2019 *Airborne Laser Hydrography II*; Mandlburger 2022 *IHR* review; Fernandez-Diaz et al. 2014 (Titan); Nayegandhi et al. 2009 (EAARL); Parrish et al. 2019 *Remote Sens.* (ICESat-2 bathymetry); Quadros et al. 2008 (topo–bathy integration).
 **Pitfalls.** Surface model errors doubling as depth errors; data gaps in the surf zone sold as "no features"; turbidity-limited depth presented as the seabed; mixing tidal and orthometric datums within one topobathy LAS.
 **Key takeaways.** Bathy lidar fills the white ribbon but only where water is clear; its uncertainty is dominated by the water surface and refraction model, so publish those models with the data.
@@ -532,12 +528,12 @@ I. Gap review — what else should be included, and what could be trimmed
 **Then & now.** da Vinci 1490 ⟨H⟩ → Titanic 1912 / Fessenden → echo sounder patent 1913 ⟨H⟩ → Simrad 1931, Atlas 1902 ⟨H⟩ → Hawley's Hydrographic Manual 1928 ⟨H⟩ → multibeam patent 1962, SeaBeam 1977, Hydrosweep 1989 ⟨H⟩ → MB-System 1993, pfmabe 1994, GSF 1998 ⟨H⟩ → CUBE 2003, BAG 2006 → HSSD 2000 ⟨H⟩ and annual updates → USV/AUV mapping 2020s.
 **Math.** Sonar equation; Snell ray tracing through an SVP; footprint = 2d·tan(θ/2); TVU/THU; CUBE hypothesis weighting; patch-test geometry.
 **Software.** Open: MB-System, Kluster (NOAA), HydrOffice Sound Speed Manager/QC Tools, Pydro (partly), GMT, pfmabe (legacy). Closed: Teledyne CARIS HIPS & SIPS/BASE Editor, QPS Qimera/Fledermaus/FMGT, HYPACK/HYSWEEP, EIVA NaviSuite, BeamworX, Teledyne PDS, Kongsberg SIS, Chesapeake SonarWiz, NaviModel.
-**Standards & guides.** IHO S-44 Ed. 6; NOAA HSSD (annual) and FPM; USACE EM 1110-2-1003; IHO C-13; Multibeam Advisory Committee calibration guidance; GeoHab backscatter guidelines (Lurton & Lamarche 2015); IHO S-102/BAG specs.
+**Standards & guides.** IHO S-44 Ed. 6.1.0 (2022); NOAA HSSD (annual) and FPM; USACE EM 1110-2-1003; IHO C-13; Multibeam Advisory Committee calibration guidance; GeoHab backscatter guidelines (Lurton & Lamarche 2015); IHO S-102/BAG specs.
 **Key references.** Lurton 2010; Urick 1983; Medwin & Clay 1998; de Moustier 1988 *IHR*; Hughes Clarke, Mayer & Wells 1996 *MGR*; Hughes Clarke 2018 (*Submarine Geomorphology* chapter; *Geosciences* imaging-geometry paper); Godin 1998 (patch test); Hare, Godin & Mayer 1995; Hare 1995/2001 (error budgets); Calder & Mayer 2003 *G³* (CUBE); Calder & Rice 2017 (CHRT); Lurton & Augustin 2010 *IEEE JOE*; Beaudoin, Hughes Clarke & Bartlett 2004 (sound speed); Dinn, Loncarevic & Costello 1995; Colbo et al. 2014 (water column); Hansen 2011 and Hayes & Gough 2009 (SAS); Demer et al. 2015 ICES CRR 326 (calibration spheres); Caress & Chayes 1996 (MB-System); Hawley 1928 and Umbach 1976 *Hydrographic Manual* ⟨H⟩.
 **Pitfalls.** Grid resolution finer than the depth-dependent footprint; sound-speed casts too infrequent in stratified water; mis-set waterline/draft as a constant vertical bias; squat ignored at survey speed; over-cleaning that removes real shoals; averaging surfaces used for charting; bubble sweep-down on the transducer.
 **Key takeaways.** Sonar resolution degrades with depth by physics, so products are inherently variable-resolution; the vertical budget is dominated by water level, sound speed, and vessel geometry; navigation surfaces must be shoal-biased and must carry uncertainty.
 
-### Chapter 21 — Radar, SAR, InSAR, radar altimetry, ice-penetrating radar
+### Chapter 21 — Radar, SAR, InSAR, radar altimetry, and ice-penetrating radar
 **Scope.** Microwave methods for elevation: imaging geometry, interferometry, altimetry, sub-ice beds.
 **Sections.**
 - 21.1 Radar basics and SAR imaging geometry: slant range, foreshortening, layover, shadow; speckle
@@ -550,7 +546,7 @@ I. Gap review — what else should be included, and what could be trimmed
 - 21.8 Ice-penetrating and ground-penetrating radar: radio-echo sounding, Bedmap/BedMachine bed DEMs, snow depth, GPR for shallow subsurface
 - 21.9 Ground-based radar interferometers for slopes and dams
 - 21.10 Products and missions: SRTM (2000 ⟨H⟩), TanDEM-X DEM (12/30/90 m), Copernicus DEM, NISAR, Sentinel-1C/D
-**Math.** Height of ambiguity h_amb = λ·R·sin θ / (2·B⊥) (×2 for bistatic convention); phase-to-height sensitivity; coherence; layover geometry.
+**Math.** Height of ambiguity h_amb = λ·R·sin θ / (p·B⊥) (p = 2 repeat-pass/monostatic, p = 1 bistatic single-pass); phase-to-height sensitivity; coherence; layover geometry.
 **Software.** Open: ISCE2/3, GMTSAR, ESA SNAP, MintPy, LiCSBAS, StaMPS, PyRate, SNAPHU, HyP3 (ASF service). Closed: GAMMA, SARscape, SARPROZ.
 **Standards & guides.** TanDEM-X DEM Product Specification; Copernicus DEM Product Handbook; SRTM User Guide; CEOS ARD for SAR (CARD4L).
 **Key references.** Hanssen 2001 *Radar Interferometry*; Rosen et al. 2000 *Proc. IEEE*; Bamler & Hartl 1998; Massonnet & Feigl 1998 *Rev. Geophys.*; Zebker & Villasenor 1992; Ferretti, Prati & Rocca 2001 (PS); Berardino et al. 2002 (SBAS); Hooper et al. 2004 (StaMPS); Goldstein, Zebker & Werner 1988; Chen & Zebker 2001 (SNAPHU); Farr et al. 2007 *Rev. Geophys.* (SRTM); Rodríguez, Morris & Belz 2006 (SRTM assessment); Krieger et al. 2007; Rizzoli et al. 2017 and Wessel et al. 2018 (TanDEM-X DEM); Cumming & Wong 2005; Moreira et al. 2013 tutorial; Fu & Cazenave 2001; Sandwell et al. 2014 *Science*; Fu et al. 2024 (SWOT); Fretwell et al. 2013 (Bedmap2); Morlighem et al. 2017/2020 (BedMachine); Quegan et al. 2019 (Biomass).
@@ -577,7 +573,7 @@ I. Gap review — what else should be included, and what could be trimmed
 **Pitfalls.** Doming from self-calibration with nadir-only, GCP-poor blocks; checkpoints that were also GCPs; DSM sold as DTM; smooth "water" surfaces that are matching noise; RPC products with meters of bias uncorrected; NeRF/3DGS outputs quoted with centimeter "accuracy."
 **Key takeaways.** Image-based DEMs are only as good as the camera model, the network geometry, and the control; they measure the first visible surface, and they fail predictably on water, snow, and thin objects.
 
-### Chapter 23 — Optical SDB, wave-kinematics bathymetry, altimetry-predicted bathymetry
+### Chapter 23 — Optical satellite-derived bathymetry, wave-kinematics bathymetry, and altimetry-predicted bathymetry
 **Scope.** Three distinct families often lumped together as "satellite bathymetry."
 **Sections.**
 - 23.1 Optical SDB physics: attenuation, Kd, bottom albedo, optically shallow water; empirical (Lyzenga, Stumpf band ratio), physics-based (radiative transfer), and ML approaches; multi-temporal compositing; sun glint, waves, turbidity, tide stage at acquisition (datum of the result!)
@@ -588,7 +584,7 @@ I. Gap review — what else should be included, and what could be trimmed
 - 23.6 Fitness: reconnaissance and charting support vs safety-of-navigation (CATZOC implications)
 **Math.** Stumpf ratio model z = m₁·ln(nπR(λ₁))/ln(nπR(λ₂)) − m₀; dispersion ω² = g·k·tanh(k·h); gravity–topography transfer function (Parker 1973).
 **Software.** Open: Google Earth Engine scripts, ACOLITE (atmospheric correction), `sdb` notebooks, GMT `gravfft`. Closed: EOMAP, TCarta, ENVI.
-**Standards & guides.** IHO B-13 Guidance on Satellite-Derived Bathymetry (verify current edition); IHO S-44 note on SDB; GEBCO Cook Book chapters.
+**Standards & guides.** IHO B-13 Guidance to Satellite-Derived Bathymetry (Ed. 1.0.0, March 2024); IHO S-44 note on SDB; GEBCO Cook Book chapters.
 **Key references.** Lyzenga 1978 *Appl. Opt.*; Stumpf, Holderied & Sinclair 2003 *L&O*; Lee et al. 1999; Dekker et al. 2011; Caballero & Stumpf 2019/2020; Hedley et al. 2018; Babbel, Parrish & Magruder 2021 *GRL*; Thomas et al. 2021; Sagawa et al. 2019; Ashphaq et al. 2021 review; Holman, Plant & Holland 2013 (cBathy); Bergsma, Almar & Maisongrande 2019; Almar et al. 2019; Smith & Sandwell 1994/1997 ⟨H⟩; Sandwell et al. 2014; Tozer et al. 2019; Parsons & Sclater 1977 ⟨H⟩ (depth–age prior); Marks & Smith 2006.
 **Pitfalls.** SDB depth referenced to the water level at image time, not chart datum; extrapolating empirical models beyond calibration depths/bottom types; using altimetry-predicted bathymetry for anything local; treating ML-SDB confidence as accuracy.
 **Key takeaways.** Three different physics, three different error structures; all three need in-situ calibration and all three should be flagged by source in any compilation.
@@ -763,7 +759,7 @@ I. Gap review — what else should be included, and what could be trimmed
 **Pitfalls.** A clearance survey flown on a cold day used to judge summer sag; antennas absent from a DSM used for obstacle analysis; wires removed as noise in a lidar dataset later used for drone route planning.
 **Key takeaways.** Thin structures need their own layer, their own acquisition parameters, and a time stamp with ambient conditions; their absence from a DSM is not evidence of absence.
 
-### Chapter 34 — Water in DEMs: surfaces, shorelines, and hydro-conditioning
+### Chapter 34 — Water in DEMs: surfaces, shorelines, hydro-flattening / -enforcement / -conditioning
 **Scope.** Representing water in a terrain model and the definition of a shoreline.
 **Sections.**
 - 34.1 Water in topographic lidar: absorption and specular loss, voids, low returns; hydro-flattening (flat lakes, monotonic rivers via breaklines), USGS definitions of hydro-flattening vs hydro-enforcement vs hydro-conditioning
@@ -794,7 +790,7 @@ I. Gap review — what else should be included, and what could be trimmed
 **Pitfalls.** Filled voids indistinguishable from measured cells; collapsing a bridge deck onto the river; cloud-filled DSM patches from a different year; "100 % coverage" claims that exclude the surf zone.
 **Key takeaways.** Every DEM needs a source/void/fill mask; multi-valued geometry cannot be stored in a grid — decide and document the collapse rule.
 
-### Chapter 36 — Seasonal and environmental variability
+### Chapter 36 — Seasonal and environmental variability (leaves, snow, groundwater, crops, steam, tides)
 **Scope.** The surface measured depends on the season and the weather of the day.
 **Sections.**
 - 36.1 Vegetation: leaf-on/leaf-off penetration, crop growth and harvest, tillage microtopography (10–30 cm), grass and marsh height, forest regrowth and clear-cuts
@@ -960,7 +956,7 @@ I. Gap review — what else should be included, and what could be trimmed
 **Then & now.** Contour interval as the resolution surrogate ⟨H⟩ → raster post spacing (DTED levels 0/1/2 at 30″/3″/1″ ⟨H⟩) → point density specs (LBS QL0–QL3) → effective-resolution metrics (DEMIX, spectral).
 **Math.** Sampling theorem and aliasing; modulation transfer function of footprint convolution; slope from finite differences and its dependence on cell size h (Horn's operator); power spectra of terrain (roughly 1/f^β) and the resolution at which noise exceeds signal; effective resolution estimation (Grohmann 2015; Guth 2024 DEMIX).
 **Software.** Open: GDAL (gdalwarp resampling kernels, gdaladdo), PDAL (density/overlap metrics), lidR (density), WhiteboxTools, GRASS r.resamp.*, xdem; Closed: Global Mapper, ArcGIS Pro, QPS Qimera (CUBE resolution estimation), CARIS (VR surfaces).
-**Standards & guides.** USGS LBS 2024 (NPS/NPD, QL table); IHO S-44 Ed. 6.1.0 (feature detection and search); ICAO Annex 15 eTOD post spacing; ASPRS Ed. 2 (resolution–accuracy relationships); OGC GeoTIFF 1.1 raster space definitions.
+**Standards & guides.** USGS LBS 2024/2025 rev. A (NPS/NPD, QL table); IHO S-44 Ed. 6.1.0 (feature detection and search); ICAO Annex 15 eTOD post spacing; ASPRS Ed. 2 (resolution–accuracy relationships); OGC GeoTIFF 1.1 raster space definitions.
 **Key references.** Shannon 1949 ⟨H⟩; Zhang & Montgomery 1994 *WRR*; Hengl 2006 *Comput. Geosci.* (finding the right pixel size); Grohmann 2015 *Comput. Geosci.*; Florinsky & Kuryakova 2000; Guth et al. 2021 *Remote Sens.* (DEM terminology/effective resolution); Polidori & El Hage 2020 *Remote Sens.* (DEM quality review); Kienzle 2004; Tarolli 2014 *Geomorphology* (high-resolution topography).
 **Pitfalls.** Reading "30 m" as "features of 30 m are resolved"; comparing slopes across resolutions; oversampling SDB to match lidar and treating it as equal; losing a 3 m levee in a 10 m grid and modelling a flood that can't happen (or one that can't be stopped); ignoring the half-pixel convention shift.
 **Key takeaways.** Resolution is a property of the information, not the file; derivatives inherit resolution dependence; store and publish source density, footprint, and effective resolution alongside pixel size.
@@ -1023,8 +1019,8 @@ I. Gap review — what else should be included, and what could be trimmed
 **Then & now.** Vendor binaries and ASCII → USGS DEM/SDTS (1990s) → LAS 1.0 (2003) ⟨H⟩ → GeoTIFF spec (1995) → BAG 1.0 (2006) → LAZ (2011) → COG (2016–) → COPC (2021), Zarr/GeoZarr (2020s), S-102 Ed. 3 (2024).
 **Math.** Quantization error (uniform: σ = q/√12); float32 precision limits (24-bit significand: ulp ≈ 0.8 cm at 10⁵ m, 6 cm at 10⁶ m, 0.5 m at 5×10⁶ m — projected northings must not be stored as float32 without an offset); LERC max-error semantics; Hilbert-ordered octree addressing in COPC.
 **Software.** Open: PDAL, LAStools (partly open), laspy, GDAL/rasterio, libLAS (legacy), MB-System, HDF5/h5py, xarray/rioxarray, Zarr-Python, cogger/rio-cogeo, pybag/OpenNS BAG library, s100py (NOAA), GeoPandas; Closed: LAStools (licensed tools), CARIS, QPS, Hypack, Global Mapper, FME, ArcGIS, TerraSolid.
-**Standards & guides.** ASPRS LAS 1.4 R15 (2019) and the LAS 1.4 domain profile for topo-bathy; OGC GeoTIFF 1.1 (19-008r4); OGC COG 1.0 (21-026); ONS BAG Format Specification 2.0 (verify edition/date); IHO S-100 Ed. 5, S-102 Ed. 3.0 (3.1 — verify); MIL-PRF-89020B (DTED); CF Conventions 1.11; Zarr v3 spec; OGC GeoPackage 1.4; OGC CityGML 3.0/CityJSON 2.0.
-**Key references.** ASPRS LAS 1.4 R15 specification; Isenburg 2013 *PE&RS* (LAZ); Hobu Inc./USGS COPC spec 1.0; OGC COG; ONS 2024 BAG 2.0; IHO S-102 PS 3.0 (2024); Ritter & Ruth 1997 (GeoTIFF); Eaton et al. (CF conventions); Cesium quantized-mesh and OGC 3D Tiles specifications (web terrain delivery).
+**Standards & guides.** ASPRS LAS 1.4 R15 (2019) and the LAS 1.4 domain profile for topo-bathy; OGC GeoTIFF 1.1 (19-008r4); OGC COG 1.0 (21-026); ONS BAG Format Specification (FSD 2.0.1, 2022); IHO S-100 Ed. 5.2.0 (2024), S-102 Ed. 3.0.0 (Dec 2024; 3.1.0 in development); MIL-PRF-89020B (DTED); CF Conventions 1.11; Zarr v3 spec; OGC GeoPackage 1.4; OGC CityGML 3.0/CityJSON 2.0.
+**Key references.** ASPRS LAS 1.4 R15 specification; Isenburg 2013 *PE&RS* (LAZ); Hobu Inc./USGS COPC spec 1.0; OGC COG; ONS 2022 BAG 2.0 (FSD 2.0.1); IHO S-102 PS 3.0.0 (2024); Ritter & Ruth 1997 (GeoTIFF); Eaton et al. (CF conventions); Cesium quantized-mesh and OGC 3D Tiles specifications (web terrain delivery).
 **Pitfalls.** LAS files with no CRS VLR and "it's probably State Plane feet"; GeoTIFF with horizontal CRS but no vertical CRS (orthometric or ellipsoidal? which geoid?); exporting BAG uncertainty into a GeoTIFF and losing its meaning; Terrain-RGB decoded with the wrong base/interval; DTED edges and integer meters taken as 1 m accuracy; a JP2 DEM with 0.5 m "lossless-looking" errors.
 **Key takeaways.** The format is part of the measurement chain; always carry horizontal and vertical CRS, nodata, uncertainty, and lineage inside the file; validate files automatically on receipt and before delivery.
 
@@ -1061,7 +1057,7 @@ I. Gap review — what else should be included, and what could be trimmed
 - 49.8 Reading metadata forensically: what is missing tells you what wasn't done (no vertical CRS → probably never checked; no checkpoints → accuracy is a guess) (links Ch. 54)
 **Then & now.** Map marginalia and survey sheets' title blocks → FGDC CSDGM (1994/1998) ⟨H⟩ → ISO 19115 (2003/2014) → machine-first STAC (2017–; 1.0 in 2021 ⟨H⟩); from documents to records to API-queryable catalogs.
 **Software.** Open: pystac/stac-validator, pygeometa, GeoNetwork, CKAN, pycsw, mdEditor, GDAL/PDAL metadata readers, ISO 19139 validators, NOAA s100py; Closed: ArcGIS metadata editor, CARIS, QPS, FME, commercial catalog portals.
-**Standards & guides.** ISO 19115-1:2014/-2:2019/-3; ISO 19157-1:2023; FGDC-STD-001-1998 and shoreline/lidar extensions; STAC 1.0/1.1 and extensions; INSPIRE D2.8.II.1 (Elevation); USGS LBS 2024 metadata section; NOAA HSSD (DR, survey outline, metadata deliverables); IHO S-100 Part 4a (metadata); DataCite schema 4.
+**Standards & guides.** ISO 19115-1:2014/-2:2019/-3; ISO 19157-1:2023; FGDC-STD-001-1998 and shoreline/lidar extensions; STAC 1.0/1.1 and extensions; INSPIRE D2.8.II.1 (Elevation); USGS LBS 2024/2025 rev. A metadata section; NOAA HSSD (DR, survey outline, metadata deliverables); IHO S-100 Part 4a (metadata); DataCite schema 4.
 **Key references.** FGDC 1998; ISO 19115-1; Hanson & Holmes (STAC spec) 2021; Wilkinson et al. 2016 *Sci. Data* (FAIR); Carroll et al. 2020 (CARE); Goodchild 2007 (fitness-for-use, VGI metadata); Devillers et al. 2010 *IJGIS* (spatial data quality in practice); Tsou 2002 (metadata and interoperability).
 **Pitfalls.** "Vertical datum: NAVD88" without geoid model; "accuracy: 0.1 m" without stating RMSE/95 %/CE/LE or checkpoint count; dates as the publication year not the acquisition year; metadata in a PDF nobody can query; copying a template's values into a new project.
 **Key takeaways.** Metadata is the user's only defence against misuse; automate the structured parts, hand-write the limitations; if it's not in the metadata, assume it wasn't measured.
@@ -1118,10 +1114,10 @@ I. Gap review — what else should be included, and what could be trimmed
 - 52.6 Vegetated and bathymetric truth problems: ground under canopy (probe vs lidar vs GNSS under trees), marsh surfaces, soft seafloor (what depth is "the bottom" for lead-line vs acoustic vs lidar); temporal mismatch (snow, tide, growth)
 - 52.7 Benchmarks for algorithms vs datasets for products: ISPRS, DALES/OpenGF (Ch. 42), DEMIX (Ch. 55), SfM benchmark sets, MBES processing test data (Shallow Survey series)
 - 52.8 Sharing and licensing truth data; checkpoint tables as mandatory deliverables; privacy of control locations (usually none)
-**Then & now.** Levelled benchmarks and triangulation stations ⟨H⟩ → GPS campaigns (1990s) → CORS/OPUS (2000s) → spaceborne laser altimetry as near-global reference (ICESat 2003; ICESat-2 2018; GEDI 2019); ASPRS standards moved from NMAS 1947 ⟨H⟩ to NSSDA 1998 to ASPRS 2014/2023.
+**Then & now.** Levelled benchmarks and triangulation stations ⟨H⟩ → GPS campaigns (1990s) → CORS/OPUS (2000s) → spaceborne laser altimetry as near-global reference (ICESat 2003; ICESat-2 2018; GEDI 2018/2019); ASPRS standards moved from NMAS 1947 to NSSDA 1998 to ASPRS 2014/2023.
 **Math.** Required N for a confidence interval on RMSE (chi-square); allowing for checkpoint error: σ²_obs = σ²_product + σ²_check; stratified estimation; outlier policy (3σ rule vs robust).
 **Software.** Open: NGS OPUS (free service), RTKLIB, PDAL/xdem/CloudCompare for point-vs-surface checks, icepyx/SlideRule (ICESat-2), GEDI tools, QGIS; Closed: Trimble Business Center, Leica Infinity, TerraMatch/TerraScan control reports, CARIS/QPS reference-surface tools.
-**Standards & guides.** ASPRS Positional Accuracy Standards Ed. 2 (2023) incl. checkpoint guidance; NSSDA (FGDC-STD-007.3-1998); NGS-58 (1997) and NGS-59 (2008); USGS LBS 2024 (checkpoint requirements); IHO S-44 Ed. 6.1.0 (reference surfaces, crosslines); NOAA FPM 2020/2023 (reference surface, patch test); ISO 19157 quality evaluation procedures.
+**Standards & guides.** ASPRS Positional Accuracy Standards Ed. 2 (2023; v2 2024) incl. checkpoint guidance; NSSDA (FGDC-STD-007.3-1998); NGS-58 (1997) and NGS-59 (2008); USGS LBS 2024/2025 rev. A (checkpoint requirements); IHO S-44 Ed. 6.1.0 (reference surfaces, crosslines); NOAA FPM (April 2014 PDF; 2020+ online edition; reference surface, patch test); ISO 19157 quality evaluation procedures.
 **Key references.** Zilkoski, D'Onofrio & Frakes 1997 (NGS-58); Hodgson & Bresnahan 2004 *PE&RS* (lidar accuracy and checkpoint error); Höhle & Höhle 2009 *ISPRS J.* (robust accuracy measures); Neuenschwander et al. 2020 (ATL08 validation); Liu et al. 2021 (ICESat-2 for DEM validation); Guth et al. 2021; Bielski et al. 2024 (DEMIX); Hare, Eakins & Amante 2011; Dewberry 2012 (NEEA).
 **Pitfalls.** Checkpoints collected by the same crew/instrument/epoch as the survey; all checkpoints on roads (then claiming vegetated accuracy); ICESat-2 used as truth under dense canopy without filtering; comparing lidar to benchmarks in NAVD88 realized with a different geoid; reporting RMSE from 8 points.
 **Key takeaways.** Truth has an error budget — state it; independence and stratification matter more than count; a validation dataset's metadata must be as rigorous as the product's.
@@ -1130,7 +1126,7 @@ I. Gap review — what else should be included, and what could be trimmed
 **Scope.** The procedures, statistics, and reporting language for saying how good an elevation product is — with the standards that define the words.
 **Sections.**
 - 53.1 Vocabulary (back to Ch. 5): accuracy vs precision vs uncertainty; absolute vs relative; horizontal vs vertical; RMSE, mean error (bias), standard deviation, MAE, NMAD, 95th percentile, LE95/CE90/CE95; "tested" vs "produced to meet" vs "compiled to meet" (NMAS/NSSDA language)
-- 53.2 Standards and their test logic: NMAS 1947 ⟨H⟩ (90 % within ½ contour interval), NSSDA 1998 (RMSE × 1.96), ASPRS 2014 → Ed. 2 2023 (RMSE_v classes; NVA vs VVA, VVA at 95th percentile and not pass/fail; horizontal from RMSE_r; 3D accuracy), USGS LBS QLs, IHO S-44 Ed. 6 (TVU = √(a² + (b·d)²), THU, orders; feature detection), ICAO Annex 15 (eTOD accuracy/confidence per area), INSPIRE elevation quality
+- 53.2 Standards and their test logic: NMAS 1947 (90 % within ½ contour interval), NSSDA 1998 (RMSE × 1.96), ASPRS 2014 → Ed. 2 2023/2024 (RMSE_V/RMSE_H; NVA vs VVA, VVA reported as RMSE_V and not pass/fail; horizontal from RMSE_r; 3D accuracy), USGS LBS QLs, IHO S-44 Ed. 6.1.0 (TVU = √(a² + (b·d)²), THU, orders; feature detection), ICAO Annex 15 (eTOD accuracy/confidence per area), INSPIRE elevation quality
 - 53.3 Procedures: checkpoint comparison (point-to-surface via TIN/bilinear), relative accuracy (swath-to-swath, intra-swath, crossline analysis), internal consistency (overlap statistics), systematic error detection (bias by strip, by scan angle, by time), outlier handling and reporting, strata by land cover/slope
 - 53.4 Uncertainty budgets: component propagation (GNSS, IMU, ranging, boresight, lever arms, sound speed, tide, refraction, interpolation), TPU for hydrography (Hare 1995; CUBE inputs), lidar error models (Baltsavias 1999; Glennie 2007), SfM (James et al. 2017 precision maps), InSAR height error (HoA, coherence), DEM error surfaces (Wechsler 2007), Monte Carlo propagation to derivatives (slope, viewshed, floodplain)
 - 53.5 Spatial structure of error: autocorrelation, variograms of residuals, slope/aspect dependence, resolution effects; why global RMSE understates local error
@@ -1140,7 +1136,7 @@ I. Gap review — what else should be included, and what could be trimmed
 **Then & now.** Contour-interval tests ⟨H⟩ → NSSDA RMSE → quality-level frameworks and stratified vegetated tests → delivered uncertainty rasters (BAG, S-102, TanDEM-X HEM) → probabilistic products and decision analytics.
 **Math.** RMSE, bias, σ decomposition RMSE² = bias² + σ²; NMAD = 1.4826·median|ε − median ε|; percentile confidence intervals; S-44 TVU formula; variance propagation J Σ Jᵀ; Monte Carlo with spatially correlated fields (sequential Gaussian simulation); variogram fitting; chi-square test for RMSE claims.
 **Software.** Open: xdem (error modelling, variograms, Monte Carlo), demcoreg, PDAL/lidR QC, CloudCompare, R gstat/geoR, QGIS, NOAA HydrOffice (QC Tools, free), MB-System crossline tools; Closed: TerraMatch/TerraScan reports, LP360 QA/QC, CARIS (TPU, crosslines), QPS Qimera (CUBE), ArcGIS, Global Mapper, GeoCue.
-**Standards & guides.** ASPRS Positional Accuracy Standards for Digital Geospatial Data Ed. 2 (2023); NSSDA; USGS LBS 2024; IHO S-44 Ed. 6.1.0 and S-67 (mariners' guide to uncertainty); NOAA HSSD (current edition); ICAO Annex 15/Doc 10066; ISO 19157-1; JCGM 100 (GUM) and JCGM 101 (Monte Carlo); FEMA elevation guidelines (G&S).
+**Standards & guides.** ASPRS Positional Accuracy Standards for Digital Geospatial Data Ed. 2 (2023; v2 June 2024); NSSDA; USGS LBS 2024/2025 rev. A; IHO S-44 Ed. 6.1.0 and S-67 (mariners' guide to uncertainty); NOAA HSSD (current edition); ICAO Annex 15/Doc 10066; ISO 19157-1; JCGM 100 (GUM) and JCGM 101 (Monte Carlo); FEMA elevation guidelines (G&S).
 **Key references.** Höhle & Höhle 2009; Hodgson & Bresnahan 2004; Wechsler 2007 *HESS*; Hare 1995 *Int. Hydrogr. Rev.* (TPU); Calder & Mayer 2003; Baltsavias 1999 *ISPRS J.*; Glennie 2007 *J. Appl. Geod.*; James, Robson & Smith 2017 *ESPL*; Fisher & Tate 2006 *Prog. Phys. Geogr.*; Hugonnet et al. 2022; Rolstad, Haug & Denby 2009 (spatially correlated error); ASPRS 2023.
 **Pitfalls.** Treating RMSE as 95 % error; declaring VVA pass/fail; checkpoint-to-raster comparison with nearest-cell instead of interpolation (inflating error on slopes); mixing ellipsoidal checkpoints with orthometric DEM; propagating only random error; reporting a single number for a continent.
 **Key takeaways.** Say which statistic, which standard, which checkpoints, which strata; deliver uncertainty spatially; the point of UQ is a defensible decision, not a number in a report.
@@ -1169,7 +1165,7 @@ I. Gap review — what else should be included, and what could be trimmed
 **Sections.**
 - 55.1 Global/near-global land DEMs: SRTM (v3/NASADEM; Feb 2000; C-band DSM; voids; 60°N–56°S), ASTER GDEM v3 (optical stereo; noisy; 83°), ALOS World 3D AW3D30 (v3/v4; PRISM stereo DSM), TanDEM-X 90 m/30 m and 12 m (X-band DSM; penetration; commercial for 12 m), Copernicus DEM GLO-30/GLO-90 (from TanDEM-X; edited; masks; best general-purpose DSM today; 2011–2015 dates), MERIT DEM (error-removed SRTM/AW3D), MERIT Hydro, FABDEM/FABDEM v1-2 (ML-removed forest/buildings; NC licence), DeltaDTM (coastal DTM), CoastalDEM (NC; ML), DiluviumDEM, GEDTM30 (2025), GMTED2010, GTOPO30 ⟨H⟩, ETOPO1/2022, GLO-30 vs NASADEM vs AW3D30 behaviour by land cover
 - 55.2 Regional/national high-resolution: USGS 3DEP (lidar; QL1/QL2; 1 m DEMs; CoNED/CUDEM topobathy), Canada HRDEM, Mexico INEGI, UK EA 1 m/2 m composite and national lidar programme, Netherlands AHN1–AHN5 (the longest national lidar time series), Denmark DHM, Finland NLS, Norway Høydedata, Sweden, Switzerland swissALTI3D/swissSURFACE3D, Austria, Spain PNOA-LiDAR, France LiDAR HD/RGE ALTI, Italy, Poland ISOK, Estonia, Japan GSI 5 m/1 m, Australia ELVIS/Geoscience Australia 5 m & lidar, New Zealand LINZ lidar, Slovenia, Brazil, Argentina; ArcticDEM and REMA (2 m SfM strips/mosaics; time stamps; ellipsoidal heights)
-- 55.3 Global bathymetry: GEBCO_2024 (15″; with TID), SRTM15+ V2 (gravity + soundings), ETOPO 2022, GMRT (MBES synthesis), EMODnet Bathymetry DTM (1/16′), IBCAO v5/IBCSO v2, Seabed 2030 progress metrics, BedMachine/Bedmap3 (sub-ice), NOAA NBS/BlueTopo (US; per-cell source/uncertainty), NCEI CUDEM tiles, national bathymetric portals (UKHO ADMIRALTY Marine Data Portal, Australia AusSeabed, NZ, Canada CHS NONNA, Japan), crowdsourced CSB (DCDB)
+- 55.3 Global bathymetry: GEBCO_2024/2025/2026 (15″; with TID), SRTM15+ V2 (gravity + soundings), ETOPO 2022, GMRT (MBES synthesis), EMODnet Bathymetry DTM (1/16′), IBCAO v5/IBCSO v2, Seabed 2030 progress metrics, BedMachine/Bedmap3 (sub-ice), NOAA NBS/BlueTopo (US; per-cell source/uncertainty), NCEI CUDEM tiles, national bathymetric portals (UKHO ADMIRALTY Marine Data Portal, Australia AusSeabed, NZ, Canada CHS NONNA, Japan), crowdsourced CSB (DCDB)
 - 55.4 Spaceborne altimetry as products: ICESat-2 ATL06/08/13, GEDI L2/L3/L4, CryoSat-2, SWOT L2 (rivers/lakes), Sentinel-3/6 (inland water)
 - 55.5 Commercial: Maxar Precision3D/Vricon (50 cm/3 m DSM/DTM), Airbus WorldDEM Neo (5 m), Intermap NEXTMap (IfSAR), Fugro/NV5/Hexagon lidar programs, Planet/Blackshark 3D, elevation-as-a-service APIs
 - 55.6 Comparison framework (DEMIX-style): surface type (DSM/DTM/hybrid), nominal vs effective resolution, acquisition dates, vertical/horizontal datum (EGM96 vs EGM2008 vs ellipsoid; WGS 84 realizations), reported vs independent accuracy by land cover and slope, voids and fills, artefacts (stripes, terraces, penetration), licence (CC-BY, CC-BY-NC, public domain, custom), formats/tiling, uncertainty layers, update cadence; standardized tables in Appendix E
@@ -1230,7 +1226,7 @@ I. Gap review — what else should be included, and what could be trimmed
 - 57.9 Visualizing uncertainty: transparency/fog, noise texture, side-by-side ensembles, hop/animated realizations, contour "bands", bivariate maps (elevation × uncertainty), confidence hatching on change maps (MacEachren 2005/2012)
 - 57.10 Visualizing time: before/after swipes, DoD maps, 4D point clouds, animation; the tyranny of two-epoch stills
 - 57.11 Accessibility and reproducibility: colorblind-safe palettes, tactile/3D-printed terrain, screen readers for charts, scripted figures
-**Then & now.** Hachures (Lehmann 1799) ⟨H⟩ → hand-painted Swiss relief (Imhof) → analytical hillshade (Yoëli 1965) → GIS hillshade default → multi-technique archaeological visualizations (RVT 2011) → web 3D terrain → neural rendering (2020–).
+**Then & now.** Hachures (Lehmann 1799) → hand-painted Swiss relief (Imhof) → analytical hillshade (Yoëli 1965) → GIS hillshade default → multi-technique archaeological visualizations (RVT 2011) → web 3D terrain → neural rendering (2020–).
 **Math.** Gradient estimation (Horn 3×3), illumination I = cos θ with normal n and light vector l; sky-view factor and openness integrals; multiscale relief filters; perceptual colour spaces (CIELAB, CAM16) and lightness monotonicity.
 **Software.** Open: GDAL (gdaldem), QGIS (hillshade, blending), Relief Visualization Toolbox (RVT), WhiteboxTools, SAGA, GRASS, Blender (GIS add-on; raytraced relief), Eduard (closed-source, paid), Potree, CloudCompare, Cesium (open core), deck.gl, MapLibre, three.js, matplotlib/cmcrameri/cmocean, gsplat/nerfstudio; Closed: ArcGIS Pro (multidirectional hillshade), Global Mapper, Surfer, Fledermaus, Terragen, Natural Scene Designer, Adobe Photoshop workflows.
 **Standards & guides.** ISO 7154/charting conventions for depth tints (IHO S-4, S-52 presentation library); USGS topographic map symbol standards; cartographic colour guidance (ColorBrewer; Crameri 2020 misuse paper); WCAG for web maps.
@@ -1241,7 +1237,7 @@ I. Gap review — what else should be included, and what could be trimmed
 ### Chapter 58 — Making maps from elevation: topographic maps, charts, graticules, standard elements
 **Scope.** From DEM to a finished topographic map or nautical chart: generalization, symbology, marginalia, and the standards that define them.
 **Sections.**
-- 58.1 Map purpose and scale: topographic (general), nautical (safety of navigation), aeronautical (obstacles, terrain), thematic (hazard, slope); scale → generalization → contour interval; "map accuracy" standards (NMAS 1947 ⟨H⟩: 90 % of contours within ½ interval; horizontal 1/30″ or 1/50″)
+- 58.1 Map purpose and scale: topographic (general), nautical (safety of navigation), aeronautical (obstacles, terrain), thematic (hazard, slope); scale → generalization → contour interval; "map accuracy" standards (NMAS 1947: 90 % of contours within ½ interval; horizontal 1/30″ or 1/50″)
 - 58.2 USGS topographic maps: the 7.5′ quadrangle series (1947–1992; HTMC scans), US Topo (2009–; GeoPDF from national datasets), what changed (field-checked vs database-derived; loss of some features), reading legacy sheets (datum NAD27 ⟨H⟩, NGVD29, declination), other national series (OS, IGN, swisstopo, GSI, LINZ Topo50)
 - 58.3 Contours from DEMs: interval selection, smoothing/generalization, supplementary contours, depression contours, consistency with spot heights and hydrography, avoiding contour crossings and "staircase" artefacts; contour accuracy inherits DEM accuracy plus generalization
 - 58.4 Nautical charts from bathymetry: soundings selection (shoal-biased, legibility), depth contours/areas, depth tints, generalization rules (IHO S-4), CATZOC/ZOC diagram, chart datum (LAT/MLLW), scale and compilation scale, ENC (S-57 → S-101) vs paper, overscale warnings; S-102 bathymetric surface overlays; source diagrams
@@ -1300,7 +1296,7 @@ I. Gap review — what else should be included, and what could be trimmed
 **Math.** Hilbert/Morton curve mapping; S2 cell geometry (cube face quadratic projection); H3 aperture-7 rotation and non-containment; equal-area projections underlying ISEA; area distortion of Web Mercator ∝ sec²φ; precision per code length.
 **Software.** Open: s2geometry (and bindings), h3 (and bindings; h3-pandas), DGGRID, rHEALPix, geohash libs, open-location-code, mgrs libs, pyproj, DuckDB spatial (H3/S2 extensions), BigQuery/PostGIS extensions; Closed: what3words API, commercial DGGS platforms.
 **Standards & guides.** OGC Topic 21 (DGGS) and OGC API – DGGS (draft); NGA MGRS/USNG standard (FGDC-STD-011-2001); Open Location Code spec; H3 documentation; S2 documentation.
-**Key references.** Sahr, White & Kimerling 2003 *Cartogr. Geogr. Inf. Sci.* (DGGS); Purss et al. 2016/2019 (OGC DGGS); Veach et al. (S2 docs); Brodsky 2018 (H3); Open Location Code technical overview (Google, 2014; verify author); Bondaruk, Roberts & Robertson 2020 (DGGS review); Kmoch et al. 2022 *Big Earth Data*; Gibb 2016 (rHEALPix); Mahdavi-Amiri, Alderson & Samavati 2015 (survey).
+**Key references.** Sahr, White & Kimerling 2003 *Cartogr. Geogr. Inf. Sci.* (DGGS); Purss et al. 2016/2019 (OGC DGGS); Veach et al. (S2 docs); Brodsky 2018 (H3); Open Location Code technical overview (Google, 2014–; D. Rinckes & P. Bunge); Bondaruk, Roberts & Robertson 2020 (DGGS review); Kmoch et al. 2022 *Big Earth Data*; Gibb 2016 (rHEALPix); Mahdavi-Amiri, Alderson & Samavati 2015 (survey).
 **Pitfalls.** Summing H3 children and comparing to parents; Web Mercator tiles used for area statistics; MGRS zone-boundary mistakes; a DEM resampled to hexagons then differentiated; emergency responders handed a what3words address with a transposed word; assuming a code encodes a datum/epoch.
 **Key takeaways.** DGGS and codes are indexes, not measurements; match cell size to data resolution; know each scheme's geometry quirks before aggregating or differencing elevation on it.
 
@@ -1450,7 +1446,7 @@ I. Gap review — what else should be included, and what could be trimmed
 ### Chapter 68 — Legal issues
 **Scope.** Where elevation data meets law: boundaries, liability, licensing, regulation, and evidence.
 **Sections.**
-- 68.1 Boundaries defined by elevation and water: UNCLOS baselines (Art. 5 normal baseline = low-water line on official charts; Art. 7 straight baselines; Art. 13 low-tide elevations; Art. 76 continental shelf — 2,500 m isobath + 100 nmi and foot-of-slope rules; Art. 121 rocks vs islands), TALOS (IHO S-51) manual, the "ambulatory" shoreline and sea-level rise (ILC/ILA debates; Pacific states' baseline-freezing declarations), riparian/littoral property boundaries (mean high water; *Borax Consolidated v. Los Angeles* 1935 defining MHW by 18.6-year tidal epoch), watershed and ridgeline borders that move (Alps glaciers), thalweg boundaries (rivers), state boundaries in lakes
+- 68.1 Boundaries defined by elevation and water: UNCLOS baselines (Art. 5 normal baseline = low-water line on official charts; Art. 7 straight baselines; Art. 13 low-tide elevations; Art. 76 continental shelf — 2,500 m isobath + 100 nmi and foot-of-slope rules; Art. 121 rocks vs islands), TALOS (IHO C-51) manual, the "ambulatory" shoreline and sea-level rise (ILC/ILA debates; Pacific states' baseline-freezing declarations), riparian/littoral property boundaries (mean high water; *Borax Consolidated v. Los Angeles* 1935 defining MHW by 18.6-year tidal epoch), watershed and ridgeline borders that move (Alps glaciers), thalweg boundaries (rivers), state boundaries in lakes
 - 68.2 Vertical datum and units in law: statutory datums (NAVD88, NGVD29 in old deeds, local tidal datums), US survey foot deprecation (2022) and its legal transition, grid vs ground in plats, floodplain regulatory elevations (BFE) and insurance (NFIP; Elevation Certificates), building height limits (which reference?), FAA Part 77 obstruction surfaces and notice (Form 7460), easements by elevation (air rights, solar access, view ordinances), mineral rights by depth
 - 68.3 Licensing and IP: public domain (US federal), Crown copyright and open licences (OGL), CC-BY/CC-BY-NC/CC-BY-SA products (FABDEM NC; CoastalDEM NC; Copernicus DEM licence terms; AW3D30 terms; TanDEM-X 12 m commercial), database rights (EU sui generis), derivative-work questions (is a DTM derived from NC data NC?), attribution requirements, open data mandates (EU High-Value Datasets Regulation 2023 includes elevation; INSPIRE; US OPEN Government Data Act), ML training data licensing and model outputs
 - 68.4 Liability and professional practice: licensed surveyor requirements for boundary and (in some jurisdictions) topographic/hydrographic surveys, "practice of surveying" definitions vs GIS/photogrammetry (state board disputes; ASPRS/NSPS model law), standard of care and negligence (charts, flood maps, obstacle data), product liability for data, disclaimers and their limits, duty to warn (known errors), professional certification (ASPRS CP, IHO Cat A/B, PLS/RPLS, chartered status)
@@ -1462,7 +1458,7 @@ I. Gap review — what else should be included, and what could be trimmed
 - 68.10 Indigenous and community data rights: CARE principles, OCAP (Canada), consultation on surveys over traditional lands, sacred-site locations in elevation products
 **Then & now.** Boundaries by monument and witness tree ⟨H⟩ → coordinates in law (Public Land Survey System; state plane) → tidal boundaries by datum (Borax 1935) → UNCLOS 1982 (in force 1994) → open-data mandates (2010s–2020s) and ML-licence questions (2020s).
 **Software.** Open: GDAL/QGIS for boundary analysis; UNCLOS/TALOS tools (CARIS LOTS is closed; Geocap closed; open scripts exist); licence checkers (SPDX); Closed: CARIS LOTS, Geocap, Trimble/Carlson survey legal description tools.
-**Standards & guides.** UNCLOS (1982); IHO S-51 TALOS Manual (Ed. 5); ILA Sea Level Rise Committee reports; US ALTA/NSPS Land Title Survey standards; NSPS model law; ASPRS/MAPPS guidance on licensing; FEMA G&S and Elevation Certificate instructions; FAA AC 70/7460; EU Regulation 2023/138 (High-Value Datasets); INSPIRE Directive 2007/2/EC; Creative Commons licences; OGL v3; India Geospatial Guidelines 2021; US OPEN Government Data Act 2018.
+**Standards & guides.** UNCLOS (1982); IHO C-51 TALOS Manual (Ed. 5); ILA Sea Level Rise Committee reports; US ALTA/NSPS Land Title Survey standards; NSPS model law; ASPRS/MAPPS guidance on licensing; FEMA G&S and Elevation Certificate instructions; FAA AC 70/7460; EU Regulation 2023/138 (High-Value Datasets); INSPIRE Directive 2007/2/EC; Creative Commons licences; OGL v3; India Geospatial Guidelines 2021; US OPEN Government Data Act 2018.
 **Key references.** *Borax Consolidated v. City of Los Angeles*, 296 U.S. 10 (1935); Shalowitz 1962/1964 *Shore and Sea Boundaries*; Reed 2000 (vol. 3); Schofield et al. 2014 (sea-level rise and baselines); Prescott & Schofield 2005 *Maritime Political Boundaries*; Onsrud 2010 (legal issues in geospatial data); Cho 2005 *Geographic Information Science: Mastering the Legal Issues*; Scassa 2013 (legal issues with VGI); NGS 2019/2020 (survey foot deprecation notices); Carroll et al. 2020 (CARE).
 **Pitfalls.** Treating MHW from a single tide gauge as the boundary everywhere; building a commercial product on NC-licensed DEMs; "topographic survey" delivered by an unlicensed firm in a state that requires a PLS; obstacle filings in the wrong vertical datum; assuming public-domain status for non-US agency data; discovery of a known DEM error after harm with no record of disclosure.
 **Key takeaways.** Elevation numbers have legal meaning only with their datum, epoch, method, and licence attached; know which activities require licensure or certification; keep provenance as if it will be evidence — someday it will be.
@@ -1493,19 +1489,19 @@ I. Gap review — what else should be included, and what could be trimmed
 **Scope.** The documents that define what "good enough" means — how they're structured, how they differ, and how to read, apply, and crosswalk them.
 **Sections.**
 - 70.1 How specs are built: scope, definitions, accuracy classes/orders, coverage/density, feature detection, calibration/QC requirements, deliverables, metadata, acceptance tests; prescriptive vs performance-based; versions and change logs
-- 70.2 Hydrographic: IHO S-44 Ed. 6.1.0 (orders Exclusive/Special/1a/1b/2; TVU/THU formulas; feature detection/search; bathymetric coverage; survey-matrix flexibility), NOAA HSSD (annual editions; object detection coverage, complete coverage, set-line spacing; crosslines; TPU; deliverables — BAG, S-57 features, DR, metadata; NBS integration), NOAA Field Procedures Manual (2020; later editions) — systems preparation, calibrations, reference surfaces, data acquisition and processing procedures, USACE EM 1110-2-1003 (Hydrographic Surveying; dredging payment surveys), LINZ HYSPEC, UKHO/Admiralty specs, CHS Hydrographic Survey Management Guidelines, Australian HIPP specs, IHO C-13 (Manual on Hydrography), S-67, B-11 (GEBCO Cookbook), IHO S-100 product specs (S-101/S-102/S-104/S-111) and their quality attributes; crowdsourced bathymetry guidance (B-12)
-- 70.3 Topographic lidar/photogrammetry: USGS Lidar Base Specification (2024 rev A; QL0–QL3; NPS/NPD, NVA/VVA, classification, hydro-flattening, swath overlap, deliverables), ASPRS Positional Accuracy Standards Ed. 2 (2023), ASPRS LAS 1.4, FEMA G&S elevation guidance, USACE EM 1110-1-1000 (photogrammetric and lidar mapping), FGDC NSSDA, NDEP guidelines (2004 — historical), ICSM LiDAR Acquisition Specifications (Australia), NRCan/CanElevation specs, UK EA survey specs, Netherlands AHN specs, Nordic national specs, ISPRS/EuroSDR guidance, UAV mapping guidelines (ASPRS UAS; national aviation authorities)
+- 70.2 Hydrographic: IHO S-44 Ed. 6.1.0 (orders Exclusive/Special/1a/1b/2; TVU/THU formulas; feature detection/search; bathymetric coverage; survey-matrix flexibility), NOAA HSSD (annual editions; object detection coverage, complete coverage, set-line spacing; crosslines; TPU; deliverables — BAG, S-57 features, DR, metadata; NBS integration), NOAA Field Procedures Manual (April 2014 PDF; 2020+ living online edition) — systems preparation, calibrations, reference surfaces, data acquisition and processing procedures, USACE EM 1110-2-1003 (Hydrographic Surveying; dredging payment surveys), LINZ HYSPEC, UKHO/Admiralty specs, CHS Hydrographic Survey Management Guidelines, Australian HIPP specs, IHO C-13 (Manual on Hydrography), S-67, B-11 (GEBCO Cookbook), IHO S-100 product specs (S-101/S-102/S-104/S-111) and their quality attributes; crowdsourced bathymetry guidance (B-12)
+- 70.3 Topographic lidar/photogrammetry: USGS Lidar Base Specification (2024/2025 rev. A; QL0–QL3; NPS/NPD, NVA/VVA, classification, hydro-flattening, swath overlap, deliverables), ASPRS Positional Accuracy Standards Ed. 2 (2023; v2 June 2024), ASPRS LAS 1.4, FEMA G&S elevation guidance, USACE EM 1110-1-1000 (photogrammetric and lidar mapping), FGDC NSSDA, NDEP guidelines (2004 — historical), ICSM LiDAR Acquisition Specifications (Australia), NRCan/CanElevation specs, UK EA survey specs, Netherlands AHN specs, Nordic national specs, ISPRS/EuroSDR guidance, UAV mapping guidelines (ASPRS UAS; national aviation authorities)
 - 70.4 Aviation: ICAO Annex 15 and PANS-AIM Doc 10066 (eTOD areas 1–4, numerical requirements), Doc 9881, RTCA DO-276C/EUROCAE ED-98D (terrain/obstacle data user requirements), DO-200B/ED-76A (processing standards), FAA AC 150/5300-18 (airport surveys; vertical/horizontal accuracy by feature), AC 150/5300-16/17, EUROCONTROL TOD manual
 - 70.5 Geodetic control: NGS-58/59 (GPS heights), NGS Bluebooking, FGCC 1984 standards (orders/classes), ISO 17123 (instrument field procedures), CORS site guidelines, NOAA NGS NSRS modernization documents, IGS standards
 - 70.6 Product/data specs: INSPIRE Data Specification on Elevation (D2.8.II.1), Copernicus DEM product handbook, 3DEP product standards, DTED MIL-PRF-89020B, NGA HRE/HRTe, OGC CityGML, S-102; INSPIRE/ISO 19157 quality element mapping
 - 70.7 Crosswalk tables: S-44 orders ↔ HSSD coverage/accuracy ↔ USACE classes ↔ ICAO eTOD areas ↔ ASPRS vertical classes ↔ LBS QLs ↔ INSPIRE quality — units, confidence levels (95 % vs RMSE vs 90 %), surface definitions, feature detection; where they are incommensurable
 - 70.8 Reading specs critically: what they don't say (effective resolution, correlated error, temporal validity), when specs lag technology (topo-bathy lidar, ML, VR grids), how to write a project-specific spec that references standards without copying them
 - 70.9 Compliance and audit: QA/QC plans, independent verification, documentation of deviations, acceptance/rejection, continuous improvement loops (post-project reviews)
-**Then & now.** NMAS 1947 ⟨H⟩ → IHO S-44 1st ed. 1968 ⟨H⟩ … 6th ed. 2020/2022 → NSSDA 1998 → USGS LBS v1.0 2012 → 2024; from contour tests to statistical, surface-type-aware, uncertainty-bearing specifications.
+**Then & now.** NMAS 1947 → IHO S-44 1st ed. 1968 … 6th ed. 2020/2022 → NSSDA 1998 → USGS LBS v1.0 2012 → 2024/2025 rev. A; from contour tests to statistical, surface-type-aware, uncertainty-bearing specifications.
 **Math.** S-44 TVU/THU; ASPRS RMSE classes and 95 % conversion; LBS density/accuracy relationships; ICAO confidence levels (90 %/95 %); conversions between 90 %, 95 %, RMSE assuming normality (and when not to assume it).
 **Software.** Open: NOAA HydrOffice QC Tools (free), Pydro (free), PDAL/lidR checks scripted to LBS, xdem; Closed: CARIS/QPS compliance tools, TerraScan, LP360 QA, GeoCue.
 **Standards & guides.** (This chapter *is* the index — see Appendix D for the full citation list with editions and URLs.)
-**Key references.** IHO 2020/2022 S-44 Ed. 6.0.0/6.1.0; NOAA OCS HSSD (current edition) and FPM (2020; 2023 update); USGS 2024 LBS rev A (Techniques and Methods 11-B4 lineage); ASPRS 2023 *PE&RS*; ICAO Annex 15 (Amendment 40+) and Doc 10066; RTCA 2021 DO-276C; FAA 2009/2024 AC 150/5300-18; FGDC 1998 NSSDA; NDEP 2004; INSPIRE TWG 2013; Zilkoski et al. 1997/2008.
+**Key references.** IHO 2020/2022 S-44 Ed. 6.0.0/6.1.0; NOAA OCS HSSD (current edition) and FPM (April 2014 PDF; 2020+ online edition); USGS LBS 2024/2025 rev. A (Techniques and Methods 11-B4 lineage); ASPRS 2023 *PE&RS*; ICAO Annex 15 (Amendment 40+) and Doc 10066; RTCA 2021 DO-276C; FAA 2009/2024 AC 150/5300-18; FGDC 1998 NSSDA; NDEP 2004; INSPIRE TWG 2013; Zilkoski et al. 1997/2008.
 **Pitfalls.** Quoting a spec's accuracy class as the product's tested accuracy; mixing 95 % and RMSE across specs; applying LBS classification rules to a bathymetric dataset; treating HSSD annual changes as cosmetic; forgetting that S-44 "orders" are minimums chosen by the hydrographic office, not automatic properties of a survey.
 **Key takeaways.** Specs encode a domain's definition of fitness; read the definitions and test procedures, not just the tables; crosswalks are approximate — document assumptions; a project spec should reference, not reinvent.
 
@@ -1539,12 +1535,12 @@ I. Gap review — what else should be included, and what could be trimmed
 **Scope.** A narrative history tying the handbook together — ideas, instruments, institutions, and mistakes — anchored to the timeline in Appendix C.
 **Sections.**
 - 72.1 Antiquity to the Enlightenment: Eratosthenes' circumference; Ptolemy; Islamic geodesy (al-Biruni); Snellius triangulation (1615); Picard; Cassini vs Newton on the Earth's shape and the French geodesic missions to Lapland and Peru (1735–44); the metre defined from the meridian ⟨H⟩
-- 72.2 National surveys and the figure of the Earth: Ordnance Survey (1791) ⟨H⟩; Great Trigonometrical Survey of India and Everest (1802–1870s); Gauss and least squares (1809) ⟨H⟩; Bessel/Clarke/Hayford ellipsoids ⟨H⟩; US Coast Survey (1807) ⟨H⟩; levelling networks and NGVD29 (1929) ⟨H⟩; Helmert and the geoid; isostasy (Pratt/Airy)
-- 72.3 Depth: lead lines and Maury's bathymetric chart (1853) ⟨H⟩; HMS *Challenger* (1872–76) ⟨H⟩; echo sounding (Fessenden 1914; Meteor expedition 1925) ⟨H⟩; Heezen–Tharp physiographic maps (1950s–70s) ⟨H⟩; SeaBeam multibeam (1977) ⟨H⟩; satellite altimetry bathymetry (Seasat 1978; Smith & Sandwell 1997) ⟨H⟩; GEBCO (1903–) and Seabed 2030 (2017) ⟨H⟩
-- 72.4 Air and light: photogrammetry (Laussedat; stereoplotters 1900s–1930s) ⟨H⟩; aerial survey in WWI/WWII; radar (1930s–40s); laser (1960) and airborne laser profiling (1960s–70s); GPS launch (1978) ⟨H⟩ and full operational capability (1995); airborne lidar with GPS/IMU (1990s) ⟨H⟩; SRTM (2000) ⟨H⟩; ICESat (2003); TanDEM-X (2010); ICESat-2/GEDI (2018–19); UAV SfM (2010s)
-- 72.5 Computation and data: Fourier/Shannon ⟨H⟩; Kalman (1960) ⟨H⟩; digital terrain models (Miller & Laflamme 1958) ⟨H⟩; SYMAP/Harvard Lab (1960s) ⟨H⟩; CGIS (1960s) ⟨H⟩; DTED (1970s) ⟨H⟩; quadtrees ⟨H⟩; ARC/INFO (1982) ⟨H⟩; GRASS (1982) ⟨H⟩; TIN (1978); CUBE (2003); LAS (2003) ⟨H⟩; BAG (2006); GDAL (1998) ⟨H⟩; PDAL; cloud-native formats (2016–) ⟨H⟩; STAC (2017–) ⟨H⟩; Earth Engine (2010) ⟨H⟩; ML era (2012–)
+- 72.2 National surveys and the figure of the Earth: Ordnance Survey (1791) ⟨H⟩; Great Trigonometrical Survey of India and Everest (1802–1870s); Gauss and least squares (1809); Bessel/Clarke/Hayford ellipsoids ⟨H⟩; US Coast Survey (1807) ⟨H⟩; levelling networks and NGVD29 (1929); Helmert and the geoid; isostasy (Pratt/Airy)
+- 72.3 Depth: lead lines and Maury's bathymetric chart (1853); HMS *Challenger* (1872–76); echo sounding (Fessenden 1913/1914 ⟨H⟩; Meteor expedition 1925); Heezen–Tharp physiographic maps (1950s–70s) ⟨H⟩; SeaBeam multibeam (1977) ⟨H⟩; satellite altimetry bathymetry (Seasat 1978; Smith & Sandwell 1997 ⟨H⟩); GEBCO (1903– ⟨H⟩) and Seabed 2030 (2017)
+- 72.4 Air and light: photogrammetry (Lambert 1776 ⟨H⟩; Laussedat; stereoplotters 1900s–1930s); aerial survey in WWI/WWII; radar (1930s–40s); laser (1960) and airborne laser profiling (1960s–70s); GPS launch (1978) ⟨H⟩ and full operational capability (1995); airborne lidar with GPS/IMU (1990s); SRTM (2000) ⟨H⟩; ICESat (2003) ⟨H⟩; TanDEM-X (2010); ICESat-2/GEDI (2018) ⟨H⟩; UAV SfM (2010s)
+- 72.5 Computation and data: Fourier/Shannon ⟨H⟩; Kalman (1960) ⟨H⟩; digital terrain models (Miller & Laflamme 1958); SYMAP/Harvard Lab (1965) ⟨H⟩; CGIS (1963) ⟨H⟩; DTED (1970s); quadtrees (1974) ⟨H⟩; ARC/INFO (1982) ⟨H⟩; GRASS (1984) ⟨H⟩; TIN (1978) ⟨H⟩; CUBE (2003); LAS (2003) ⟨H⟩; BAG (2006); GDAL (1998/2000) ⟨H⟩; PDAL; cloud-native formats (2016–); STAC (2017–) ⟨H⟩; Earth Engine (2009/2010) ⟨H⟩; ML era (2012–)
 - 72.6 Datums and frames: NAD27 (1927) ⟨H⟩ → NAD83 (1986) → ITRF (1988–) → WGS 84 realizations ⟨H⟩ → NAVD88 (1991) → GEOID models → NSRS modernization (2020s); international: ED50 → ETRS89; GDA94 → GDA2020; the move to time-dependent coordinates (Ch. 38)
-- 72.7 Standards and institutions: IHO (1921) ⟨H⟩ and S-44 (1968) ⟨H⟩; ISPRS (1910); FIG (1878); IAG/IUGG; ASPRS (1934); FGDC (1990) ⟨H⟩; OGC (1994) ⟨H⟩; ISO/TC 211 (1994) ⟨H⟩; OSGeo (2006) ⟨H⟩; the open-data turn (SRTM, Landsat 2008, Copernicus, 3DEP)
+- 72.7 Standards and institutions: IHO (1921) and S-44 (1968); ISPRS (1910); FIG (1878); IAG/IUGG; ASPRS (1934) ⟨H⟩; FGDC (1990) ⟨H⟩; OGC (1994) ⟨H⟩; ISO/TC 211 (1994); OSGeo (2006) ⟨H⟩; the open-data turn (SRTM, Landsat 2008, Copernicus, 3DEP)
 - 72.8 Recurring patterns: every new sensor was first over-trusted; every datum change created a decade of mixed data; the archive was always under-funded; the error budget was understood by few and documented by fewer; standards followed disasters
 - 72.9 Then-vs-now table: for each capability (horizontal position, height, depth, point density, coverage, latency, cost, uncertainty reporting) — 1900 / 1950 / 1980 / 2000 / 2025
 **Math.** Eratosthenes' geometry; least squares (Gauss/Legendre); ellipsoid flattening from arc measurements; the geoid as an equipotential surface (brief); Kalman filter origins.
@@ -1576,8 +1572,8 @@ I. Gap review — what else should be included, and what could be trimmed
 
 ## Appendices
 
-### Appendix A — Glossary (selected entries; full glossary ≈ 400 terms)
-Format: **term** — definition — *see chapter*. Entries flag common confusions with ⚠.
+### Appendix A — Glossary
+*Selected entries in seed outline; full glossary in Appendix A.* Format: **term** — definition — *see chapter*. Entries flag common confusions with ⚠.
 - **Accuracy / precision / uncertainty** — closeness to truth / repeatability / quantified doubt (GUM) — ⚠ RMSE is not a 95 % bound — *Ch. 5, 53*
 - **AGL / AMSL / HAE** — above ground level / above mean sea level (orthometric) / height above ellipsoid — ⚠ GPS "altitude" is HAE unless converted — *Ch. 7, 9, 62*
 - **BAG** — Bathymetric Attributed Grid; elevation + uncertainty + metadata (ONS) — *Ch. 47*
@@ -1634,8 +1630,8 @@ Short derivations and formulas collected from the "Math" lines, with notation ta
 - B.12 ML evaluation: confusion matrix metrics, IoU, κ; spatial CV; proper scoring rules; conformal intervals; calibration curves
 - B.13 Numeric worked examples: (a) float32 northing precision; (b) half-cell shift effect on slope; (c) sound-speed error → depth error at 60° beam; (d) sag change for 100 °C conductor temperature rise; (e) RMSE from 30 checkpoints with 95 % CI; (f) volume ±uncertainty with correlation length 20 m
 
-### Appendix C — Timeline (seeded from gis-history; ⟨H⟩ = from the repository, ⟨+⟩ = added for this handbook)
-*Format: year — event — chapter(s). A ~250-entry version is planned; the seed below shows coverage.*
+### Appendix C — Timeline
+*Seeded from gis-history (⟨H⟩ = from the repository, ⟨+⟩ = added for this handbook). Format: year — event — chapter(s).*
 - c. 240 BC — Eratosthenes measures Earth's circumference ⟨+⟩ — 72
 - 1569 — Mercator projection ⟨H⟩ — 10
 - 1576 — Theodolite first built ⟨H⟩ — 11
@@ -1732,19 +1728,19 @@ Short derivations and formulas collected from the "Math" lines, with notation ta
 - 2019 — Copernicus DEM first release; GEBCO TID grids; Zarr spec ⟨+⟩⟨H⟩ — 55, 48, 47
 - 2020 — IHO S-44 Ed. 6; NOAA FPM 2020; Kyl–Bingaman relaxed; Planetary Computer; NBS/BlueTopo ⟨+⟩⟨H⟩ — 70, 69, 51, 48
 - 2021 — STAC 1.0; COPC 1.0; GeoParquet; Mars 2020 TRN landing; Hugonnet glacier mass balance ⟨H⟩⟨+⟩ — 51, 47, 62, 40
-- 2022 — FABDEM; ETOPO 2022; US survey foot deprecated; SWOT launched ⟨+⟩ — 43, 55, 68, 66
+- 2022 — FABDEM; ETOPO 2022; BAG 2.0 (FSD 2.0.1); US survey foot deprecated; SWOT launched ⟨+⟩ — 43, 55, 47, 68, 66
 - 2023 — ASPRS Positional Accuracy Standards Ed. 2; SAM; EU High-Value Datasets in force ⟨+⟩ — 53, 42, 68
-- 2024 — USGS LBS 2024; S-102 Ed. 3; DEMIX papers; STAC 1.1; Icechunk; DeltaDTM; BAG 2.0 ⟨H⟩⟨+⟩ — 70, 47, 55, 51
-- 2025 — Biomass P-band launched; NISAR launch; GEDTM30; Bedmap3 ⟨H⟩⟨+⟩ — 64, 21, 55, 66
-- 2026+ — NSRS modernization rollout (NATRF2022/NAPGD2022) ⟨+⟩ — 73
+- 2024 — USGS LBS 2024 rev. A; S-102 Ed. 3.0.0; DEMIX papers; STAC 1.1; Icechunk; DeltaDTM ⟨H⟩⟨+⟩ — 70, 47, 55, 51
+- 2025 — Biomass P-band launched; NISAR launch; USGS LBS 2025 rev. A; GEDTM30; Bedmap3; GEBCO_2025 ⟨H⟩⟨+⟩ — 64, 21, 70, 55, 66
+- 2026+ — GEBCO_2026 (28.7 % mapped); NSRS modernization rollout (NATRF2022/NAPGD2022; Sept 2026 final public beta, 2027 target) ⟨+⟩ — 66, 73
 
 ### Appendix D — Standards and guide documents index
 Grouped by domain; each entry in the full appendix carries: issuer, current edition/date, scope one-liner, what it defines about accuracy/uncertainty, URL, chapters.
-- **Hydrographic:** IHO S-44 Ed. 6.1.0 (2022); S-57 Ed. 3.1; S-100 Ed. 5.x; S-101; S-102 Ed. 3.0/3.1; S-104; S-111; S-67; S-4; S-51 (TALOS); S-32 (dictionary); C-13; B-11 (GEBCO Cookbook); B-12 (CSB); NOAA HSSD (annual; current ed.); NOAA Field Procedures Manual (2020; subsequent updates); NOAA NOS Hydrographic Manual 4th ed. (1976, historical); NOAA Tidal Datums and Their Applications (SP CO-OPS 1); USACE EM 1110-2-1003; LINZ HYSPEC; CHS Standards for Hydrographic Surveys; UKHO/ADMIRALTY survey specs; AusSeabed/HIPP specs; NOAA NBS/BlueTopo specification
-- **Topographic lidar/photogrammetry/UAS:** USGS Lidar Base Specification 2024 rev A; ASPRS Positional Accuracy Standards Ed. 2 (2023); ASPRS LAS 1.4 R15 (2019) and topo-bathy domain profile; FGDC NSSDA (1998); NMAS (1947); NDEP Guidelines (2004); FEMA Guidelines & Standards for Flood Risk Analysis and Mapping (elevation guidance); USACE EM 1110-1-1000; ICSM LiDAR Acquisition Specifications (AU); NRCan HRDEM product spec; UK EA National LiDAR Programme spec; AHN product specs (NL); ASPRS UAS guidelines; ISPRS/EuroSDR benchmarks
+- **Hydrographic:** IHO S-44 Ed. 6.1.0 (2022); S-57 Ed. 3.1; S-100 Ed. 5.2.0 (2024); S-101; S-102 Ed. 3.0.0 (Dec 2024; 3.1.0 in development); S-104; S-111; S-67; S-4 Ed. 4.10.0; C-51 (TALOS); S-32 (dictionary); C-13; B-11 (GEBCO Cookbook); B-12 Ed. 3.0.0 (2023, CSB); B-13 Ed. 1.0.0 (Mar 2024, SDB); NOAA HSSD (2024 ed.); NOAA Field Procedures Manual (April 2014 PDF; 2020+ online); NOAA NOS Hydrographic Manual 4th ed. (1976, historical); NOAA Tidal Datums and Their Applications (SP CO-OPS 1); USACE EM 1110-2-1003; LINZ HYSPEC; CHS Standards for Hydrographic Surveys; UKHO/ADMIRALTY survey specs; AusSeabed/HIPP specs; NOAA NBS/BlueTopo specification
+- **Topographic lidar/photogrammetry/UAS:** USGS Lidar Base Specification 2024 rev. A / 2025 rev. A; ASPRS Positional Accuracy Standards Ed. 2 (2023; v2 June 2024); ASPRS LAS 1.4 R15 (2019) and topo-bathy domain profile; FGDC NSSDA (1998); NMAS (1947); NDEP Guidelines (2004); FEMA Guidelines & Standards for Flood Risk Analysis and Mapping (elevation guidance); USACE EM 1110-1-1000; ICSM LiDAR Acquisition Specifications (AU); NRCan HRDEM product spec; UK EA National LiDAR Programme spec; AHN product specs (NL); ASPRS UAS guidelines; ISPRS/EuroSDR benchmarks
 - **Geodesy and datums:** ISO 19111:2019; IOGP EPSG Guidance Notes 7-2 and 373-25; NGS-58 (1997), NGS-59 (2008); FGCC Standards and Specifications for Geodetic Control Networks (1984); NGS NSRS modernization Blueprints (NOAA TR NOS NGS 62, 64, 67); IERS Conventions (2010) and updates; ITRF2020 documentation; GDA2020 Technical Manual; LINZ NZGD2000 deformation model; VDatum documentation; IHO/IOC tidal datum guidance
 - **Aviation:** ICAO Annex 15; Annex 4; Doc 10066 (PANS-AIM); Doc 9881 (eTOD guidelines); RTCA DO-276C / EUROCAE ED-98D; DO-200B / ED-76A; FAA AC 150/5300-18; AC 150/5300-16, -17; 14 CFR Parts 77 and 107; EUROCONTROL TOD manual
-- **Formats:** OGC GeoTIFF 1.1 (19-008r4); OGC COG 1.0 (21-026); COPC 1.0; ASPRS LAS 1.4 R15; ONS BAG 2.0; MIL-PRF-89020B (DTED); CF Conventions 1.11; Zarr v3; GeoZarr (draft); OGC GeoPackage 1.4; GeoParquet 1.1; RFC 7946 (GeoJSON); OGC Simple Features (ISO 19125); OGC CityGML 3.0, CityJSON 2.0; OGC IndoorGML 2.0; OGC 3D Tiles 1.1; I3S; Cesium quantized-mesh; LandXML 1.2; E57 (ASTM E2807); GSF; S-100 Part 10c (HDF5)
+- **Formats:** OGC GeoTIFF 1.1 (19-008r4); OGC COG 1.0 (21-026); COPC 1.0; ASPRS LAS 1.4 R15; ONS BAG FSD 2.0.1 (2022); MIL-PRF-89020B (DTED); CF Conventions 1.11; Zarr v3; GeoZarr (draft); OGC GeoPackage 1.4; GeoParquet 1.1; RFC 7946 (GeoJSON); OGC Simple Features (ISO 19125); OGC CityGML 3.0, CityJSON 2.0; OGC IndoorGML 2.0; OGC 3D Tiles 1.1; I3S; Cesium quantized-mesh; LandXML 1.2; E57 (ASTM E2807); GSF; S-100 Part 10c (HDF5)
 - **Metadata, quality, catalogs, archives:** ISO 19115-1/-2/-3; ISO 19157-1:2023; ISO 19131 (product specs); FGDC CSDGM (1998) and shoreline/lidar profiles; STAC 1.0/1.1 + extensions; OGC API – Records; DCAT/GeoDCAT-AP; INSPIRE D2.8.II.1 Elevation; ISO 14721 (OAIS); ISO 16363; W3C PROV; DataCite 4; FAIR; CARE; CoreTrustSeal
 - **DGGS and codes:** OGC Topic 21 (DGGS); OGC API – DGGS (draft); FGDC-STD-011-2001 (USNG); Open Location Code spec; H3/S2 documentation
 - **ML and software governance:** OGC TrainingDML-AI; model cards; ISO/IEC 23053; OSGeo incubation; FAIR4RS
@@ -1753,7 +1749,7 @@ Grouped by domain; each entry in the full appendix carries: issuer, current edit
 
 ### Appendix E — Public products comparison tables
 Two master tables (land; bathymetry/ice) plus regional-program table. Columns: **Product · Producer · Type (DSM/DTM/hybrid/model) · Nominal post · Effective resolution (est.) · Acquisition dates · Horizontal/vertical datum (geoid) · Reported accuracy · Independent accuracy (by land cover/slope; source) · Voids/fills & masks · Known artefacts · Uncertainty layer? · Licence · Formats/tiling · Cadence/version · Best for / avoid for · Handbook refs.**
-Seed rows (values to be verified against product handbooks at writing time):
+Indicative summary rows (verified against current product handbooks in Appendix E):
 
 | Product | Type | Post | Dates | Vert. datum | Reported acc. | Licence | Notes |
 |---|---|---|---|---|---|---|---|
@@ -1768,14 +1764,14 @@ Seed rows (values to be verified against product handbooks at writing time):
 | CoastalDEM v2 | Coastal DTM (ML) | 1″ | SRTM base | EGM96 | ~1–2 m RMSE reported | Non-commercial/licensed | Used in SLR exposure papers |
 | GEDTM30 | DTM (ML global) | 1″ | multi | EGM2008 | per paper | CC-BY | 2025; validate locally |
 | ArcticDEM / REMA | DSM strips & mosaics | 2 m | 2009– (time-stamped) | WGS 84 ellipsoid | ~m-level abs. (ICESat-2 registered) | Public | Blunders; use strips for change |
-| USGS 3DEP | DTM (lidar) + point clouds | 1 m (QL2/QL1) | 2010s– | NAVD88 (GEOID12B/18) | ≤10 cm RMSE_z NVA (QL2) | Public domain | Project-based dates; seamless 1 m/1/3″ |
+| USGS 3DEP | DTM (lidar) + point clouds | 1 m (QL2/QL1) | 2010s– | NAVD88 (GEOID12B/18) | ≤10 cm RMSE_V NVA (QL2) | Public domain | Project-based dates; seamless 1 m/1/3″ |
 | National lidar (AHN, EA, swisstopo, LINZ, …) | DTM/DSM | 0.5–2 m | varies | national | ~5–15 cm | mostly open | See Ch. 55.2 |
-| GEBCO_2024 | Bathy/topo model | 15″ | compilation | MSL (nominal) | n/a (TID-based) | Free | Mostly predicted in deep ocean |
+| GEBCO_2024 / 2025 / 2026 | Bathy/topo model | 15″ | compilation | MSL (nominal) | n/a (TID-based) | Free | 26.1 / 27.3 / 28.7 % mapped; rest predicted |
 | SRTM15+ V2 | Bathy/topo | 15″ | compilation | MSL | n/a | Free | Gravity-predicted + soundings |
 | ETOPO 2022 | Bathy/topo (bed/ice) | 15″/30″ | compilation | EGM2008 | n/a | Public domain | Ice surface & bedrock versions |
 | GMRT | MBES synthesis | ~100 m (multi) | continuous | MSL | n/a | Free | Measured where MBES exists |
 | EMODnet Bathymetry | Bathy DTM | 1/16′ | compilation | LAT→MSL | source-dependent | Free | Europe; source references layer |
-| IBCAO v5 / IBCSO v2 | Bathy | 200 m / 500 m | compilation | MSL | n/a | Free | Polar; TID-like source grids |
+| IBCAO v5 / IBCSO v2 | Bathy | 100 m / 500 m | compilation | MSL | n/a | Free | Polar; TID-like source grids |
 | NOAA BlueTopo (NBS) | Bathy (US) | 2–16 m VR | continuous | MLLW (ellipsoid-ready) | per-cell uncertainty | Public domain | Source & uncertainty rasters; supersession |
 | NCEI CUDEM | Topo-bathy tiles | 1/9″, 1/3″ | compilation | NAVD88 / MHW variants | per-tile | Public domain | Coastal US; check datum variant |
 | BedMachine / Bedmap3 | Sub-ice bed | 150–500 m | compilation | ellipsoid/geoid | error grid | Free | Mass-conservation inversion |

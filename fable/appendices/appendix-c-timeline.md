@@ -1,6 +1,6 @@
 # Appendix C — Timeline
 
-A dated chronology of the ideas, instruments, institutions, datasets, formats, and failures that shaped elevation mapping. Entries tagged ⟨H⟩ are taken from the gis-history repository (https://github.com/schwehr/gis-history, CC0); entries tagged ⟨+⟩ were added for this handbook. Dates in ISO style where a month is known; "(verify)" marks dates the authors could not confirm against a primary source. The "significance" column names the chapter(s) where the item matters. See [Chapter 72](../chapters/ch72-history.md) for the narrative and [Chapter 11](../chapters/ch11-history-of-positioning.md) for the positioning thread.
+A dated chronology of the ideas, instruments, institutions, datasets, formats, and failures that shaped elevation mapping. Entries tagged ⟨H⟩ are taken from the gis-history repository (https://github.com/schwehr/gis-history, CC0); entries tagged ⟨+⟩ were added for this handbook. Dates use ISO style where a month is known. The "significance" column names the chapter(s) where the item matters. See [Chapter 72](../chapters/ch72-history.md) for the narrative and [Chapter 11](../chapters/ch11-history-of-positioning.md) for the positioning thread.
 
 ## Antiquity to 1800
 
@@ -51,7 +51,7 @@ A dated chronology of the ideas, instruments, institutions, datasets, formats, a
 | 1855 | Pratt and Airy propose isostasy | Geoid and gravity — Ch. 7 | ⟨+⟩ |
 | 1855 | Gall stereographic projection | Compromise world projections — Ch. 10 | ⟨H⟩ |
 | 1858 | Nadar photographs Paris from a balloon | First aerial remote sensing — Ch. 22 | ⟨H⟩ |
-| 1861 | Clarke ellipsoid (1866 and 1880 follow) | Clarke 1866 underlies NAD27 — Ch. 7, 8 | ⟨H⟩ |
+| 1861 | Clarke ellipsoid (1866 follows; later 1880s revision) | Clarke 1866 underlies NAD27 — Ch. 7, 8 | ⟨H⟩⟨+⟩ |
 | 1862 | Mitteleuropäische Gradmessung founded | Ancestor of the IAG — Ch. 72 | ⟨+⟩ |
 | 1872–1876 | HMS *Challenger* expedition | Deep-sea soundings; oceanography — Ch. 20 | ⟨+⟩ |
 | 1873 | Listing coins "geoid" | Named the reference surface for heights — Ch. 7 | ⟨+⟩ |
@@ -91,7 +91,7 @@ A dated chronology of the ideas, instruments, institutions, datasets, formats, a
 | 1940 | Gee radio navigation; LORAN predecessor | Hyperbolic positioning — Ch. 11 | ⟨H⟩ |
 | 1942 | Decca; LORAN; first INS; UTM first appears | Radio navigation, inertial navigation, grid system — Ch. 10, 11, 13 | ⟨H⟩ |
 | 1945 | ENIAC; Trinity test | Electronic computing — Ch. 71 | ⟨H⟩ |
-| 1946–1947 | Simrad (Simonsen Radio) founded in Oslo by Willy Simonsen; later part of Kongsberg Maritime (the gis-history repository lists 1931; company and Wikipedia histories give 1946/47) | Sonar industry; first commercial fisheries echo sounder 1950 — Ch. 20 | ⟨H⟩ |
+| 1946–1947 | Simrad (Simonsen Radio) founded in Oslo by Willy Simonsen; later part of Kongsberg Maritime (the gis-history repository lists 1931; company and Wikipedia histories give 1946/47) | Sonar industry; first commercial fisheries echo sounder 1950 — Ch. 20 | ⟨+⟩ |
 | 1947 | US National Map Accuracy Standards | First map accuracy standard — Ch. 53, 58 | ⟨+⟩ |
 | 1948 | Shannon, *A Mathematical Theory of Communication* | Sampling theorem; information — Ch. 44 | ⟨H⟩ |
 | 1949 | Ammonia atomic clock | Atomic timekeeping — Ch. 6 | ⟨H⟩ |
@@ -185,7 +185,7 @@ A dated chronology of the ideas, instruments, institutions, datasets, formats, a
 |---|---|---|---|
 | 2010-06 | TanDEM-X launched | Global 12 m InSAR DEM; Copernicus DEM source — Ch. 21, 55 | ⟨+⟩ |
 | 2010 | Deepwater Horizon spill; libais released | Transient objects, AIS processing — Ch. 27 | ⟨H⟩ |
-| 2010 | Planet Labs and Mapbox founded; Leaflet; Three.js; Earth Engine public (COP16) | Smallsats; web mapping; cloud EO — Ch. 22, 51, 57 | ⟨H⟩ |
+| 2010 | Planet Labs and Mapbox founded; Leaflet; Three.js; Earth Engine public (COP16) | Smallsats; web mapping; cloud EO — Ch. 22, 51, 57 | ⟨H⟩⟨+⟩ |
 | 2011-03 | Tōhoku earthquake and tsunami | Metres of coseismic displacement; datum patching — Ch. 39 | ⟨H⟩ |
 | 2011 | PDAL initial release; LAZ compression; CesiumJS; Galileo first launch; Pléiades 1; VIIRS; IPython Notebook | Point-cloud tooling; 3D web; GNSS — Ch. 12, 47, 57, 71 | ⟨H⟩⟨+⟩ |
 | 2012 | USGS Lidar Base Specification v1.0; 3DEP concept; AlexNet; Earth Engine API; Pléiades 2; Apple Maps | US national lidar; deep-learning era — Ch. 43, 70 | ⟨+⟩⟨H⟩ |
@@ -208,11 +208,11 @@ A dated chronology of the ideas, instruments, institutions, datasets, formats, a
 | 2021 | COPC 1.0; GeoParquet spec; TorchGeo; Pléiades Neo; Mars 2020 terrain-relative-navigation landing; Hugonnet et al. glacier mass balance; NGS Blueprint Part 3 | Cloud-native point clouds; ML tooling; 4D DEMs; NSRS modernization — Ch. 40, 47, 62, 73 | ⟨H⟩⟨+⟩ |
 | 2022 | FABDEM; ETOPO 2022; BAG 2.0 format specification; US survey foot deprecated (2022-12-31); SWOT launched (2022-12); EMIT; Dynamic World; ChatGPT; S-44 Ed. 6.1.0; S-100 Ed. 5.0 | ML-corrected global DTM; units; water-surface altimetry — Ch. 43, 55, 66, 68, 70 | ⟨+⟩⟨H⟩ |
 | 2023 | ASPRS Positional Accuracy Standards Ed. 2; Segment Anything; EU High-Value Datasets in force; ISO 19157-1:2023; GEDI paused (2023-03); Earth Engine STAC catalog checker; Overture Maps | Accuracy standard; foundation models; open-data law — Ch. 42, 53, 68 | ⟨+⟩⟨H⟩ |
-| 2024 | USGS LBS 2024 rev. A; S-102 Ed. 3.0.0 (2024-12); DEMIX ranking papers; STAC 1.1 (2024-08); STAC-GeoParquet; Icechunk; DeltaDTM; Maxar Legion; PACE; Clay 1.0; GEDI reinstalled (2024-04); phone-based ionosphere mapping | Specifications; intercomparison; versioned cloud arrays; EO foundation models — Ch. 47, 51, 55, 70 | ⟨H⟩⟨+⟩ |
+| 2024 | USGS LBS 2024 rev. A; S-102 Ed. 3.0.0 (2024-12); DEMIX ranking papers; STAC 1.1 (2024-09); STAC-GeoParquet; Icechunk; DeltaDTM; Maxar Legion; PACE; Clay 1.0; GEDI reinstalled (2024-04); phone-based ionosphere mapping | Specifications; intercomparison; versioned cloud arrays; EO foundation models — Ch. 47, 51, 55, 70 | ⟨H⟩⟨+⟩ |
 | 2025-04 | ESA Biomass launched — first civilian P-band SAR | Sub-canopy terrain and biomass — Ch. 21, 64 | ⟨H⟩ |
-| 2025 | NISAR launched (2025-07-30; science operations from early 2026); GEDTM30; Bedmap3; WGS 84 (G2296) in use | L/S-band InSAR; ML global DTM; Antarctic bed — Ch. 21, 55, 66 | ⟨+⟩ |
+| 2025 | NISAR launched (2025-07-30; science operations from early 2026); USGS LBS 2025 rev. A (2025-06); GEDTM30; Bedmap3; GEBCO_2025 (27.3 % mapped); WGS 84 (G2296) in use | L/S-band InSAR; updated lidar spec; ML global DTM; Antarctic bed — Ch. 21, 55, 66, 70 | ⟨+⟩ |
 | 2026-05 | GeoLibre initial commit | Open geospatial software lineage continues — Ch. 71 | ⟨H⟩ |
-| 2025–2026+ | NSRS modernization rollout (NATRF2022 / NAPGD2022); NGS has repeatedly revised the release schedule, so check ngs.noaa.gov for the current state | A decade of mixed-datum data — Ch. 9, 73 | ⟨+⟩ |
+| 2025–2026+ | GEBCO_2026 (28.7 % mapped, 2026-04); NSRS modernization rollout (NATRF2022 / NAPGD2022; final public beta 2026-09 for 6-month evaluation, operational adoption targeted for 2027) | Seabed 2030 progress; a decade of mixed-datum data — Ch. 9, 66, 73 | ⟨+⟩ |
 
 ## Single-event entries for the modern period
 
@@ -271,7 +271,7 @@ The bundled rows above are expanded here so that individual items can be cited b
 | 2017 | Seabed 2030 launched (Nippon Foundation–GEBCO) | Goal of complete ocean mapping — Ch. 66, 73 | ⟨+⟩ |
 | 2017 | PointNet (Qi et al.) | Deep learning directly on point clouds — Ch. 42 | ⟨+⟩ |
 | 2017 | Earth Engine technical paper (Gorelick et al.) | Documentation of cloud EO platform — Ch. 51 | ⟨H⟩ |
-| 2018 | H3 open-sourced (Uber) | Hexagonal DGGS — Ch. 60 | ⟨H⟩ |
+| 2018 | H3 open-sourced (Uber) | Hexagonal DGGS — Ch. 60 | ⟨+⟩ |
 | 2018-01 | Strava global heatmap reveals military sites | Aggregation privacy failure — Ch. 69 | ⟨+⟩ |
 | 2018 | CoastalDEM (Kulp & Strauss) | Neural-network-corrected coastal DEM — Ch. 43 | ⟨+⟩ |
 | 2018 | NASEM Decadal Survey *Thriving on Our Changing Planet* | Topography and vegetation as targeted observables — Ch. 73 | ⟨+⟩ |
@@ -296,10 +296,10 @@ The bundled rows above are expanded here so that individual items can be cited b
 | 2023 | ASPRS Positional Accuracy Standards Edition 2 | Current US accuracy standard — Ch. 53 | ⟨+⟩ |
 | 2023 | EU High-Value Datasets regulation in force | Elevation data open by law in the EU — Ch. 68 | ⟨+⟩ |
 | 2023 | Segment Anything Model | Foundation model for segmentation — Ch. 42 | ⟨+⟩ |
-| 2024 | USGS Lidar Base Specification 2024 rev. A | Current US lidar specification — Ch. 70 | ⟨+⟩ |
+| 2024 / 2025 | USGS Lidar Base Specification 2024 rev. A (2024-01) and 2025 rev. A (2025-06) | Current US lidar specification (ASPRS Ed. 2 RMSE_V alignment; Class 20/21 updates) — Ch. 70 | ⟨+⟩ |
 | 2024-12 | IHO S-102 Edition 3.0.0 | Bathymetric surface product with uncertainty — Ch. 47 | ⟨+⟩ |
 | 2024 | DEMIX ranking papers (Bielski et al.) | Standardized DEM intercomparison — Ch. 55 | ⟨+⟩ |
-| 2024-08 | STAC 1.1.0 | Catalog specification update — Ch. 51 | ⟨H⟩ |
+| 2024-09 | STAC 1.1.0 | Catalog specification update — Ch. 51 | ⟨H⟩ |
 | 2024-10 | Icechunk released | Transactional, versioned Zarr storage — Ch. 47, 50 | ⟨H⟩ |
 | 2024 | DeltaDTM (Pronk et al.) | ML coastal-lowland DTM — Ch. 43 | ⟨+⟩ |
 | 2024-05 | Clay 1.0 Earth foundation model | Open EO foundation model — Ch. 43 | ⟨H⟩ |

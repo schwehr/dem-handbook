@@ -158,16 +158,16 @@ XVI Standards, software, and history
 | 20 | chapters/ch20-sonar.md | Sonar: the many types and how they make bathymetry |
 | 21 | chapters/ch21-radar-sar-insar.md | Radar, SAR, InSAR, radar altimetry, and ice-penetrating radar |
 | 22 | chapters/ch22-photogrammetry-sfm.md | Photogrammetry, stereo, and structure from motion |
-| 23 | chapters/ch23-satellite-derived-bathymetry.md | Optical satellite-derived bathymetry, wave-kinematics bathymetry, altimetry-predicted bathymetry |
+| 23 | chapters/ch23-satellite-derived-bathymetry.md | Optical satellite-derived bathymetry, wave-kinematics bathymetry, and altimetry-predicted bathymetry |
 | 24 | chapters/ch24-gravity-magnetics-geophysics.md | Gravity, magnetics, and other geophysics as mapping aids |
 | 25 | chapters/ch25-calibration-infrastructure.md | Calibration: targets, stations, networks, benchmarks, reference surfaces |
 | 26 | chapters/ch26-survey-planning.md | Survey planning for calibration, error reduction, and error monitoring |
-| 27 | chapters/ch27-moving-and-transient-objects.md | Moving and transient objects during collection (cars, ships, cranes, smoke, steam; AIS/ADS-B) |
+| 27 | chapters/ch27-moving-and-transient-objects.md | Moving and transient objects during collection |
 | 28 | chapters/ch28-reducing-cost.md | Reducing cost across collection, processing, validation, and use |
 | 29 | chapters/ch29-processing-pipelines.md | Processing pipelines: levels, lineage, and what gets lost |
 | 30 | chapters/ch30-point-cloud-classification.md | Point-cloud cleaning, classification, and ground extraction |
 | 31 | chapters/ch31-interpolation-and-gridding.md | Interpolation, gridding, and grid registration |
-| 32 | chapters/ch32-dsm-to-dtm.md | DSM → DTM: removing objects, and the definitions problem (buildings, roads, bridges, pipes, panels) |
+| 32 | chapters/ch32-dsm-to-dtm.md | DSM → DTM: removing objects, and the definitions problem |
 | 33 | chapters/ch33-wires-and-thin-structures.md | Wires, power lines, antennas, and other thin or moving structures |
 | 34 | chapters/ch34-water-in-dems.md | Water in DEMs: surfaces, shorelines, hydro-flattening / -enforcement / -conditioning |
 | 35 | chapters/ch35-voids-and-overhangs.md | Voids, occlusion, shadows, overhangs, and multi-valued surfaces |
@@ -211,10 +211,10 @@ XVI Standards, software, and history
 | 73 | chapters/ch73-open-problems.md | Open problems and the next decade |
 | A | appendices/appendix-a-glossary.md | Glossary |
 | B | appendices/appendix-b-math-reference.md | Mathematical reference |
-| C | appendices/appendix-c-timeline.md | Timeline (seeded from gis-history) |
+| C | appendices/appendix-c-timeline.md | Timeline |
 | D | appendices/appendix-d-standards-index.md | Standards and guide documents index |
 | E | appendices/appendix-e-public-products-tables.md | Public products comparison tables |
 | F | appendices/appendix-f-software-index.md | Software index |
 | G | appendices/appendix-g-checklists.md | Checklists |
 | H | appendices/appendix-h-datasets.md | Datasets for exercises and benchmarks |
-| I | appendices/appendix-i-gap-review.md | Gap review — what else should be included, and what could be trimmed |
+| I | appendices/appendix-i-gap-review.md | Gap review: what else should be included, and what could be trimmed |

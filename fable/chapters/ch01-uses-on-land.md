@@ -6,13 +6,13 @@
 
 ## 1.1 Topographic mapping and cartography
 
-The oldest and still the most visible use of elevation data is the topographic map: contours, spot heights, hill shading, and hypsometric tints that let a reader see a landscape in their head. A national mapping agency's elevation layer is also the skeleton on which everything else hangs — hydrography must flow downhill through it, roads must sit on it, orthoimagery (§1.2) must be draped over it. In the United States the US Geological Survey (USGS) has produced topographic quadrangles since its founding in 1879 and converted that heritage into the 7.5-minute series, the digitised-contour DEMs of the 1970s–1990s, and finally the lidar-based 3D Elevation Program (3DEP) that began after the 2012 National Enhanced Elevation Assessment (Dewberry 2012; Sugarbaker et al. 2014). Most other countries followed a similar arc — Ordnance Survey, IGN, swisstopo, Geoscience Australia, GSI Japan — and the modern pattern is a national **digital terrain model (DTM)** at 0.5–5 m, with contours now *derived* from it rather than the other way round.
+The oldest and still the most visible use of elevation data is the topographic map: contours, spot heights, hill shading, and hypsometric tints that let a reader see a landscape in their head. A national mapping agency's elevation layer is also the skeleton on which everything else hangs — hydrography must flow downhill through it, roads must sit on it, orthoimagery (§1.2) must be draped over it. In the United States the US Geological Survey (USGS) has produced topographic quadrangles since its founding in 1879 and converted that heritage into the 7.5-minute series, the digitised-contour DEMs of the 1970s–1990s, and finally the lidar-based 3D Elevation Program (3DEP) that began after the 2012 National Enhanced Elevation Assessment (Dewberry 2012; Sugarbaker et al. 2014; Maune and Nayegandhi 2018). Most other countries followed a similar arc — Ordnance Survey, IGN, swisstopo, Geoscience Australia, GSI Japan — and the modern pattern is a national **digital terrain model (DTM)** at 0.5–5 m, with contours now *derived* from it rather than the other way round.
 
 What cartography silently assumes is instructive, because it differs from most other uses:
 
 - **Surface type.** Contours represent **bare earth** — ground with vegetation and buildings removed — but a map also wants buildings, bridges, and dams drawn where they stand, so the cartographer needs *both* a DTM and knowledge of what was removed. A contour that dips to the river bed under a bridge deck is "correct" for a DTM and wrong for a road map.
 - **Resolution.** Contour interval drives it. A 10 m interval on a 1:24,000 map needs vertical accuracy of about half the interval (the historical National Map Accuracy Standard required 90 % of tested points within one-half contour interval) and an effective resolution fine enough that contour crenulations are real terrain, not interpolation noise.
-- **Datum.** National orthometric datum (NAVD 88 in the US today, with NAPGD2022 coming; see [Chapter 9](ch09-vertical-datums.md)). Contours labelled in feet on older sheets and metres on newer ones have cost more than one user a factor of 3.28.
+- **Datum.** National orthometric datum (NAVD 88 in the US today, with NAPGD2022 in final public beta as of September 2026 ahead of operational adoption targeted for 2027; see [Chapter 9](ch09-vertical-datums.md)). Contours labelled in feet on older sheets and metres on newer ones have cost more than one user a factor of 3.28.
 - **Currency.** Maps age gracefully for mountains and badly for suburbs, open-pit mines, and river deltas.
 - **Uncertainty.** Traditionally expressed once for the whole sheet, if at all. Modern practice — and this book — asks for it per cell or per tile.
 
@@ -110,7 +110,7 @@ In the hours after an earthquake, landslide, flood, eruption, or wildfire, eleva
 
 The silent assumption that bites hardest is **currency and the datum's own stability**: a large earthquake moves the ground, and therefore the control network, by metres; the pre-event DEM and the post-event survey are in different physical frames even if both say "NAD83(2011)" ([Chapter 39](ch39-earthquakes-volcanoes-landslides.md)). Response work also tolerates and must *communicate* much higher uncertainty than mapping work — a rough DSM within hours beats a precise DTM in weeks — but the rough product must carry its uncertainty so that it is retired when the better one arrives.
 
-> **Case file.** After the 2014 Oso landslide in Washington State, pre-event lidar (2003 and 2013) and post-event lidar were differenced to compute the mobilised volume (about 8 million m³, approximate) and the runout surface (Iverson et al. 2015). Earlier lidar had revealed the long history of prehistoric landslides on the same slope — visible under the forest canopy only in a lidar DTM — which became central to the post-event review of what was knowable beforehand. The lesson for this chapter: the DTM existed; the use case (hazard communication) had not been connected to it.
+> **Case file.** After the 22 March 2014 Oso landslide in Washington State (which killed 43 people), pre-event lidar (2003 and 2013) and post-event lidar were differenced to compute the mobilised volume (7.6–8.3 million m³) and the runout surface (Iverson et al. 2015). Earlier lidar had revealed the long history of prehistoric landslides on the same slope — visible under the forest canopy only in a lidar DTM — which became central to the post-event review of what was knowable beforehand. The lesson for this chapter: the DTM existed; the use case (hazard communication) had not been connected to it.
 
 ## 1.12 Climate and cryosphere
 
@@ -244,10 +244,10 @@ Each use in this chapter fails in its own way when the data are wrong, so valida
 
 ## Standards & guides
 
-- **USGS 3D Elevation Program (3DEP)** program documents and the **USGS Lidar Base Specification** (current online edition, 2024 revision; earlier v2.1 2020) — quality levels QL0–QL3, point density, NVA/VVA, hydro-flattening, deliverables.
+- **USGS 3D Elevation Program (3DEP)** program documents and the **USGS Lidar Base Specification** (online edition, 2024 rev. A / 2025 rev. A; earlier v2.1 2020) — quality levels QL0–QL3, point density, NVA/VVA, hydro-flattening, deliverables.
 - **National Enhanced Elevation Assessment** (Dewberry 2012, for USGS) — the use/benefit inventory (602 mission-critical activities across 34 federal agencies, all 50 states; approximate counts) that justified 3DEP.
 - **3D Nation Elevation Requirements and Benefits Study** (Dewberry for NOAA and USGS, 2022) — extends the inventory to topobathymetry and inland bathymetry.
-- **ASPRS Positional Accuracy Standards for Digital Geospatial Data, Edition 2 (2023)** — NVA, VVA, checkpoint design, accuracy classes.
+- **ASPRS Positional Accuracy Standards for Digital Geospatial Data, Edition 2 (Version 1.0, 2023; Version 2, June 2024)** — NVA, VVA, checkpoint design, accuracy classes.
 - **FEMA Guidelines and Standards for Flood Risk Analysis and Mapping — Elevation Guidance** (November 2022 revision; continuously maintained) — ties flood-study DEM quality to USGS QLs.
 - **ITU-R P.1812** (point-to-area terrestrial propagation, 30 MHz–6 GHz) and **ITU-R P.452** (interference evaluation) — terrain-profile and clutter inputs.
 - **ICAO Annex 15 / PANS-AIM (Doc 10066)** — terrain and obstacle data areas 1–4 (detail in [Chapter 62](ch62-navigation-and-charting.md)).
@@ -282,27 +282,27 @@ Each use in this chapter fails in its own way when the data are wrong, so valida
 
 ## References
 
-- ASPRS (2023). *ASPRS Positional Accuracy Standards for Digital Geospatial Data*, Edition 2, Version 1.0. American Society for Photogrammetry and Remote Sensing.
-- Chase, A. F., Chase, D. Z., Weishampel, J. F., Drake, J. B., Shrestha, R. L., Slatton, K. C., Awe, J. J., Carter, W. E. (2011). Airborne LiDAR, archaeology, and the ancient Maya landscape at Caracol, Belize. *Journal of Archaeological Science* 38(2):387–398.
-- Clark, K. J., Nissen, E. K., Howarth, J. D., et al. (2017). Highly variable coastal deformation in the 2016 Mw 7.8 Kaikōura earthquake reflects rupture complexity along a transpressional plate boundary. *Earth and Planetary Science Letters* 474:334–344.
+- ASPRS (2023). *ASPRS Positional Accuracy Standards for Digital Geospatial Data*, Edition 2, Version 1.0 (Version 2, June 2024). American Society for Photogrammetry and Remote Sensing.
+- Chase, A. F., Chase, D. Z., Weishampel, J. F., Drake, J. B., Shrestha, R. L., Slatton, K. C., Awe, J. J., Carter, W. E. (2011). Airborne LiDAR, archaeology, and the ancient Maya landscape at Caracol, Belize. *Journal of Archaeological Science* 38(2):387–398. doi:10.1016/j.jas.2010.09.018
+- Clark, K. J., Nissen, E. K., Howarth, J. D., et al. (2017). Highly variable coastal deformation in the 2016 Mw 7.8 Kaikōura earthquake reflects rupture complexity along a transpressional plate boundary. *Earth and Planetary Science Letters* 474:334–344. doi:10.1016/j.epsl.2017.06.048
 - Dewberry (2012). *National Enhanced Elevation Assessment — Final Report*. Prepared for the U.S. Geological Survey. Fairfax, VA: Dewberry.
 - Dewberry (2022). *3D Nation Elevation Requirements and Benefits Study — Final Report*. Prepared for NOAA and USGS. Fairfax, VA: Dewberry.
-- Dubayah, R., Blair, J. B., Goetz, S., et al. (2020). The Global Ecosystem Dynamics Investigation: High-resolution laser ranging of the Earth's forests and topography. *Science of Remote Sensing* 1:100002.
-- Farr, T. G., Rosen, P. A., Caro, E., et al. (2007). The Shuttle Radar Topography Mission. *Reviews of Geophysics* 45(2):RG2004.
+- Dubayah, R., Blair, J. B., Goetz, S., et al. (2020). The Global Ecosystem Dynamics Investigation: High-resolution laser ranging of the Earth's forests and topography. *Science of Remote Sensing* 1:100002. doi:10.1016/j.srs.2020.100002
+- Farr, T. G., Rosen, P. A., Caro, E., et al. (2007). The Shuttle Radar Topography Mission. *Reviews of Geophysics* 45(2):RG2004. doi:10.1029/2005RG000183
 - FEMA (2022). *Guidelines and Standards for Flood Risk Analysis and Mapping: Elevation Guidance* (November 2022). Federal Emergency Management Agency.
-- Gesch, D. B. (2018). Best practices for elevation-based assessments of sea-level rise and coastal flooding exposure. *Frontiers in Earth Science* 6:230.
-- Hawker, L., Uhe, P., Paulo, L., Sosa, J., Savage, J., Sampson, C., Neal, J. (2022). A 30 m global map of elevation with forests and buildings removed. *Environmental Research Letters* 17(2):024016.
+- Gesch, D. B. (2018). Best practices for elevation-based assessments of sea-level rise and coastal flooding exposure. *Frontiers in Earth Science* 6:230. doi:10.3389/feart.2018.00230
+- Hawker, L., Uhe, P., Paulo, L., Sosa, J., Savage, J., Sampson, C., Neal, J. (2022). A 30 m global map of elevation with forests and buildings removed. *Environmental Research Letters* 17(2):024016. doi:10.1088/1748-9326/ac4d4f
 - Hengl, T., Reuter, H. I. (eds.) (2009). *Geomorphometry: Concepts, Software, Applications*. Developments in Soil Science 33. Amsterdam: Elsevier.
-- Hugonnet, R., McNabb, R., Berthier, E., et al. (2021). Accelerated global glacier mass loss in the early twenty-first century. *Nature* 592:726–731.
+- Hugonnet, R., McNabb, R., Berthier, E., et al. (2021). Accelerated global glacier mass loss in the early twenty-first century. *Nature* 592:726–731. doi:10.1038/s41586-021-03436-z
 - Iverson, R. M., George, D. L., Allstadt, K., et al. (2015). Landslide mobility and hazards: implications of the 2014 Oso disaster. *Earth and Planetary Science Letters* 412:197–208. doi:10.1016/j.epsl.2014.12.020
-- Kulp, S. A., Strauss, B. H. (2019). New elevation data triple estimates of global vulnerability to sea-level rise and coastal flooding. *Nature Communications* 10:4844.
+- Kulp, S. A., Strauss, B. H. (2019). New elevation data triple estimates of global vulnerability to sea-level rise and coastal flooding. *Nature Communications* 10:4844. doi:10.1038/s41467-019-12808-z
 - Maune, D. F., Nayegandhi, A. (eds.) (2018). *Digital Elevation Model Technologies and Applications: The DEM Users Manual*, 3rd ed. Bethesda, MD: ASPRS.
-- Painter, T. H., Berisford, D. F., Boardman, J. W., et al. (2016). The Airborne Snow Observatory: Fusion of scanning lidar, imaging spectrometer, and physically-based modeling for mapping snow water equivalent and snow albedo. *Remote Sensing of Environment* 184:139–152.
-- Passalacqua, P., Belmont, P., Staley, D. M., et al. (2015). Analyzing high resolution topography for advancing the understanding of mass and energy transfer through landscapes: A review. *Earth-Science Reviews* 148:174–193.
-- Small, D. (2011). Flattening gamma: Radiometric terrain correction for SAR imagery. *IEEE Transactions on Geoscience and Remote Sensing* 49(8):3081–3093.
-- Sugarbaker, L. J., Constance, E. W., Heidemann, H. K., Jason, A. L., Lukas, V., Saghy, D. L., Stoker, J. M. (2014). *The 3D Elevation Program initiative — A call for action*. U.S. Geological Survey Circular 1399.
-- Tarolli, P. (2014). High-resolution topography for understanding Earth surface processes: Opportunities and challenges. *Geomorphology* 216:295–312.
-- Wald, D. J., Allen, T. I. (2007). Topographic slope as a proxy for seismic site conditions and amplification. *Bulletin of the Seismological Society of America* 97(5):1379–1395.
-- Wechsler, S. P. (2007). Uncertainties associated with digital elevation models for hydrologic applications: a review. *Hydrology and Earth System Sciences* 11:1481–1500.
+- Painter, T. H., Berisford, D. F., Boardman, J. W., et al. (2016). The Airborne Snow Observatory: Fusion of scanning lidar, imaging spectrometer, and physically-based modeling for mapping snow water equivalent and snow albedo. *Remote Sensing of Environment* 184:139–152. doi:10.1016/j.rse.2016.06.018
+- Passalacqua, P., Belmont, P., Staley, D. M., et al. (2015). Analyzing high resolution topography for advancing the understanding of mass and energy transfer through landscapes: A review. *Earth-Science Reviews* 148:174–193. doi:10.1016/j.earscirev.2015.05.012
+- Small, D. (2011). Flattening gamma: Radiometric terrain correction for SAR imagery. *IEEE Transactions on Geoscience and Remote Sensing* 49(8):3081–3093. doi:10.1109/TGRS.2011.2120616
+- Sugarbaker, L. J., Constance, E. W., Heidemann, H. K., Jason, A. L., Lukas, V., Saghy, D. L., Stoker, J. M. (2014). *The 3D Elevation Program initiative — A call for action*. U.S. Geological Survey Circular 1399. doi:10.3133/cir1399
+- Tarolli, P. (2014). High-resolution topography for understanding Earth surface processes: Opportunities and challenges. *Geomorphology* 216:295–312. doi:10.1016/j.geomorph.2014.03.008
+- Wald, D. J., Allen, T. I. (2007). Topographic slope as a proxy for seismic site conditions and amplification. *Bulletin of the Seismological Society of America* 97(5):1379–1395. doi:10.1785/0120060267
+- Wechsler, S. P. (2007). Uncertainties associated with digital elevation models for hydrologic applications: a review. *Hydrology and Earth System Sciences* 11(4):1481–1500. doi:10.5194/hess-11-1481-2007
 - Wilson, J. P., Gallant, J. C. (eds.) (2000). *Terrain Analysis: Principles and Applications*. New York: Wiley.
-- Zhang, W., Montgomery, D. R. (1994). Digital elevation model grid size, landscape representation, and hydrologic simulations. *Water Resources Research* 30(4):1019–1028.
+- Zhang, W., Montgomery, D. R. (1994). Digital elevation model grid size, landscape representation, and hydrologic simulations. *Water Resources Research* 30(4):1019–1028. doi:10.1029/93WR03553

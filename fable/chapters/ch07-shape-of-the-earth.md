@@ -24,7 +24,7 @@ Through the nineteenth century, national surveys produced a family of **referenc
 
 Two things matter about this table for DEM work. First, the ellipsoids differ by hundreds of metres in semi-major axis, and a classical datum also *positions* its ellipsoid relative to the Earth's centre of mass by hundreds of metres ([Chapter 8](ch08-horizontal-datums.md)). Second, GRS80 and WGS84 share the same $a$ and differ in flattening only in the ninth significant figure; their semi-minor axes differ by about 0.1 mm. For any elevation purpose the two ellipsoids are identical; what differs between NAD83 and WGS84 is the datum (origin and orientation), not the ellipsoid.
 
-GRS80 is a **geodetic reference system**, not just a shape: it is defined by four constants — $a$, the geocentric gravitational constant $GM$, the dynamic form factor $J_2$, and the angular velocity $\omega$ — from which the flattening and a **normal gravity** field (§7.2) are derived. It is the equipotential ellipsoid: its surface is a level surface of its own normal gravity field. That is what makes it the natural reference for both geometric and physical heights.
+GRS80 is a **geodetic reference system**, not just a shape: it is defined by four constants — $a$, the geocentric gravitational constant $GM$, the dynamic form factor $J_2$, and the angular velocity $\omega$ — from which the flattening and a **normal gravity** field (§7.2) are derived (Moritz 2000; Torge & Müller 2012; Jekeli 2016). It is the equipotential ellipsoid: its surface is a level surface of its own normal gravity field. That is what makes it the natural reference for both geometric and physical heights (Vaníček & Krakiwsky 1986; Meyer 2010).
 
 <!-- figure: Figure 7.1 — Meridian ellipse with semi-axes a and b, geodetic latitude φ versus geocentric latitude ψ, the normal through a surface point, and the radius of curvature in the prime vertical N(φ). -->
 
@@ -46,7 +46,7 @@ Reducing an observation at height $H$ to the geoid uses the **free-air gradient*
 
 ### 7.2.2 Stokes, Molodensky, and the quasigeoid
 
-Stokes (1849) showed that if gravity anomalies were known everywhere on the geoid, and if there were no masses outside it, the undulation at any point would follow from a global integral of the anomalies weighted by a kernel depending only on the spherical distance (Mathematics section). The two "ifs" are the problem. There are masses above the geoid — the continents — and we measure gravity on the topography, not on the geoid. Classical practice removes the topographic masses computationally, computes a geoid for the mass-reduced Earth, and restores them (the **remove–compute–restore** approach that modern regional geoids still use).
+Stokes (1849) showed that if gravity anomalies were known everywhere on the geoid, and if there were no masses outside it, the undulation at any point would follow from a global integral of the anomalies weighted by a kernel depending only on the spherical distance (Mathematics section; Heiskanen & Moritz 1967). The two "ifs" are the problem. There are masses above the geoid — the continents — and we measure gravity on the topography, not on the geoid. Classical practice removes the topographic masses computationally, computes a geoid for the mass-reduced Earth, and restores them (the **remove–compute–restore** approach that modern regional geoids still use).
 
 Molodensky (1945, English edition 1962) reframed the problem to avoid hypotheses about the density of the crust: solve the boundary-value problem on the actual topographic surface instead of the geoid. The resulting height system uses **normal heights** $H^*$ measured from the **quasigeoid**, which is not an equipotential surface but coincides with the geoid over the oceans and departs from it on land by $N - \zeta \approx \Delta g_B H / \bar\gamma$, where $\Delta g_B$ is the Bouguer anomaly in the same units as $\bar\gamma$ (Hofmann-Wellenhof & Moritz 2006, §8.13). The difference is centimetres in lowlands and reaches a metre or more in high mountains: at 3 000 m elevation with a Bouguer anomaly of −200 mGal, $N - \zeta \approx -2\times 10^{-3}\times 3000 / 9.8 \approx -0.6$ m. Germany, Russia, China, and much of Europe use normal heights; North America, Australia, and the UK use orthometric heights. A European DEM in DHHN2016 (normal heights) merged with one in a Helmert-orthometric system differs by a few decimetres in the Alps for this reason alone.
 
@@ -92,7 +92,7 @@ A **global geopotential model** (GGM) is a set of spherical-harmonic coefficient
 | EGM2008 ⟨H⟩ | 2008 | 2 159 (2 190) | ~9 km | GRACE, 5′ surface gravity, altimetry, SRTM/DTM2006 fill | ~0.1–0.15 m RMS vs GNSS/levelling in well-surveyed areas; decimetres to >1 m elsewhere (Pavlis et al. 2012) |
 | XGM2019e | 2019 | 5 540 (2′) | ~4 km | GOCO06s, 15′ ground gravity, topography-derived short wavelengths | comparable to EGM2008 where data are good; improved where EGM2008 used fill (Zingerle et al. 2020) |
 
-The jump from EGM96 to EGM2008 was driven by two things: GRACE's long-wavelength field and the release of 5′×5′ terrestrial gravity grids by many countries. Where no gravity was released (parts of Africa, South America, Antarctica, Southeast Asia), EGM2008 filled the short wavelengths from topography via an assumed density relation ("fill-in" areas), and its errors there are metres rather than decimetres. Users should check the EGM2008 data-source map before trusting the model to better than a metre in those regions.
+The jump from EGM96 to EGM2008 was driven by two things: GRACE's long-wavelength field and the release of 5′×5′ terrestrial gravity grids by many countries. Where no gravity was released (parts of Africa, South America, Antarctica, Southeast Asia), EGM2008 filled the short wavelengths from topography via an assumed density relation ("fill-in" areas; ultrahigh-resolution topographic augmentation was later pushed to sub-kilometre scales by Hirt et al. 2013), and its errors there are metres rather than decimetres. Users should check the EGM2008 data-source map before trusting the model to better than a metre in those regions.
 
 ### 7.4.1 Hybrid national geoids
 
@@ -101,7 +101,7 @@ A gravimetric geoid gives $N$ relative to GRS80 in a geocentric frame. National 
 - **GEOID18** (NGS, 2019; superseded GEOID12B) converts NAD83(2011) ellipsoidal heights to NAVD88 and is fitted to about 32 000 GNSS-on-benchmark points in CONUS; NGS's own assessment puts its agreement with those marks at a few centimetres (2σ) in well-controlled regions (Ahlgren et al. 2020).
 - **CGG2013a** (Natural Resources Canada) is a *pure gravimetric* geoid defining CGVD2013 — Canada abandoned levelling-based realization in 2013 and defined the datum as the $W_0$ equipotential surface (Véronneau & Huang 2016; Huang & Véronneau 2013).
 - **AUSGeoid2020** (Geoscience Australia) is a hybrid for AHD, with an accompanying uncertainty grid — one of the first national models to ship per-cell uncertainties, which range from about 4 cm to over 10 cm (Brown et al. 2018).
-- **OSGM15** (Ordnance Survey/OSi/LPS) transforms ETRS89 heights to ODN and the Irish datums; Ordnance Survey quotes an RMS fit of about 8 mm on the Great Britain mainland, with poorer figures (a few centimetres) on offshore islands such as the Isle of Man. The **xGEOID** series (NGS, 2014–2020) were experimental gravimetric models incorporating GRAV-D airborne gravity, culminating in **GEOID2022**, the model that defines the **North American–Pacific Geopotential Datum of 2022 (NAPGD2022)**: orthometric heights become $H = h - N_{GEOID2022}$ by definition, and levelling becomes a check rather than the definition (NGS Blueprint Part 2).
+- **OSGM15** (Ordnance Survey/OSi/LPS) transforms ETRS89 heights to ODN and the Irish datums; Ordnance Survey quotes an RMS fit of about 8 mm on the Great Britain mainland, with poorer figures (a few centimetres) on offshore islands such as the Isle of Man. The **xGEOID** series (NGS, 2014–2020) were experimental gravimetric models incorporating GRAV-D airborne gravity, culminating in **GEOID2022** (released in final public beta in September 2026 ahead of operational adoption targeted for 2027), the model that defines the **North American–Pacific Geopotential Datum of 2022 (NAPGD2022)**: orthometric heights become $H = h - N_{GEOID2022}$ by definition, and levelling becomes a check rather than the definition (NGS Blueprint Part 2).
 
 ### 7.4.2 How geoid models are validated
 
@@ -140,11 +140,12 @@ Raw levelled differences around a closed loop do not sum to zero, because the su
 > ```bash
 > # EGM2008 undulation N at Mt. Whitney summit (approx. 36.5785 N, 118.2923 W)
 > echo "36.5785 -118.2923" | GeoidEval -n egm2008-1
-> # typical output: -29.9 (metres; EGM2008 N relative to WGS84 ellipsoid)
+> # typical output: -25.17 (metres; EGM2008 N relative to WGS84 ellipsoid)
 >
 > # With PROJ ≥ 7 and PROJ-data: convert an ellipsoidal height to EGM2008 orthometric
-> echo "-118.2923 36.5785 4388.0" | cs2cs EPSG:4979 EPSG:9518 -d 3
-> # EPSG:9518 = WGS 84 + EGM2008 height; expect H ≈ 4388.0 - (-29.9) ≈ 4417.9
+> # Note EPSG:4979 and EPSG:9518 use (latitude, longitude, height) axis order
+> echo "36.5785 -118.2923 4395.8" | cs2cs EPSG:4979 EPSG:9518 -d 3
+> # EPSG:9518 = WGS 84 + EGM2008 height; expect H ≈ 4395.8 - (-25.17) ≈ 4420.97
 > ```
 >
 > Then repeat with a national hybrid grid (CONUS: `EPSG:5498`, NAD83 + NAVD88 via `us_noaa_g2018u0.tif`); the two orthometric heights differ by 0.5–1.5 m in the western US — the NAVD88 datum bias relative to a global geoid, not an error in either model.
@@ -167,7 +168,8 @@ There is also the **permanent tide**, the time-averaged part of the tidal potent
 
 The ellipsoid has been settled since 1980; the geoid is the part that keeps moving.
 
-- **Arc measurements to space geodesy.** From the Lapland and Peru arcs (1735–1744) to Hayford's 1909 ellipsoid, flattening came from meridian arcs and was uncertain at a part in a thousand; satellite tracking after Sputnik (1957) gave $J_2$ directly, and GRS80 ⟨H⟩ and WGS84 ⟨H⟩ fixed it to better than a part per million.
+- **Arc measurements to space geodesy.** From the Lapland and Peru arcs (1735–1744) to Hayford's 1909 ellipsoid, flattening came from meridian arcs and was uncertain at a part in a thousand;
+  satellite tracking after Sputnik (1957) gave $J_2$ directly, and GRS80 ⟨H⟩ and WGS84 ⟨H⟩ fixed it to better than a part per million.
 - **Geoid as a diagram to geoid as a product.** Hand-drawn astrogeodetic geoids (Heiskanen's Columbus Geoid, 1957) → first satellite harmonic models (1960s) → EGM84 ⟨H⟩ (degree 180), EGM96 ⟨H⟩ (360), EGM2008 ⟨H⟩ (2 190), XGM2019e (5 540).
 - **Levelling as definition to geoid as definition.** NGVD29 and NAVD88 were levelling networks; CGVD2013 (2013) and NAPGD2022 define the datum as an equipotential surface and compute heights from GNSS plus a geoid. The GSVS campaigns (2011, 2014, 2017) exist because this shift makes the geoid model the single point of failure.
 - **Tides from nuisance to model.** Solid Earth tides were a known correction in gravimetry from the 1930s; routine millimetre-level modelling of tidal and loading displacements in positioning arrived with the IERS Standards (1989, 1992) and Conventions (1996, 2003, 2010).
@@ -278,7 +280,7 @@ For any product whose heights pass through a geoid model: the input frame and ep
 - **IERS Conventions (2010)**, Petit & Luzum (eds.), IERS Technical Note 36 — the authoritative models for solid Earth tides, ocean and atmospheric loading, permanent tide conventions, and the GRS80/ITRF constants used in positioning.
 - **IAG Resolution 1 (2015)** — conventional value of $W_0 = 62\,636\,853.4$ m² s⁻² for the International Height Reference System (IHRS); Sánchez et al. 2016 describe the derivation.
 - **NGS Blueprint for 2022, Part 1: Geometric Coordinates** (NOAA Technical Report NOS NGS 62, 2017, revised 2021); **Part 2: Geopotential Coordinates** (NOS NGS 64, 2017); **Part 3: Working in the Modernized NSRS** (NOS NGS 67, 2019) — how NAPGD2022 and GEOID2022 are defined and how heights will be computed.
-- **Geodetic Reference System 1980**, Moritz 2000, *Journal of Geodesy* 74(1):128–162 — the definitive constants and derived quantities for GRS80.
+- **Geodetic Reference System 1980**, Moritz 2000, *Journal of Geodesy* 74(1):128–133 — the definitive constants and derived quantities for GRS80.
 - **NIMA TR8350.2 (3rd ed., 2000) / NGA.STND.0036 (2014)** — the WGS84 definition, including EGM96/EGM2008 as its geoid.
 
 ## Pitfalls
@@ -304,25 +306,28 @@ For any product whose heights pass through a geoid model: the input frame and ep
 ## References
 
 - Brown, N. J., McCubbine, J. C., Featherstone, W. E., Gowans, N., Woods, A., & Baran, I. (2018). AUSGeoid2020 combined gravimetric–geometric model: location-specific uncertainties and baseline-length-dependent error decorrelation. *Journal of Geodesy*, 92(12):1457–1465. doi:10.1007/s00190-018-1202-7
-- Ekman, M. (1989). Impacts of geodynamic phenomena on systems for height and gravity. *Bulletin Géodésique*, 63(3):281–296.
+- Ekman, M. (1989). Impacts of geodynamic phenomena on systems for height and gravity. *Bulletin Géodésique*, 63(3):281–296. doi:10.1007/BF02520477
 - Heiskanen, W. A., & Moritz, H. (1967). *Physical Geodesy*. W. H. Freeman, San Francisco.
 - Hirt, C., Claessens, S., Fecher, T., Kuhn, M., Pail, R., & Rexer, M. (2013). New ultrahigh-resolution picture of Earth's gravity field. *Geophysical Research Letters*, 40(16):4279–4283. doi:10.1002/grl.50838
-- Hofmann-Wellenhof, B., & Moritz, H. (2006). *Physical Geodesy* (2nd ed.). Springer, Vienna.
+- Hofmann-Wellenhof, B., & Moritz, H. (2006). *Physical Geodesy* (2nd ed.). Springer, Vienna. doi:10.1007/978-3-211-33545-1
 - Holmes, S. A., & Featherstone, W. E. (2002). A unified approach to the Clenshaw summation and the recursive computation of very high degree and order normalised associated Legendre functions. *Journal of Geodesy*, 76(5):279–299. doi:10.1007/s00190-002-0216-2
 - Huang, J., & Véronneau, M. (2013). Canadian gravimetric geoid model 2010. *Journal of Geodesy*, 87(8):771–790. doi:10.1007/s00190-013-0645-0
-- Ahlgren, K., Scott, G., Zilkoski, D., Shaw, B., & Paudel, N. (2020). *GEOID18*. NOAA Technical Report NOS NGS 72. NOAA, Silver Spring.
+- Ahlgren, K., Scott, G., Zilkoski, D., Shaw, B., & Paudel, N. (2020). *GEOID18*. NOAA Technical Report NOS NGS 72. NOAA, Silver Spring. doi:10.25923/pc79-0q29
 - Jekeli, C. (2016). *Geometric Reference Systems in Geodesy* (August 2016 ed.). Lecture notes, Division of Geodetic Science, School of Earth Sciences, Ohio State University.
 - Meyer, T. H. (2010). *Introduction to Geometrical and Physical Geodesy: Foundations of Geomatics*. Esri Press, Redlands.
+- Moritz, H. (2000). Geodetic Reference System 1980. *Journal of Geodesy*, 74(1):128–133. doi:10.1007/s001900050278
 - National Geodetic Survey (2017). *Blueprint for 2022, Part 1: Geometric Coordinates*. NOAA Technical Report NOS NGS 62 (revised 2021). NOAA, Silver Spring.
 - National Geodetic Survey (2017). *Blueprint for 2022, Part 2: Geopotential Coordinates*. NOAA Technical Report NOS NGS 64. NOAA, Silver Spring.
 - National Geodetic Survey (2019). *Blueprint for 2022, Part 3: Working in the Modernized NSRS*. NOAA Technical Report NOS NGS 67. NOAA, Silver Spring.
 - Pavlis, N. K., Holmes, S. A., Kenyon, S. C., & Factor, J. K. (2012). The development and evaluation of the Earth Gravitational Model 2008 (EGM2008). *Journal of Geophysical Research: Solid Earth*, 117:B04406. doi:10.1029/2011JB008916
 - Petit, G., & Luzum, B. (eds.) (2010). *IERS Conventions (2010)*. IERS Technical Note 36. Verlag des Bundesamts für Kartographie und Geodäsie, Frankfurt am Main.
 - Sánchez, L., Čunderlík, R., Dayoub, N., Mikula, K., Minarechová, Z., Šíma, Z., Vatrt, V., & Vojtíšková, M. (2016). A conventional value for the geoid reference potential $W_0$. *Journal of Geodesy*, 90(9):815–835. doi:10.1007/s00190-016-0913-x
+- Santos, M. C., Vaníček, P., Featherstone, W. E., Kingdon, R., Ellmann, A., Martin, B. A., Kuhn, M., & Tenzer, R. (2006). The relation between rigorous and Helmert's definitions of orthometric heights. *Journal of Geodesy*, 80(12):691–704. doi:10.1007/s00190-006-0086-0
 - Smith, D. A., Holmes, S. A., Li, X., Guillaume, S., Wang, Y. M., Bürki, B., Roman, D. R., & Damiani, T. M. (2013). Confirming regional 1 cm differential geoid accuracy from airborne gravimetry: the Geoid Slope Validation Survey of 2011. *Journal of Geodesy*, 87(10–12):885–907. doi:10.1007/s00190-013-0653-0
 - Tapley, B. D., Bettadpur, S., Watkins, M., & Reigber, C. (2004). The gravity recovery and climate experiment: Mission overview and early results. *Geophysical Research Letters*, 31:L09607. doi:10.1029/2004GL019920
-- Torge, W., & Müller, J. (2012). *Geodesy* (4th ed.). De Gruyter, Berlin.
+- Torge, W., & Müller, J. (2012). *Geodesy* (4th ed.). De Gruyter, Berlin. doi:10.1515/9783110250008
 - Vaníček, P., & Krakiwsky, E. J. (1986). *Geodesy: The Concepts* (2nd ed.). North-Holland, Amsterdam.
 - Véronneau, M., & Huang, J. (2016). The Canadian Geodetic Vertical Datum of 2013 (CGVD2013). *Geomatica*, 70(1):9–19. doi:10.5623/cig2016-101
+- Wang, Y. M., Becker, C., Mader, G., Martin, D., Li, X., Jiang, T., et al. (2017). The Geoid Slope Validation Survey 2014 and GRAV-D airborne gravity enhanced geoid comparison results in Iowa. *Journal of Geodesy*, 91(10):1261–1276. doi:10.1007/s00190-017-1022-1
 - Wang, Y. M., Sánchez, L., Ågren, J., Huang, J., Forsberg, R., Abd-Elmotaal, H. A., et al. (2021). Colorado geoid computation experiment: overview and summary. *Journal of Geodesy*, 95:127. doi:10.1007/s00190-021-01567-9
 - Zingerle, P., Pail, R., Gruber, T., & Oikonomidou, X. (2020). The combined global gravity field model XGM2019e. *Journal of Geodesy*, 94:66. doi:10.1007/s00190-020-01398-0

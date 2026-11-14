@@ -23,7 +23,7 @@ What Z *means* is left to the format and, too often, to the producer's memory. T
 | DXF/DWG | Yes (3D polylines, 3DFACE, meshes) | No | No — drawing units only | Local CAD origins, rotations, and scale factors; "Z" may be a drawing elevation unrelated to any datum |
 | KML | Yes (`altitudeMode`: clampToGround, relativeToGround, absolute) | "absolute" means EGM96 orthometric per spec | Fixed: WGS 84 | Altitude mode is per-feature and often left at clampToGround, discarding Z |
 
-> **Definitions that bite.** *What is a GeoJSON altitude?* RFC 7946 §4 says the optional third element "SHALL be the height in meters above or below the WGS 84 reference ellipsoid" — an ellipsoidal height $h$. The 2008 GeoJSON specification it replaced said only "altitude or elevation," with no reference surface, and that is how almost all producers still behave: the Z in a GeoJSON file is whatever came out of the originating dataset — an orthometric $H$ in NAVD88, a depth below MLLW with sign flipped, a barometric altitude, or a lidar $h$ — and nothing in the file says which. The difference between $h$ and $H$ is the geoid undulation $N$, roughly −30 m across much of the conterminous United States and up to ±100 m globally ([Chapter 7](ch07-shape-of-the-earth.md)). A consumer who takes the RFC at its word will misplace every orthometric Z by that amount; a consumer who assumes orthometric will misplace every RFC-compliant Z by the same. The only defence is an explicit, out-of-band statement of the vertical datum, and a schema field for it when you control the data.
+> **Definitions that bite.** *What is a GeoJSON altitude?* RFC 7946 §4 (Butler et al. 2016) says the optional third element "SHALL be the height in meters above or below the WGS 84 reference ellipsoid" — an ellipsoidal height $h$. The 2008 GeoJSON specification it replaced said only "altitude or elevation," with no reference surface, and that is how almost all producers still behave: the Z in a GeoJSON file is whatever came out of the originating dataset — an orthometric $H$ in NAVD88, a depth below MLLW with sign flipped, a barometric altitude, or a lidar $h$ — and nothing in the file says which. The difference between $h$ and $H$ is the geoid undulation $N$, roughly −30 m across much of the conterminous United States and up to ±100 m globally ([Chapter 7](ch07-shape-of-the-earth.md)). A consumer who takes the RFC at its word will misplace every orthometric Z by that amount; a consumer who assumes orthometric will misplace every RFC-compliant Z by the same. The only defence is an explicit, out-of-band statement of the vertical datum, and a schema field for it when you control the data.
 
 The shapefile deserves a specific warning because it is still the lingua franca of exchange. Its `.prj` carries a horizontal CRS in ESRI WKT1 and nothing else — no vertical CRS, epoch, or geoid model — so Z-type shapefiles arrive with heights whose datum lives, at best, in a README. The 2 GB limit per component is reached by a few million contour vertices; field names truncate at 10 characters; and the DBF stores numbers as fixed-width text, so an elevation written with two decimals cannot later carry three. Prefer GeoPackage or GeoParquet with a compound CRS; if a shapefile must be delivered, ship a sidecar that states the vertical datum and the meaning of Z.
 
@@ -127,8 +127,9 @@ The checks that act as DEM QC, with the test for each:
 >
 > -- 2. Closed contours: inside vs outside DEM elevation (raster table dem)
 > WITH rings AS (
->   SELECT id, elev, ST_MakePolygon(geom) AS poly
->   FROM contours WHERE ST_IsClosed(geom) AND ST_NPoints(geom) > 3)
+>   SELECT id, elev, ST_MakePolygon(g) AS poly
+>   FROM (SELECT id, elev, (ST_Dump(geom)).geom AS g FROM contours) c
+>   WHERE GeometryType(g) = 'LINESTRING' AND ST_IsClosed(g) AND ST_NPoints(g) > 3)
 > SELECT r.id, r.elev,
 >        (ST_SummaryStatsAgg(ST_Clip(d.rast, r.poly), 1, true)).mean AS z_in,
 >        (ST_SummaryStatsAgg(ST_Clip(d.rast,
@@ -140,12 +141,15 @@ The checks that act as DEM QC, with the test for each:
 >            ST_Difference(ST_Buffer(r.poly, 5), r.poly)), 1, true)).mean - r.elev);
 >
 > -- 3. Flowlines that climb: sample every 10 m, compare to running minimum
-> WITH pts AS (
+> WITH lines AS (
+>   SELECT id, (ST_Dump(ST_LineMerge(geom))).geom AS geom FROM flowlines),
+> pts AS (
 >   SELECT f.id, s.i,
 >          ST_Value(d.rast, ST_LineInterpolatePoint(f.geom, s.i / ST_Length(f.geom))) AS z
->   FROM flowlines f
+>   FROM lines f
 >   CROSS JOIN LATERAL generate_series(0, floor(ST_Length(f.geom))::int, 10) AS s(i)
->   JOIN dem d ON ST_Intersects(d.rast, ST_LineInterpolatePoint(f.geom, s.i / ST_Length(f.geom))))
+>   JOIN dem d ON ST_Intersects(d.rast, ST_LineInterpolatePoint(f.geom, s.i / ST_Length(f.geom)))
+>   WHERE GeometryType(f.geom) = 'LINESTRING' AND ST_Length(f.geom) >= 10)
 > SELECT id, max(z - running_min) AS max_rise
 > FROM (SELECT id, i, z, min(z) OVER (PARTITION BY id ORDER BY i) AS running_min FROM pts) q
 > GROUP BY id HAVING max(z - running_min) > 0.3
@@ -160,7 +164,7 @@ The checks that act as DEM QC, with the test for each:
 
 **Profiles** are a one-dimensional drape and the most powerful QC tool in this book ([Chapter 57](ch57-visualizing-dems.md) §57.7): a transect across a lake shore, a road embankment, or a tile boundary shows levees, steps, and seams that no plan view reveals. Extract them with densified bilinear sampling and plot with the vertical exaggeration declared.
 
-**3D length and surface area.** The length of a draped line is its 3D length $L_{3D} = \sum_i \sqrt{\Delta x_i^2 + \Delta y_i^2 + \Delta z_i^2}$, which exceeds the planimetric length by a factor of $\sec\beta$ on a uniform slope $\beta$ — 1.5 % at 10°, 15 % at 30°, and much more on a trail with constant small undulations, where the result depends strongly on the sampling interval (a fractal-like effect: finer sampling adds length until the DEM's noise dominates). State the DEM and sampling interval with any 3D length. **Surface area** is the analogous quantity for polygons: Jenness (2004) sums the 3D areas of eight triangles connecting each cell centre to its neighbours, which for a planar slope $\beta$ gives the planimetric area times $\sec\beta$ and for rough terrain a value that increases with resolution and noise. It is useful as a relative roughness or habitat index and a poor absolute quantity, because it has no resolution-independent limit on real terrain.
+**3D length and surface area.** The length of a draped line is its 3D length $L_{3D} = \sum_i \sqrt{\Delta x_i^2 + \Delta y_i^2 + \Delta z_i^2}$, which exceeds the planimetric length by a factor of $\sec\beta$ on a uniform slope $\beta$ — 1.5 % at 10°, 15 % at 30°, and much more on a trail with constant small undulations, where the result depends strongly on the sampling interval (a fractal-like effect: finer sampling adds length until the DEM's noise dominates). State the DEM and sampling interval with any 3D length. **Surface area** is the analogous quantity for polygons: local slope can be evaluated by 3 × 3 finite differences (Zevenbergen & Thorne 1987), or Jenness (2004) sums the 3D areas of eight triangles connecting each cell centre to its neighbours, which for a planar slope $\beta$ gives the planimetric area times $\sec\beta$ and for rough terrain a value that increases with resolution and noise. It is useful as a relative roughness or habitat index and a poor absolute quantity, because it has no resolution-independent limit on real terrain.
 
 **Slope-aware buffering.** A buffer of 100 m along the ground on a 30° slope is only 87 m in plan; a planimetric buffer therefore under-represents ground distance on slopes. Where this matters (riparian setbacks measured along the ground, line-of-sight corridors), buffer in 3D by iterating a cost-distance over the slope-corrected cell size, or buffer in plan with a width divided by $\cos\beta$ of the local slope.
 
@@ -188,7 +192,7 @@ Isobaths add the shoal-bias constraint: the generalized line may move only seawa
 
 Web delivery of vectors is by **vector tiles** (Mapbox Vector Tile specification; tiles produced by tippecanoe, PostGIS `ST_AsMVT`, or Martin/Tegola servers), which encode geometry as integer coordinates within a tile's extent — typically 4,096 units across — in Web Mercator at each zoom level. Two losses are built in. Coordinates are quantized: at zoom 14 a tile is about 2.4 km across at the equator, so one unit is ≈ 0.6 m; at zoom 10 it is ≈ 9.5 m, so a shoreline delivered at zoom 10 has had nearly 10 m of positional error added. And the specification has no Z: elevation survives only as an attribute (`ele`, `height`), with no vertical CRS field in the tile or in TileJSON, so contour layers in vector-tile basemaps carry heights whose datum is stated nowhere the user can see ([Chapter 58](ch58-making-maps.md) §58.9).
 
-Three-dimensional vector content goes to the web through **3D Tiles** (OGC Community Standard, 1.0 in 2019, 1.1 in 2023), whose tiles contain **glTF 2.0** meshes with instancing and metadata; the "vector data" tile format proposed for 3D Tiles was never finalized, so vector features are delivered as meshes (extruded footprints, draped lines) or as separate 2D layers. 3D Tiles places tiles in an Earth-centred Cartesian frame (EPSG:4978) with a per-tileset transform, which means heights are ellipsoidal by construction — a CityGML model in orthometric heights that is converted without applying the geoid will float or sink by $N$. **CityJSON** (2.0, 2023; the JSON encoding of CityGML 3.0) records a CRS by EPSG code and can carry a compound CRS with a vertical component — one of the few web-oriented 3D formats that can state what its Z means. **I3S** (Esri's Indexed 3D Scene Layers, also an OGC Community Standard) and bare **glTF** have no geodetic CRS; georeferencing lives in the wrapping service.
+Three-dimensional vector content goes to the web through **3D Tiles** (OGC Community Standard, 1.0 in 2019, 1.1 in 2023), whose tiles contain **glTF 2.0** meshes with instancing and metadata; the "vector data" tile format proposed for 3D Tiles was never finalized, so vector features are delivered as meshes (extruded footprints, draped lines) or as separate 2D layers. 3D Tiles places tiles in an Earth-centred Cartesian frame (EPSG:4978) with a per-tileset transform, which means heights are ellipsoidal by construction — a CityGML model in orthometric heights that is converted without applying the geoid will float or sink by $N$. **CityJSON** (Ledoux et al. 2019; v2.0, 2023, the JSON encoding of CityGML 3.0) records a CRS by EPSG code and can carry a compound CRS with a vertical component — one of the few web-oriented 3D formats that can state what its Z means. **I3S** (Esri's Indexed 3D Scene Layers, also an OGC Community Standard) and bare **glTF** have no geodetic CRS; georeferencing lives in the wrapping service.
 
 The practical rule is the same as for GeoJSON and shapefiles: **vertical CRS is lost in web delivery unless you put it somewhere a human and a program will find it.** Carry it as an attribute on every feature or in a documented metadata object; transform to ellipsoidal heights explicitly when the target frame (3D Tiles, Cesium, any globe) is ellipsoidal; and test the result by placing a feature of known height on the terrain and measuring where it lands.
 
@@ -255,13 +259,13 @@ Vector geometry contributes to a DEM's error budget in four ways, and the vector
 - **OGC GeoPackage Encoding Standard 1.4 (2024).** SQLite container; `gpkg_spatial_ref_sys` with WKT2 (compound CRS possible).
 - **OGC GeoParquet 1.1 (2024).** Columnar vector encoding with PROJJSON CRS metadata.
 - **Esri (1998).** *ESRI Shapefile Technical Description* (white paper). The format's limits in its own words.
-- **USGS Lidar Base Specification (2024 rev. A).** Hydro-flattening thresholds, breakline deliverables, water-surface and stream monotonicity requirements.
+- **USGS Lidar Base Specification (2024 rev. A; 2025 rev. A, June 2025).** Hydro-flattening thresholds, breakline deliverables, Class 20/21 rules, MSHR NoData alignment, and water-surface and stream monotonicity requirements.
 - **FGDC Shoreline Metadata Profile (FGDC-STD-001.2-2001).** Shoreline tidal datum, source, and date metadata.
 - **LandXML 1.2 (2008).** Civil-engineering surface and alignment exchange.
 - **OGC CityGML 3.0 (2021) and CityJSON 2.0 (2023).** 3D city model semantics, LoD definitions, CRS declaration.
 - **OGC 3D Tiles 1.1 Community Standard (2023); Khronos glTF 2.0 (2017).** Web 3D delivery; ECEF frame.
 - **Mapbox Vector Tile Specification 2.1 (2016).** Integer tile coordinates; no Z.
-- **ASPRS Positional Accuracy Standards for Digital Geospatial Data, edition 2 (2023).** GCP/checkpoint requirements and reporting.
+- **ASPRS Positional Accuracy Standards for Digital Geospatial Data, edition 2 (2023; v2 2024).** GCP/checkpoint requirements and RMSE$_V$/RMSE$_H$ reporting.
 
 ## Pitfalls
 
@@ -295,19 +299,19 @@ Vector geometry contributes to a DEM's error budget in four ways, and the vector
 ## References
 
 - Butler, H., Daly, M., Doyle, A., Gillies, S., Hagen, S., & Schaub, T. (2016). *The GeoJSON Format*. IETF RFC 7946. https://doi.org/10.17487/RFC7946
-- Douglas, D. H., & Peucker, T. K. (1973). Algorithms for the reduction of the number of points required to represent a digitized line or its caricature. *The Canadian Cartographer*, 10(2), 112–122.
-- Egenhofer, M. J., & Franzosa, R. D. (1991). Point-set topological spatial relations. *International Journal of Geographical Information Systems*, 5(2), 161–174.
+- Douglas, D. H., & Peucker, T. K. (1973). Algorithms for the reduction of the number of points required to represent a digitized line or its caricature. *The Canadian Cartographer*, 10(2), 112–122. https://doi.org/10.3138/FM57-6770-U75U-7727
+- Egenhofer, M. J., & Franzosa, R. D. (1991). Point-set topological spatial relations. *International Journal of Geographical Information Systems*, 5(2), 161–174. https://doi.org/10.1080/02693799108927841
 - Environmental Systems Research Institute (1998). *ESRI Shapefile Technical Description*. ESRI White Paper, July 1998.
-- Goodchild, M. F., & Hunter, G. J. (1997). A simple positional accuracy measure for linear features. *International Journal of Geographical Information Science*, 11(3), 299–306.
-- U.S. Geological Survey (2024). *Lidar Base Specification 2024 rev. A*. National Geospatial Program, online edition (successor to Heidemann, H. K., Techniques and Methods 11-B4).
-- Hutchinson, M. F. (1989). A new procedure for gridding elevation and stream line data with automatic removal of spurious pits. *Journal of Hydrology*, 106(3–4), 211–232.
+- Goodchild, M. F., & Hunter, G. J. (1997). A simple positional accuracy measure for linear features. *International Journal of Geographical Information Science*, 11(3), 299–306. https://doi.org/10.1080/136588197242419
+- U.S. Geological Survey (2025). *Lidar Base Specification 2025 rev. A* (succeeding *2024 rev. A* and Heidemann, H. K., Techniques and Methods 11-B4). National Geospatial Program, online edition.
+- Hutchinson, M. F. (1989). A new procedure for gridding elevation and stream line data with automatic removal of spurious pits. *Journal of Hydrology*, 106(3–4), 211–232. https://doi.org/10.1016/0022-1694(89)90073-5
 - Jenness, J. S. (2004). Calculating landscape surface area from digital elevation models. *Wildlife Society Bulletin*, 32(3), 829–839.
-- Ledoux, H., Arroyo Ohori, K., Kumar, K., Dukai, B., Labetski, A., & Vitalis, S. (2019). CityJSON: a compact and easy-to-use encoding of the CityGML data model. *Open Geospatial Data, Software and Standards*, 4, 4.
-- Li, R., Ma, R., & Di, K. (2002). Digital tide-coordinated shoreline. *Marine Geodesy*, 25(1–2), 27–36.
+- Ledoux, H., Arroyo Ohori, K., Kumar, K., Dukai, B., Labetski, A., & Vitalis, S. (2019). CityJSON: a compact and easy-to-use encoding of the CityGML data model. *Open Geospatial Data, Software and Standards*, 4, 4. https://doi.org/10.1186/s40965-019-0064-0
+- Li, R., Ma, R., & Di, K. (2002). Digital tide-coordinated shoreline. *Marine Geodesy*, 25(1–2), 27–36. https://doi.org/10.1080/014904102753516714
 - Open Geospatial Consortium (2011). *OpenGIS Implementation Standard for Geographic Information — Simple Feature Access — Part 1: Common Architecture*, version 1.2.1 (OGC 06-103r4).
 - Open Geospatial Consortium (2024). *OGC GeoPackage Encoding Standard*, version 1.4.0 (OGC 12-128r19).
 - Open Geospatial Consortium (2023). *3D Tiles Specification*, version 1.1 (OGC Community Standard).
-- Shewchuk, J. R. (1996). Triangle: engineering a 2D quality mesh generator and Delaunay triangulator. In *Applied Computational Geometry: Towards Geometric Engineering*, Lecture Notes in Computer Science 1148, 203–222. Springer.
-- Visvalingam, M., & Whyatt, J. D. (1993). Line generalisation by repeated elimination of points. *The Cartographic Journal*, 30(1), 46–51.
-- Wessel, P., & Smith, W. H. F. (1996). A global, self-consistent, hierarchical, high-resolution shoreline database. *Journal of Geophysical Research: Solid Earth*, 101(B4), 8741–8743.
-- Zevenbergen, L. W., & Thorne, C. R. (1987). Quantitative analysis of land surface topography. *Earth Surface Processes and Landforms*, 12(1), 47–56.
+- Shewchuk, J. R. (1996). Triangle: engineering a 2D quality mesh generator and Delaunay triangulator. In *Applied Computational Geometry: Towards Geometric Engineering*, Lecture Notes in Computer Science 1148, 203–222. Springer. https://doi.org/10.1007/BFb0014497
+- Visvalingam, M., & Whyatt, J. D. (1993). Line generalisation by repeated elimination of points. *The Cartographic Journal*, 30(1), 46–51. https://doi.org/10.1179/000870493786962263
+- Wessel, P., & Smith, W. H. F. (1996). A global, self-consistent, hierarchical, high-resolution shoreline database. *Journal of Geophysical Research: Solid Earth*, 101(B4), 8741–8743. https://doi.org/10.1029/96JB00104
+- Zevenbergen, L. W., & Thorne, C. R. (1987). Quantitative analysis of land surface topography. *Earth Surface Processes and Landforms*, 12(1), 47–56. https://doi.org/10.1002/esp.3290120107

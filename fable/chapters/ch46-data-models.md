@@ -36,7 +36,7 @@ A discrete-return lidar applies a hardware detector and reports where it fired; 
 
 ### 46.2.2 Gaussian decomposition
 
-The standard model represents the received waveform as a sum of $K$ Gaussian echoes on a background $b$:
+The standard model represents the received waveform as a sum of $K$ Gaussian echoes on a background $b$ (Wagner et al. 2006):
 
 $$w(t) = b + \sum_{k=1}^{K} A_k \exp\!\left(-\frac{(t-\mu_k)^2}{2\sigma_k^2}\right) + \varepsilon(t),$$
 
@@ -44,7 +44,7 @@ with amplitude $A_k$, echo time $\mu_k$ (range $c\,\mu_k/2$), and width $\sigma_
 
 ### 46.2.3 Photon-counting statistics: ATL03 to ATL08
 
-Photon-counting systems trade signal strength for sensitivity, so the raw product is dominated by solar background and dark counts. ICESat-2's geolocated photon product **ATL03** contains every detection with a coarse confidence flag; the land and vegetation product **ATL08** (Neuenschwander and Pitts 2019) applies a density-based noise filter (DRAGANN), then iterative surface finding, to classify photons as ground, canopy, or top-of-canopy and to aggregate statistics in 100 m segments. Noise is a Poisson process whose rate depends on solar elevation and reflectance; signal photons per shot are few; per-photon vertical precision is of order 0.1–0.2 m 1σ; and the *segment* terrain height uncertainty depends on how many ground photons survived the filter and on terrain variation within 100 m. A photon cloud is a data model whose unit is not a surface point but a detection event with a probability of being signal, and products derived from it should carry both photon count and classification confidence.
+Photon-counting systems trade signal strength for sensitivity, so the raw product is dominated by solar background and dark counts. ICESat-2's geolocated photon product **ATL03** (Neumann et al. 2019) contains every detection with a coarse confidence flag; the land and vegetation product **ATL08** (Neuenschwander and Pitts 2019) applies a density-based noise filter (DRAGANN), then iterative surface finding, to classify photons as ground, canopy, or top-of-canopy and to aggregate statistics in 100 m segments. Noise is a Poisson process whose rate depends on solar elevation and reflectance; signal photons per shot are few; per-photon vertical precision is of order 0.1–0.2 m 1σ; and the *segment* terrain height uncertainty depends on how many ground photons survived the filter and on terrain variation within 100 m. A photon cloud is a data model whose unit is not a surface point but a detection event with a probability of being signal, and products derived from it should carry both photon count and classification confidence.
 
 ### 46.2.4 Sonar water column and snippets
 
@@ -86,14 +86,15 @@ An **overview** is a reduced-resolution copy stored alongside the grid so a view
 | Max | Block maximum | Ridges, peaks; shoalest elevation | Channels |
 | Mode | Most frequent value | Categorical bands (source, class) | Meaningless for continuous elevation |
 
-A nearest overview of a lidar DTM at 16× shows a levee as a dashed line because the crest is sampled only when the chosen cell lands on it. An average overview of a nautical surface raises every narrow shoal toward the surrounding depth—the opposite of the safety bias the product exists to provide—so hydrographic viewers must build shoal-biased overviews, and GDAL's `-r min`/`-r max` must be chosen with the sign convention in mind. A categorical band must use `mode` or `nearest`, because the average of source IDs 3 and 7 is not source 5. The honest formulation: an overview is a *new product with its own aggregation rule*, and a viewer that lets a user read a value from it is displaying a model the user did not ask for. GDAL records the kernel in overview metadata; most viewers do not show it.
+A nearest overview of a lidar DTM at 16× shows a levee as a dashed line because the crest is sampled only when the chosen cell lands on it. An average overview of a nautical surface raises every narrow shoal toward the surrounding depth—the opposite of the safety bias the product exists to provide—so hydrographic viewers must build shoal-biased overviews (`gdaladdo` itself lacks `min` and `max`, so build reduced grids with `gdalwarp -ovr NONE -r min`/`-r max`, chosen with the sign convention in mind, and attach them via `gdal raster overview add --overview-src` or `rasterio`). A categorical band must use `mode` or `nearest`, because the average of source IDs 3 and 7 is not source 5. The honest formulation: an overview is a *new product with its own aggregation rule*, and a viewer that lets a user read a value from it is displaying a model the user did not ask for. GDAL records the kernel in overview metadata; most viewers do not show it.
 
-> **Try it.** Build overviews two ways and compare the ridge.
+> **Try it.** Compare a 16× `average` overview against a crest-preserving `max` downsample.
 > ```bash
 > gdaladdo -r average -ro dtm.tif 2 4 8 16
 > gdal_translate -outsize 6.25% 6.25% -r nearest dtm.tif ovr16_avg.tif
-> cp dtm.tif dtm_max.tif && gdaladdo -r max dtm_max.tif 2 4 8 16
-> gdal_translate -outsize 6.25% 6.25% -r nearest dtm_max.tif ovr16_max.tif
+> # gdaladdo lacks min/max; read native cells (-ovr NONE) with gdalwarp -r max
+> dims=$(gdalinfo -json ovr16_avg.tif | jq -r '.size | "\(.[0]) \(.[1])"')
+> gdalwarp -ovr NONE -r max -ts $dims dtm.tif ovr16_max.tif
 > gdal_calc.py -A ovr16_avg.tif -B ovr16_max.tif --calc="B-A" --outfile=ovr_diff.tif
 > gdalinfo -stats ovr_diff.tif | grep -E "MINIMUM|MAXIMUM|MEAN"
 > ```
@@ -202,9 +203,9 @@ Where does uncertainty live in the model, and what does the number mean?
 > | CUBE hypothesis σ | Posterior σ of chosen hypothesis | 0.05 m |
 > | Propagated TVU, 1σ | Sensor + motion + SSP + tide budget | 0.15 m |
 > | Product uncertainty, 95 % | ≈ 1.96 × TVU plus allowances | 0.30 m |
-> | Source-declared accuracy | S-44 Order 1a at 20 m depth, 95 % | 0.52 m |
+> | Source-declared accuracy | S-44 Order 1a at 20 m depth, 95 % | 0.56 m |
 >
-> One cell legitimately carries values from 0.03 m to 0.52 m depending on which quantity is meant. A band named "uncertainty" without a type is a number with no units of meaning.
+> One cell legitimately carries values from 0.03 m to 0.56 m depending on which quantity is meant. A band named "uncertainty" without a type is a number with no units of meaning.
 
 ## 46.10 The conversion matrix
 
@@ -230,7 +231,7 @@ Every arrow between data models is lossy in some direction, and the loss is rare
 
 ## Then & now
 
-The history of elevation data models is a history of storing more of the measurement and deferring more of the decisions. **Contours and spot heights** ⟨H⟩ were the topographic map's model for two centuries—compact, legible, and silent about everything between the lines; digitized contours fed the first national DEMs. **Regular grids** came with computers: DTED (US Defense Mapping Agency, 1970s) and the USGS DEM series gridded contours and photogrammetric profiles because array arithmetic was what machines did. **TINs** (Peucker et al. 1978) made adaptive density and breaklines first-class and remain native to design software. **Dense point clouds** became lidar's primary deliverable in the 2000s, with LAS (2003) ⟨H⟩ as the shared container; multibeam had produced dense soundings since the 1980s but gridded them early. **Waveforms and photons** moved the archive toward the signal (full-waveform airborne systems mid-2000s; LAS 1.3/1.4 waveform packets; ICESat-2 from 2018). **Meshes and 3D tiles** (quantized-mesh; 3D Tiles 1.0 as an OGC community standard in 2019, 1.1 in 2023; I3S) made true 3D a web commodity. **Variable resolution**: CUBE (2003) made uncertainty-weighted gridding standard in hydrography; CHRT (2017) and BAG VR made resolution data-driven. **Cloud-native indexing**: EPT (2018) and COPC (2021) put octrees inside the files. **Neural and splat representations** (NeRF 2020; 3D Gaussian splatting 2023) opened a branch whose relation to measurement is still being worked out. Each generation's products were made from a richer representation that was often not kept; the change that most improves future correctness is that points, and increasingly waveforms, are now routinely archived ([Chapter 50](ch50-archiving-and-provenance.md)).
+The history of elevation data models is a history of storing more of the measurement and deferring more of the decisions. **Contours and spot heights** were the topographic map's model for two centuries—compact, legible, and silent about everything between the lines; digitized contours fed the first national DEMs. **Regular grids** came with computers: DTED (US Defense Mapping Agency, 1970s) and the USGS DEM series gridded contours and photogrammetric profiles because array arithmetic was what machines did. **TINs** (Peucker et al. 1978) ⟨H⟩ made adaptive density and breaklines first-class and remain native to design software. **Dense point clouds** became lidar's primary deliverable in the 2000s, with LAS (2003) ⟨H⟩ as the shared container; multibeam had produced dense soundings since the 1980s but gridded them early. **Waveforms and photons** moved the archive toward the signal (full-waveform airborne systems mid-2000s; LAS 1.3/1.4 waveform packets; ICESat-2 from 2018). **Meshes and 3D tiles** (quantized-mesh; 3D Tiles 1.0 as an OGC community standard in 2019, 1.1 in 2023; I3S) made true 3D a web commodity. **Variable resolution**: CUBE (2003) made uncertainty-weighted gridding standard in hydrography; CHRT (2017) and BAG VR made resolution data-driven. **Cloud-native indexing**: EPT (2018) and COPC (2021) ⟨H⟩ put octrees inside the files. **Neural and splat representations** (NeRF 2020; 3D Gaussian splatting 2023) opened a branch whose relation to measurement is still being worked out. Each generation's products were made from a richer representation that was often not kept; the change that most improves future correctness is that points, and increasingly waveforms, are now routinely archived ([Chapter 50](ch50-archiving-and-provenance.md)).
 
 ## Mathematics
 
@@ -276,7 +277,7 @@ The data model is itself an error source: every structure imposes a **representa
 - OGC, *3D Tiles* 1.1 (2023, OGC 22-025r4): tilesets, geometric error, implicit quadtree/octree tiling.
 - OGC, *I3S and Scene Layer Package* community standard 1.3 (OGC 17-014r9, 2023); Cesium *quantized-mesh-1.0*; OGC *CityGML 3.0* (2021, OGC 20-010) and *CityJSON* 2.0 (2023).
 - NASA ICESat-2 ATBDs for ATL03 and ATL08 (current releases, NSIDC).
-- USGS, *Lidar Base Specification* 2024 rev. A (or current revision): density definitions assessed on a grid.
+- USGS, *Lidar Base Specification* 2024 rev. A / 2025 rev. A (or current revision): density definitions assessed on a grid.
 - Hobu Inc., *COPC Specification* 1.0 (2021).
 
 ## Pitfalls
@@ -306,16 +307,18 @@ The data model is itself an error source: every structure imposes a **representa
 - American Society for Photogrammetry and Remote Sensing (2019). *LAS Specification 1.4 – R15*. ASPRS, Bethesda, MD.
 - Calder, B. R., and Mayer, L. A. (2003). Automatic processing of high-rate, high-density multibeam echosounder data. *Geochemistry, Geophysics, Geosystems*, 4(6), 1048. doi:10.1029/2002GC000486
 - Calder, B. R., and Rice, G. (2017). Computationally efficient variable resolution depth estimation. *Computers & Geosciences*, 106, 49–59. doi:10.1016/j.cageo.2017.05.013
-- Garland, M., and Heckbert, P. S. (1997). Surface simplification using quadric error metrics. *Proceedings of SIGGRAPH '97*, 209–216.
+- Finkel, R. A., and Bentley, J. L. (1974). Quad trees: A data structure for retrieval on composite keys. *Acta Informatica*, 4(1), 1–9. doi:10.1007/BF00288933
+- Garland, M., and Heckbert, P. S. (1997). Surface simplification using quadric error metrics. *Proceedings of SIGGRAPH '97*, 209–216. doi:10.1145/258734.258849
+- Hilbert, D. (1891). Ueber die stetige Abbildung einer Linie auf ein Flächenstück. *Mathematische Annalen*, 38(3), 459–460. doi:10.1007/BF01199431
 - Hobu Inc. (2021). *Cloud Optimized Point Cloud (COPC) Specification 1.0*. https://copc.io
-- Hornung, A., Wurm, K. M., Bennewitz, M., Stachniss, C., and Burgard, W. (2013). OctoMap: An efficient probabilistic 3D mapping framework based on octrees. *Autonomous Robots*, 34(3), 189–206.
+- Hornung, A., Wurm, K. M., Bennewitz, M., Stachniss, C., and Burgard, W. (2013). OctoMap: An efficient probabilistic 3D mapping framework based on octrees. *Autonomous Robots*, 34(3), 189–206. doi:10.1007/s10514-012-9321-0
 - International Hydrographic Organization (2024). *S-102 Bathymetric Surface Product Specification*, Edition 3.0.0. IHO, Monaco.
-- Kerbl, B., Kopanas, G., Leimkühler, T., and Drettakis, G. (2023). 3D Gaussian splatting for real-time radiance field rendering. *ACM Transactions on Graphics*, 42(4), Article 139.
-- Mallet, C., and Bretar, F. (2009). Full-waveform topographic lidar: State-of-the-art. *ISPRS Journal of Photogrammetry and Remote Sensing*, 64(1), 1–16.
-- Neuenschwander, A., and Pitts, K. (2019). The ATL08 land and vegetation product for the ICESat-2 mission. *Remote Sensing of Environment*, 221, 247–259.
-- Neumann, T. A., et al. (2019). The Ice, Cloud, and Land Elevation Satellite-2 mission: A global geolocated photon product derived from the Advanced Topographic Laser Altimeter System. *Remote Sensing of Environment*, 233, 111325.
+- Kerbl, B., Kopanas, G., Leimkühler, T., and Drettakis, G. (2023). 3D Gaussian splatting for real-time radiance field rendering. *ACM Transactions on Graphics*, 42(4), Article 139. doi:10.1145/3592433
+- Mallet, C., and Bretar, F. (2009). Full-waveform topographic lidar: State-of-the-art. *ISPRS Journal of Photogrammetry and Remote Sensing*, 64(1), 1–16. doi:10.1016/j.isprsjprs.2008.09.007
+- Neuenschwander, A., and Pitts, K. (2019). The ATL08 land and vegetation product for the ICESat-2 mission. *Remote Sensing of Environment*, 221, 247–259. doi:10.1016/j.rse.2018.11.005
+- Neumann, T. A., et al. (2019). The Ice, Cloud, and Land Elevation Satellite-2 mission: A global geolocated photon product derived from the Advanced Topographic Laser Altimeter System. *Remote Sensing of Environment*, 233, 111325. doi:10.1016/j.rse.2019.111325
 - Open Geospatial Consortium (2023). *3D Tiles Specification 1.1*, OGC 22-025r4.
-- Open Navigation Surface Working Group (2024). *Bathymetric Attributed Grid (BAG) Format Specification Document*, version 2.0.x. https://bag.readthedocs.io (code: https://github.com/OpenNavigationSurface/BAG)
+- Open Navigation Surface Working Group (2022). *Bathymetric Attributed Grid (BAG) Format Specification Document*, Version 2.0.1. https://bag.readthedocs.io (code: https://github.com/OpenNavigationSurface/BAG)
 - Peucker, T. K., Fowler, R. J., Little, J. J., and Mark, D. M. (1978). The triangulated irregular network. *Proceedings of the ASP Digital Terrain Models (DTM) Symposium*, St. Louis, 516–540.
-- Samet, H. (1984). The quadtree and related hierarchical data structures. *ACM Computing Surveys*, 16(2), 187–260.
-- Wagner, W., Ullrich, A., Ducic, V., Melzer, T., and Studnicka, N. (2006). Gaussian decomposition and calibration of a novel small-footprint full-waveform digitising airborne laser scanner. *ISPRS Journal of Photogrammetry and Remote Sensing*, 60(2), 100–112.
+- Samet, H. (1984). The quadtree and related hierarchical data structures. *ACM Computing Surveys*, 16(2), 187–260. doi:10.1145/356924.356930
+- Wagner, W., Ullrich, A., Ducic, V., Melzer, T., and Studnicka, N. (2006). Gaussian decomposition and calibration of a novel small-footprint full-waveform digitising airborne laser scanner. *ISPRS Journal of Photogrammetry and Remote Sensing*, 60(2), 100–112. doi:10.1016/j.isprsjprs.2005.12.001

@@ -2,7 +2,7 @@
 
 This index lists software referred to throughout the handbook, grouped by the task it is most often used for. It complements the prose survey in [Chapter 71](../chapters/ch71-software-landscape.md), which discusses *how to choose*; this appendix only answers *what exists*. Rows are alphabetical within each group. The "Chapters" column points to where the tool is used or discussed.
 
-**Reading the Licence column.** OSI identifiers are used for open source (MIT, BSD-3, Apache-2.0, GPL-2.0/3.0, LGPL-2.1/3.0, MPL-2.0). "Freeware" means gratis but closed. "Commercial" means paid, closed; "Commercial (free tier)" where a limited free edition exists. Licences change — LAStools, for example, is a mixture of LGPL tools and closed tools — so check the current licence file before redistributing or embedding. "(verify)" marks entries whose licence or status could not be confirmed at the time of writing.
+**Reading the Licence column.** OSI identifiers are used for open source (MIT, BSD-3, Apache-2.0, GPL-2.0/3.0, LGPL-2.1/3.0, MPL-2.0). "Freeware" means gratis but closed. "Commercial" means paid, closed; "Commercial (free tier)" where a limited free edition exists. Licences change — LAStools, for example, is a mixture of LGPL tools and closed tools — so check the current licence file before redistributing or embedding.
 
 **Reading the Platform column.** "CLI" means command line; "GUI" a desktop application; "lib" a library; "web" browser-based. Language indicates the implementation language and, where relevant, the primary binding (e.g. "C++ / Python").
 
@@ -79,18 +79,18 @@ This index lists software referred to throughout the handbook, grouped by the ta
 
 | Name | Task area | Licence | Language / platform | Notes | Chapters |
 |---|---|---|---|---|---|
-| ISCE2 / ISCE3 | InSAR processing (stripmap, TOPS, ALOS, NISAR) | Apache-2.0 (ISCE2 export-controlled historically; verify) | C/C++/Python | NASA JPL; NISAR ground segment basis | 21 |
+| ISCE2 / ISCE3 | InSAR processing (stripmap, TOPS, ALOS, NISAR) | Apache-2.0 (EAR99; open on GitHub since 2018) | C/C++/Python | NASA JPL; NISAR ground segment basis | 21 |
 | GMTSAR | InSAR processing built on GMT | GPL-3.0 | C / CLI | Scripps; simple batch processing | 21 |
 | SNAP (Sentinel Application Platform) with S1TBX | Sentinel-1 interferometry, terrain correction | GPL-3.0 | Java / GUI, CLI (gpt) | ESA; terrain correction requires an external DEM | 21 |
 | MintPy | Small-baseline InSAR time series | GPL-3.0 | Python | Works on ISCE/GAMMA/SNAP stacks | 21, 41 |
 | LiCSBAS | Time-series from LiCSAR products | GPL-3.0 | Python | COMET; semi-automatic | 21, 41 |
 | HyP3 (ASF) | On-demand Sentinel-1 InSAR and RTC | Free service (BSD-3 SDK) | web / Python SDK | No local processing needed | 21 |
-| snaphu | Statistical-cost phase unwrapping | Stanford licence (free, redistributable with restrictions; verify) | C / CLI | Used by most open InSAR stacks | 21 |
+| snaphu | Statistical-cost phase unwrapping | Permissive Stanford / BSD-style licence | C / CLI | Used by most open InSAR stacks | 21 |
 | GAMMA Remote Sensing software | InSAR, SAR processing, geocoding | Commercial | C / CLI | Reference commercial toolkit in research | 21 |
 | SARscape (ENVI) | SAR/InSAR processing in ENVI | Commercial | IDL / GUI | DEM generation from stereo/InSAR | 21 |
 | ENVI | Image analysis incl. DEM extraction module | Commercial | IDL / GUI | Photogrammetric DEM extraction from stereo pairs | 21, 22 |
 | PyRate | Rate and time-series estimation from InSAR | Apache-2.0 | Python | Geoscience Australia | 21, 38 |
-| CReSIS Toolbox | Ice-penetrating radar processing | Free (academic) (verify) | MATLAB | Radar depth sounder processing for ice thickness | 21, 66 |
+| Open Polar Radar (OPR; formerly CReSIS Toolbox) | Ice-penetrating radar processing | MIT | MATLAB / Python (`xopr`) | Radar depth sounder processing for ice thickness | 21, 66 |
 
 ## F.5 Sonar and hydrography
 
@@ -130,7 +130,7 @@ This index lists software referred to throughout the handbook, grouped by the ta
 | xdem | DEM co-registration (Nuth–Kääb, ICP), bias correction, uncertainty (variograms), differencing | Apache-2.0 | Python | GlacioHack; integrates with geoutils | 41, 53 |
 | demcoreg / pygeotools | DEM co-registration to reference points (ICESat) and tools | MIT | Python | David Shean; ArcticDEM/REMA workflows | 41, 53 |
 | GCD (Geomorphic Change Detection) | DoD with spatially variable uncertainty and thresholding | GPL-3.0 | ArcGIS add-in / standalone | Riverscapes consortium | 40, 41 |
-| DSAS (Digital Shoreline Analysis System) | Shoreline change rates | Public domain (USGS) | ArcGIS add-in | Transect-based statistics | 34, 40 |
+| DSAS (Digital Shoreline Analysis System) | Shoreline change rates | Public domain (USGS) | Standalone (v6.0+) / ArcGIS add-in (v5) | Transect-based statistics on GeoPackage/geodatabase | 34, 40 |
 | MICRODEM | DEM analysis, DEMIX tools, visualization | Freeware (Peter Guth) | Windows | DEMIX criteria implemented here first | 53, 55 |
 | Relief Visualization Toolbox (RVT) | Hillshade, sky-view factor, openness, local relief | Apache-2.0 | Python / QGIS plugin | ZRC SAZU | 57 |
 | gdaldem (GDAL) | Hillshade, slope, aspect, TRI, TPI, roughness, color-relief | MIT | CLI | First-pass derivatives | 44, 57 |
@@ -138,7 +138,7 @@ This index lists software referred to throughout the handbook, grouped by the ta
 | QGIS | Desktop GIS with Processing (GDAL, GRASS, SAGA, Whitebox) | GPL-2.0 | C++/Python / GUI | Point-cloud support via PDAL since 3.18+ | throughout |
 | Surfer (Golden Software) | Gridding (kriging, min. curvature) and contouring | Commercial | Windows | Legacy in mining/geoscience | 31 |
 | gstat / scikit-gstat / PyKrige / GSTools | Variography and kriging | GPL (gstat), MIT (scikit-gstat, PyKrige), LGPL-3.0 (GSTools) | R / Python | Interpolation uncertainty; variograms of DEM error | 31, 53 |
-| DEMIX tools (Guth et al.) | Tile-based DEM intercomparison, ranking | Open (GitHub) (verify licence) | Python / MICRODEM | Wine-contest ranking statistics | 53, 55 |
+| DEMIX tools (Guth, Grohmann et al.) | Tile-based DEM intercomparison, ranking | Open source (GPL / MIT; MICRODEM & `DEMIX_wine_contest`) | Python / MICRODEM | Wine-contest ranking statistics | 53, 55 |
 
 ## F.7 GNSS, navigation, and positioning
 
@@ -148,7 +148,7 @@ This index lists software referred to throughout the handbook, grouped by the ta
 | PRIDE PPP-AR | PPP with ambiguity resolution | GPL-3.0 | Fortran/C / CLI | Wuhan University; cm-level static | 12 |
 | GAMIT/GLOBK | Scientific GNSS network processing | Free for academic (licence agreement) | Fortran / CLI | MIT; reference-frame work, velocities | 8, 12, 38 |
 | Bernese GNSS Software | Scientific GNSS processing | Commercial (academic pricing) | Fortran / CLI | AIUB; used by many IGS analysis centres | 8, 12 |
-| GipsyX / RTGx | PPP and orbit determination | Free for non-commercial via JPL licence (verify) | C++/Python | JPL; PPP with JPL products | 12 |
+| GipsyX / RTGx | PPP and orbit determination | Free for academic/research via JPL/Caltech licence; commercial licensed | C++/Python | JPL; PPP with JPL products | 12 |
 | OPUS (NGS) | Online static GNSS positioning in the US (NAD83/ITRF) | Free service | web | OPUS-Projects for networks; OPUS Share for benchmarks | 12, 25 |
 | AUSPOS / CSRS-PPP / TrimbleRTX / Apps from IGS ACs | Online PPP/static services | Free services | web | Different frames/epochs — read the report header | 12 |
 | gnssrefl | GNSS interferometric reflectometry (snow depth, water level, soil moisture) | GPL-3.0 | Python | Kristine Larson's group | 14, 36 |
@@ -199,7 +199,7 @@ This index lists software referred to throughout the handbook, grouped by the ta
 | QGIS (hillshade, relief, 3D map view, Qgis2threejs) | Map production | GPL-2.0 | GUI | Print layouts with graticules, scale bars, north arrows | 57, 58 |
 | ArcGIS Pro (Maps, Layouts, Scene) | Map production, multidirectional hillshade, 3D scenes | Commercial | Windows | Standard in US agencies for topo map production | 58 |
 | matplotlib / cmcrameri / cmocean / colorcet | Plotting and perceptually uniform colormaps | PSF / MIT / MIT / CC-BY | Python | Use `batlow`, `topo`, `oleron` (land–sea) — avoid rainbow | 57 |
-| Terrain Sculptor / Pyramid Shader / Scree Painter | Generalized relief, scree, and rock drawing (Jenny) | Open (various) (verify) | Java | Cartographic generalization | 57, 58 |
+| Terrain Sculptor / Pyramid Shader / Scree Painter | Generalized relief, scree, and rock drawing (Jenny) | GPL-2.0 (Terrain Sculptor, Scree Painter) / MIT (Pyramid Shader) | Java | Cartographic generalization | 57, 58 |
 | MapSCII / Mapnik / Maperitive | Tile rendering | GPL / LGPL-2.1 / freeware | C++ / CLI | — | 58 |
 | ParaView / VisIt | Scientific 3D visualization of meshes, voxels | BSD-3 | C++ / GUI, Python | Large time-varying datasets | 46, 57 |
 | Potree / Cesium / three.js | Web 3D (see F.2, F.8) | BSD-2 / Apache-2.0 / MIT | JS | — | 57 |
@@ -215,11 +215,11 @@ This index lists software referred to throughout the handbook, grouped by the ta
 | HEC-HMS | Hydrologic modelling | Freeware (USACE) | Windows/Linux | — | 61 |
 | LISFLOOD-FP | Raster-based 2D flood inundation | GPL-3.0 (v8) | C++ / CLI | Subgrid channels; used with FABDEM in global studies | 61 |
 | SFINCS (Deltares) | Compound flooding (surge, rain, river) at reduced complexity | GPL-3.0 | Fortran / Python (HydroMT) | Needs topobathy seams correct | 61, 66 |
-| ANUGA | Shallow-water finite-volume inundation (tsunami, flood) | Apache-2.0 (verify; earlier GPL) | Python/C | Unstructured mesh from DEM | 61 |
+| ANUGA | Shallow-water finite-volume inundation (tsunami, flood) | GPL-2.0+ | Python/C | Unstructured mesh from DEM | 61 |
 | Delft3D FM / D-Flow | Hydrodynamics, morphology, waves | AGPL-3.0 (source) / commercial support | Fortran/C++ | Morphological change needs bathy time series | 40, 66 |
 | TUFLOW / MIKE+ / Infoworks ICM / XPSWMM | Commercial urban/river flood modelling | Commercial | Windows | Urban drainage with 1D–2D coupling | 61 |
 | SWMM (EPA) / PCSWMM | Stormwater modelling | Public domain (SWMM) / commercial (PCSWMM) | C / Windows | Subcatchment slopes from DTM | 61 |
-| RAMMS / Flow-R / r.avaflow / Titan2D | Avalanche, debris-flow, rockfall, lava and mass-flow runout | Commercial / free / GPL-3.0 / open (verify) | Windows / GRASS / Python | Runout is very sensitive to DEM smoothing | 39, 61 |
+| RAMMS / Flow-R / r.avaflow / Titan2D | Avalanche, debris-flow, rockfall, lava and mass-flow runout | Commercial / freeware / GPL-3.0 / NCSA | Windows / GRASS / Python | Runout is very sensitive to DEM smoothing | 39, 61 |
 | GeoClaw / ComMIT-MOST / Tsunami-HySEA | Tsunami propagation and inundation | BSD / NOAA free / academic licence | Fortran/Python / GPU | Nearshore bathymetry resolution governs results | 39, 61 |
 | SAGA / GRASS solar modules, `r.sun`, PVGIS | Solar radiation on terrain | GPL | — | Horizon from DSM vs DTM matters | 1, 63 |
 | WindNinja / WAsP / OpenFOAM | Wind flow over terrain | Public domain / commercial / GPL-3.0 | — | DSM roughness vs DTM shape | 1, 63 |
@@ -235,7 +235,7 @@ This index lists software referred to throughout the handbook, grouped by the ta
 
 | Name | Task area | Licence | Language / platform | Notes | Chapters |
 |---|---|---|---|---|---|
-| ISIS (USGS Astrogeology) | Planetary image processing: ingestion, camera models, control networks (`jigsaw`), map projection | CC0 / public domain (verify; formerly custom) | C++ / CLI | Core for HiRISE/CTX/LRO DTM pipelines with SOCET or ASP | 67 |
+| ISIS (USGS Astrogeology) | Planetary image processing: ingestion, camera models, control networks (`jigsaw`), map projection | CC0-1.0 (public domain) | C++ / CLI | Core for HiRISE/CTX/LRO DTM pipelines with SOCET or ASP | 67 |
 | SPICE (NAIF) toolkit, SpiceyPy | Spacecraft geometry, ephemerides, pointing, body frames | Public domain (NASA) | C/Fortran/IDL/MATLAB; Python | Needed to geolocate any planetary observation | 67 |
 | Ames Stereo Pipeline | See F.3 | Apache-2.0 | C++ | `bundle_adjust`, `pc_align` to altimetry | 67 |
 | JMARS / JMoon | Planetary GIS and data browsing | Free (ASU) | Java | Visual QA of DTM coverage and layers | 67 |
@@ -251,7 +251,7 @@ This index lists software referred to throughout the handbook, grouped by the ta
 |---|---|---|---|---|---|
 | `pdal info --stats`, `pdal density`, `lasinfo`, `lasvalidate` | Point-cloud statistics and validity | BSD-3 / LGPL / ASPRS free | CLI | lasvalidate checks LAS spec compliance | 47, 53 |
 | `gdalinfo -stats -checksum`, `gdalcompare.py` | Raster inspection and regression tests | MIT | CLI | Pixel-is-point vs area flag is in the metadata | 47, 54 |
-| ASPRS positional-accuracy spreadsheet / `aspras` tools | ASPRS 2014/2023 statistics (NVA/VVA) | Free (ASPRS) / open (verify) | Excel / Python | Compute RMSE, 95 % with the right formula | 53 |
+| ASPRS positional-accuracy spreadsheet / Python checkpoint scripts (`numpy`, `xdem`) | ASPRS 2014/2023 statistics (RMSE$_V$/RMSE$_H$, NVA/VVA) | Free (ASPRS) / Apache-2.0 (`xdem`) | Excel / Python | Compute RMSE and 95 % statistics with the right formula | 53 |
 | NOAA/USGS lidar QA tools (e.g. `lidar_qc`, GeoCue QC) | Density, overlap, classification QA | Public domain / commercial | — | — | 53 |
 | Great Expectations / pandera / pytest | Data validation and test harnesses for pipelines | Apache-2.0 / MIT / MIT | Python | Regression tests on reference tiles | 29 |
 | Jupyter / Quarto / R Markdown | Reproducible reports (accuracy assessment, fitness memos) | BSD-3 / MIT / GPL | — | Deliver the notebook with the DEM | 53, 54 |

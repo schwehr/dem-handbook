@@ -6,7 +6,7 @@
 
 ## 18.1 System types
 
-An **airborne laser scanner (ALS)** combines three subsystems: a laser rangefinder, a scanning mechanism that sweeps the beam across the flight line, and a GNSS/INS position-and-orientation system (POS) that tells each pulse where it was fired from and in which direction ([Chapter 12](ch12-gnss.md), [Chapter 13](ch13-imu-ins.md)). Topographic lasers emit at 1,064 nm (Nd:YAG and its fibre equivalents) or 1,550 nm (eye-safer at higher power, more strongly absorbed by water and by wet surfaces), with pulse lengths of 1–5 ns, pulse repetition frequencies (PRF) of 100 kHz to 2 MHz or more per channel, and beam divergences of 0.2–0.5 mrad. The scanner is an oscillating mirror (sawtooth or sinusoidal pattern, with slow-down and point bunching at the swath edges), a rotating polygon (parallel lines, uniform density), a Palmer or nutating mirror (elliptical pattern, each point seen from two directions), or a fibre-optic array; drone and mobile systems increasingly use rotating multi-channel heads.
+An **airborne laser scanner (ALS)** combines three subsystems: a laser rangefinder, a scanning mechanism that sweeps the beam across the flight line, and a GNSS/INS position-and-orientation system (POS) that tells each pulse where it was fired from and in which direction (Wehr & Lohr 1999; Vosselman & Maas 2010; Renslow 2012; Shan & Toth 2018; [Chapter 12](ch12-gnss.md), [Chapter 13](ch13-imu-ins.md)). Topographic lasers emit at 1,064 nm (Nd:YAG and its fibre equivalents) or 1,550 nm (eye-safer at higher power, more strongly absorbed by water and by wet surfaces), with pulse lengths of 1–5 ns, pulse repetition frequencies (PRF) of 100 kHz to 2 MHz or more per channel, and beam divergences of 0.2–0.5 mrad. The scanner is an oscillating mirror (sawtooth or sinusoidal pattern, with slow-down and point bunching at the swath edges), a rotating polygon (parallel lines, uniform density), a Palmer or nutating mirror (elliptical pattern, each point seen from two directions), or a fibre-optic array; drone and mobile systems increasingly use rotating multi-channel heads.
 
 **Discrete-return** systems detect echoes in real time with analogue electronics and record up to 4–15 returns per pulse with a range, an intensity, and a return number. **Full-waveform** systems digitise the entire backscattered echo (typically at 1 GHz, so 15 cm range bins) and either decompose it into Gaussian components in post-processing (Wagner et al. 2006; Mallet & Bretar 2009) or store it for later analysis; they detect weaker and closer-spaced returns, give calibrated backscatter cross-sections, and allow re-processing when the detection rules change. **Single-photon lidar (SPL)** and **Geiger-mode lidar (GmL)** take sensitivity to its limit: instead of needing hundreds or thousands of photons per detection, they trigger on single photons, using arrays of detectors behind a diffractive beam splitter (SPL, e.g. the Leica SPL100 from 2017, 100 beamlets at 60 kHz each) or a focal-plane array of avalanche photodiodes in Geiger mode (GmL). The payoff is collection from 4–10 km altitude at tens of points per square metre; the cost is a noisy raw cloud (solar background and detector dark counts) that must be filtered statistically, a "blooming" of returns around bright targets, reduced penetration into dense canopy per pulse, and intensity that is not comparable with linear-mode systems (Degnan 2016; Stoker et al. 2016). **Photon-counting** from orbit (ICESat-2's ATLAS) is the same physics at 500 km (Section 18.8).
 
@@ -49,9 +49,9 @@ Modern practice replaces manual signature-reading with **least-squares calibrati
 
 ## 18.4 Density, spacing, overlap, relative accuracy, and quality levels
 
-The USGS **Lidar Base Specification (LBS)** organises project requirements into **quality levels**. The current figures (2024 rev. A; the online specification is revised more often than printed, so verify) are:
+The USGS **Lidar Base Specification (LBS)** (U.S. Geological Survey 2024, 2025) organises project requirements into **quality levels**. In **2024 rev. A** (January 2024) USGS adopted ASPRS Edition 2 (ASPRS 2023; `RMSE_V`/`RMSE_H`, minimum 30 checkpoints per class, dropping the 95 % multiplier and pass/fail VVA threshold), and **2025 rev. A** (June 2025) added Class 20 (ignored ground), Class 21 (perennial snowpack) rules, and MSHR NoData alignment; the pre-2024 (v2.1) 95 % thresholds remain widely seen in archive contracts:
 
-| Quality level | ANPD (pulses/m²) | NPS (m) | RMSEz, non-vegetated (cm) | NVA at 95 % (cm) | VVA, 95th percentile (cm) |
+| Quality level | ANPD (pulses/m²) | NPS (m) | RMSE$_V$ / RMSE$_z$, non-vegetated (cm) | NVA at 95 % (pre-2024 LBS) (cm) | VVA, 95th percentile (pre-2024 LBS) (cm) |
 |---|---|---|---|---|---|
 | QL0 | ≥ 8 | ≤ 0.35 | ≤ 5 | ≤ 9.8 | ≤ 15 |
 | QL1 | ≥ 8 | ≤ 0.35 | ≤ 10 | ≤ 19.6 | ≤ 30 |
@@ -62,7 +62,7 @@ The USGS **Lidar Base Specification (LBS)** organises project requirements into 
 
 **Swath overlap** is required (the LBS asks for no data gaps and a nominal sidelap, with 10–30 % typical in practice) so that the project has no holes at the edges of swaths, where roll and turbulence move the swath boundary, and so that **relative accuracy** can be measured. The LBS distinguishes **intra-swath** (within a swath: the "smooth-surface repeatability," measured as the range of heights of points on a hard flat surface in a small window, or more recently the RMS difference between the two scan directions) and **inter-swath** accuracy (between overlapping swaths, measured as the RMS difference, RMSDz, of surfaces built from each swath on open hard ground, and its maximum). For QL0–QL2 the thresholds are of the order of 6 cm intra-swath and 8 cm RMSDz / 16 cm maximum inter-swath, and double those for QL3. Relative accuracy is reported as a map (a raster of swath-to-swath differences, with its histogram), because a project that meets the RMS threshold while hiding a 15 cm tilt in one corner has a calibration problem that the summary statistic conceals.
 
-**Absolute accuracy** in the LBS follows the ASPRS Edition 1 (2014) model ([Chapter 53](ch53-accuracy-assessment.md)): the **non-vegetated vertical accuracy (NVA)** is $1.96 \times \text{RMSE}_z$ on checkpoints in open terrain and urban hard surfaces, where errors are approximately Gaussian; the **vegetated vertical accuracy (VVA)** is the 95th percentile of absolute errors on checkpoints in vegetated classes, where they are not. ASPRS Edition 2 (2023; Version 2, 2024) drops the 95 % multipliers and reports RMSE$_z$ directly for both classes, with a 3 × RMSE outlier threshold; read which edition a specification invokes before comparing numbers. The checkpoints must be surveyed independently (static or RTK GNSS, [Chapter 12](ch12-gnss.md)) to at least three times the accuracy being tested, be at least 30 per land-cover class, and lie on flat or gently sloping ground so that horizontal error does not leak into the vertical test.
+**Absolute accuracy** in pre-2024 LBS editions followed ASPRS Edition 1 (2014) ([Chapter 53](ch53-accuracy-assessment.md)): **non-vegetated vertical accuracy (NVA)** at $1.96 \times \text{RMSE}_z$ on open terrain and urban hard surfaces (approximately Gaussian), and **vegetated vertical accuracy (VVA)** as the 95th percentile of absolute errors in vegetated classes. ASPRS Edition 2 (2023; Version 2, June 2024) and USGS LBS 2024 rev. A onward drop the 95 % multipliers, report $\text{RMSE}_V$ (formerly $\text{RMSE}_z$) directly, make VVA report-only rather than pass/fail, and require horizontal accuracy ($\text{RMSE}_H$) alongside vertical; check which edition a contract invokes before comparing numbers. Checkpoints must be surveyed independently (static or RTK GNSS, [Chapter 12](ch12-gnss.md)) to higher accuracy than the product being tested (ASPRS Ed. 2 requires checkpoint survey error to be accounted for in the final product RMSE, and ≥ 30 checkpoints per land-cover class), and lie on flat or gently sloping ground so that horizontal error does not leak into the vertical test.
 
 ## 18.5 Vegetation, leaf-off timing, ground returns, and water
 
@@ -94,7 +94,7 @@ These instruments are **sparse truth**: profiles, not grids, but with globally c
 
 ## 18.9 Deliverables and QA
 
-A complete airborne lidar project delivers: the **classified point cloud** in LAS 1.4 or LAZ (point data record format 6–10, with per-point GPS time in adjusted standard GPS time, swath/flight-line ID, scan angle, intensity, return number, and classification codes per ASPRS — ground = 2, low/medium/high vegetation = 3/4/5, building = 6, low noise = 7, water = 9, bridge deck = 17, high noise = 18, with the LBS prescribing which must be populated), tiled with no gaps and overlaps; the **DTM** (bare-earth, hydro-flattened per the LBS) and often the **DSM**, as GeoTIFF/COG; **intensity** images; **breaklines** used for hydro-flattening; the **trajectory** (SBET or equivalent) and the **calibration report**; **checkpoint tables** with NVA/VVA statistics; **swath overlap** difference rasters; a **project report** describing dates, conditions, sensors, processing, and the geoid and datum used ([Chapter 47](ch47-file-formats.md), [Chapter 49](ch49-metadata.md)).
+A complete airborne lidar project delivers: the **classified point cloud** in LAS 1.4 (ASPRS 2019) or LAZ (point data record format 6–10, with per-point GPS time in adjusted standard GPS time, swath/flight-line ID, scan angle, intensity, return number, and classification codes per ASPRS — ground = 2, low/medium/high vegetation = 3/4/5, building = 6, low noise = 7, water = 9, bridge deck = 17, high noise = 18, with the LBS prescribing which must be populated), tiled with no gaps and overlaps; the **DTM** (bare-earth, hydro-flattened per the LBS) and often the **DSM**, as GeoTIFF/COG; **intensity** images; **breaklines** used for hydro-flattening; the **trajectory** (SBET or equivalent) and the **calibration report**; **checkpoint tables** with NVA/VVA statistics; **swath overlap** difference rasters; a **project report** describing dates, conditions, sensors, processing, and the geoid and datum used ([Chapter 47](ch47-file-formats.md), [Chapter 49](ch49-metadata.md)).
 
 The reviewer's checks, in the order they catch problems: (1) **coverage and voids** — classify voids as water, acceptable (low-reflectance), or unacceptable; (2) **density** — ANPD map on open terrain, 90 % of cells above threshold; (3) **relative accuracy** — intra- and inter-swath statistics and maps, hillshades of flat surfaces for corduroy and tilts; (4) **absolute accuracy** — NVA and VVA against independent checkpoints, plus a comparison of the DTM with any existing control; (5) **classification** — visual inspection of ground under vegetation, buildings misclassified as ground (flat roofs), bridges, vehicles, and "pits" and "spikes" from noise; (6) **DEM artefacts** — tile seams, interpolation across voids, hydro-flattening errors; (7) **metadata and lineage** — GPS time convention, CRS and geoid, LAS header consistency. A project that passes (4) and fails (3) or (5) will produce a DTM whose errors are spatially correlated and invisible to checkpoint statistics, which is why the order matters.
 
@@ -103,13 +103,13 @@ The reviewer's checks, in the order they catch problems: (1) **coverage and void
 > ```bash
 > # 1. Split ground returns by swath (PointSourceId 101 and 102 here) and grid each at 1 m.
 > for id in 101 102; do
->   pdal translate tile.laz swath_$id.tif \
->     --json="{\"pipeline\":[
->       {\"type\":\"filters.range\",\"limits\":\"Classification[2:2],PointSourceId[$id:$id]\"},
->       {\"type\":\"writers.gdal\",\"resolution\":1.0,\"output_type\":\"mean\",\"gdaldriver\":\"GTiff\",\"nodata\":-9999}]}"
+>   pdal translate tile.laz swath_$id.tif range \
+>     --filters.range.limits="Classification[2:2],PointSourceId[$id:$id]" \
+>     --writers.gdal.resolution=1.0 --writers.gdal.output_type=mean \
+>     --writers.gdal.gdaldriver=GTiff --writers.gdal.nodata=-9999
 > done
 > # 2. Difference the two swath DTMs where both exist.
-> gdal_calc.py -A swath_101.tif -B swath_102.tif --outfile=diff.tif \
+> gdal_calc.py --extent=intersect -A swath_101.tif -B swath_102.tif --outfile=diff.tif \
 >   --calc="(A-B)*((A!=-9999)&(B!=-9999)) + (-9999)*((A==-9999)|(B==-9999))" --NoDataValue=-9999
 > # 3. Statistics and a histogram of the overlap differences.
 > gdalinfo -stats -hist diff.tif | grep -E "STATISTICS_(MEAN|STDDEV|MINIMUM|MAXIMUM)"
@@ -129,7 +129,7 @@ $$\delta\mathbf{p} = \delta\mathbf{p}_{\text{GNSS}} + \mathbf{R}^m_b\,\delta\mat
 
 where $[\cdot]_\times$ is the skew-symmetric (cross-product) matrix, $\delta\boldsymbol{\omega}$ the attitude errors, $\delta\boldsymbol{\beta}$ the boresight errors, and $\hat{\mathbf{r}}$ the unit range vector. For level flight and a cross-track scanner the vertical components reduce to
 
-$$\sigma_z^2 \approx \sigma_{z,\text{GNSS}}^2 + \sigma_{l_z}^2 + (\rho\sin\theta)^2\,(\sigma_\omega^2 + \sigma_{\beta_\omega}^2) + (\rho\sin\theta\,\tan\theta)^2\,\sigma_\theta^2 + \cos^2\theta\,\sigma_\rho^2 + \ldots,$$
+$$\sigma_z^2 \approx \sigma_{z,\text{GNSS}}^2 + \sigma_{l_z}^2 + (\rho\sin\theta)^2\,(\sigma_\omega^2 + \sigma_{\beta_\omega}^2 + \sigma_\theta^2) + \cos^2\theta\,\sigma_\rho^2 + \ldots,$$
 
 (Baltsavias 1999; Glennie 2007; Schenk 2001 give the full forms). With $\rho = 1{,}600$ m at $\theta = 20°$, $\sigma_\omega = 0.005° = 87$ µrad, $\sigma_{\beta_\omega} = 0.003°$, $\sigma_\rho = 0.02$ m, $\sigma_{z,\text{GNSS}} = 0.05$ m, $\sigma_{l_z} = 0.01$ m: the attitude term is $1600 \times 0.342 \times \sqrt{87^2 + 52^2}\times10^{-6} = 0.055$ m, and $\sigma_z \approx \sqrt{0.05^2 + 0.01^2 + 0.055^2 + 0.019^2} = 0.077$ m. At nadir the attitude term vanishes and $\sigma_z \approx 0.055$ m; this difference between nadir and edge is the physical reason relative accuracy is assessed in overlaps.
 
@@ -145,7 +145,7 @@ Lidar validation has three layers, and a competent project reports all three.
 
 **Internal (relative) consistency.** The cheapest and most sensitive check is the data against itself: inter-swath and intra-swath differences on open hard ground, mapped and summarised (Section 18.4). Compute the difference raster of per-swath DTMs in every overlap, its mean, RMS, and 95th percentile, and its spatial pattern; a cross-track ramp means roll/boresight, an along-track displacement on slopes means pitch or timing, periodic ridges mean scanner latency, and per-swath steps mean GNSS. The statistics should be computed on surfaces where the comparison is meaningful — flat, hard, unvegetated — and the areas used should be shown. Overlap statistics are not a substitute for absolute checks (the whole block can be offset by a geoid or base-station error with perfect overlaps), but they catch calibration failures that checkpoints cannot.
 
-**External (absolute) accuracy.** Checkpoints surveyed independently with GNSS to ≤ 1/3 of the target accuracy, at least 30 per land-cover class and well distributed; NVA as $1.96\,\text{RMSE}_z$ in open terrain, VVA as the 95th percentile in vegetation, each reported with the bias (mean error) separately, because a 5 cm systematic offset is a datum problem and a 5 cm random scatter is a noise problem, and the two have different fixes ([Chapter 53](ch53-accuracy-assessment.md)). Checkpoints should be compared to the DTM *and* to the nearest ground points or a local plane fit of the point cloud, to separate interpolation error from measurement error. Horizontal accuracy is harder to test and is usually inferred from the trajectory and attitude budget or from well-defined features (roof corners, painted markings in intensity).
+**External (absolute) accuracy.** Checkpoints surveyed independently with GNSS (more accurate than the product being tested, with checkpoint survey uncertainty folded into product RMSE under ASPRS Ed. 2), at least 30 per land-cover class and well distributed; report NVA ($\text{RMSE}_V$ under ASPRS Ed. 2 / LBS 2024+ rev. A, or $1.96\,\text{RMSE}_z$ under pre-2024 contracts) in open terrain and VVA ($\text{RMSE}_V$ and, for heavy-tailed vegetated errors, the 95th percentile) in vegetation, each reported with the bias (mean error) separately, because a 5 cm systematic offset is a datum problem and a 5 cm random scatter is a noise problem, and the two have different fixes ([Chapter 53](ch53-accuracy-assessment.md)). Checkpoints should be compared to the DTM *and* to the nearest ground points or a local plane fit of the point cloud, to separate interpolation error from measurement error. Horizontal accuracy is harder to test and is usually inferred from the trajectory and attitude budget or from well-defined features (roof corners, painted markings in intensity).
 
 **Spatial structure of error.** Errors in lidar DTMs are spatially correlated at the scale of swaths (calibration), of GNSS solutions (kilometres), and of canopy gaps (metres). A validation that reports only a global RMSE has assumed independence that does not exist, and downstream change detection ([Chapter 41](ch41-change-detection.md)) will be mis-calibrated by exactly the correlated part. Report, where possible, the semivariogram of checkpoint residuals or of overlap differences, and map residuals rather than tabulating them.
 
@@ -158,7 +158,7 @@ Lidar validation has three layers, and a competent project reports all three.
 > | Range + slope effect (flat) | 2 | 2 | grows as $D\tan\alpha/2$ on slopes |
 > | Lever arm, timing | 1 | 1.5 | |
 > | Geoid model (if H delivered) | 2–5 | 2–5 | systematic over the block |
-> | RSS | ≈ 6–7 | ≈ 8–9 | NVA ≈ 13–18 cm |
+> | RSS | ≈ 6–7 | ≈ 8–9 | RMSE$_V$ ≈ 6–9 cm (pre-2024 NVA ≈ 13–18 cm) |
 > | Vegetated (interpolation, misclassification) | | | VVA 20–60 cm; non-Gaussian, report 95th percentile |
 
 **What to report.** Dates and conditions; sensor, PRF, altitude, speed, FOV, divergence; POS and processing (PPK/PPP, base stations, geoid); calibration method and residuals; strip-adjustment model and before/after overlap statistics; density and void maps; relative-accuracy maps and statistics; checkpoint tables with NVA/VVA and bias; classification method and accuracy sample; CRS, vertical datum, and GPS time convention. This list is what makes a lidar product auditable in ten years ([Chapter 49](ch49-metadata.md), [Chapter 50](ch50-archiving-and-provenance.md)).
@@ -173,13 +173,13 @@ Lidar validation has three layers, and a competent project reports all three.
 
 ## Standards & guides
 
-- **USGS Lidar Base Specification**, 2024 rev. A and its online successors — quality levels, density, overlap, relative/absolute accuracy, classification, hydro-flattening, deliverables for US federal projects.
-- **ASPRS Positional Accuracy Standards for Digital Geospatial Data**, Edition 2 (2023), including the addendum on lidar/point-cloud accuracy — NVA/VVA definitions, checkpoint requirements, relative accuracy.
+- **USGS Lidar Base Specification**, 2024 rev. A (Jan 2024) and 2025 rev. A (June 2025, current online) — quality levels, density, overlap, relative/absolute accuracy, classification (including Class 20/21 in 2025 rev. A), hydro-flattening, deliverables for US federal projects.
+- **ASPRS Positional Accuracy Standards for Digital Geospatial Data**, Edition 2 (Version 1.0, 2023; Version 2, June 2024), including the addendum on lidar/point-cloud accuracy — NVA/VVA definitions, checkpoint requirements, relative accuracy.
 - **ASPRS LAS Specification 1.4 – R15** (2019) — point record formats, classification codes, GPS time, CRS encoding via WKT.
 - **ASTM E2807** (E57 format, 2011, reapproved) — terrestrial scan interchange.
-- **Natural Resources Canada, Federal Airborne LiDAR Data Acquisition Guideline**, Version 3 (2020s) — Canadian equivalent of the LBS. (verify)
+- **Natural Resources Canada, Federal Airborne LiDAR Data Acquisition Guideline**, Version 3.0 (2020) and Version 3.1 (2022; informing National Standard of Canada CSA W229.1:25) — Canadian equivalent of the LBS.
 - **ICSM LiDAR Acquisition Specifications and Tender Template** (Australia/New Zealand, 2010 with updates) — specification language for leaf-off, density, and accuracy classes.
-- **LINZ National Base Specification for Aerial LiDAR** (New Zealand) — base specification for regional programs. (verify)
+- **Toitū Te Whenua Land Information New Zealand (LINZ), New Zealand National Aerial LiDAR Base Specification**, Version 1.2 (2022) — base specification for regional and national elevation programs.
 - **ISO 19157 / INSPIRE Data Specification on Elevation** — quality element reporting for European deliveries.
 
 ## Pitfalls
@@ -211,28 +211,28 @@ Lidar validation has three layers, and a competent project reports all three.
 
 ## References
 
-- Shan, J., & Toth, C. K. (eds.) (2018). *Topographic Laser Ranging and Scanning: Principles and Processing*, 2nd ed. CRC Press.
-- Vosselman, G., & Maas, H.-G. (eds.) (2010). *Airborne and Terrestrial Laser Scanning*. Whittles Publishing.
-- Renslow, M. S. (ed.) (2012). *Manual of Airborne Topographic Lidar*. ASPRS.
-- Baltsavias, E. P. (1999). Airborne laser scanning: basic relations and formulas. *ISPRS Journal of Photogrammetry and Remote Sensing*, 54(2–3):199–214.
-- Wehr, A., & Lohr, U. (1999). Airborne laser scanning—an introduction and overview. *ISPRS Journal of Photogrammetry and Remote Sensing*, 54(2–3):68–82.
-- Glennie, C. (2007). Rigorous 3D error analysis of kinematic scanning LIDAR systems. *Journal of Applied Geodesy*, 1(3):147–157.
-- Schenk, T. (2001). *Modeling and analyzing systematic errors in airborne laser scanners*. Technical Notes in Photogrammetry No. 19, The Ohio State University.
-- Skaloud, J., & Lichti, D. (2006). Rigorous approach to bore-sight self-calibration in airborne laser scanning. *ISPRS Journal of Photogrammetry and Remote Sensing*, 61(1):47–59.
-- Habib, A., Bang, K. I., Kersting, A. P., & Chow, J. (2010). Alternative methodologies for LiDAR system calibration. *Remote Sensing*, 2(3):874–907.
-- Glira, P., Pfeifer, N., Briese, C., & Ressl, C. (2015). A correspondence framework for ALS strip adjustments based on variants of the ICP algorithm. *Photogrammetrie – Fernerkundung – Geoinformation*, 2015(4):275–289.
-- Hodgson, M. E., & Bresnahan, P. (2004). Accuracy of airborne lidar-derived elevation: empirical assessment and error budget. *Photogrammetric Engineering & Remote Sensing*, 70(3):331–339.
-- Mallet, C., & Bretar, F. (2009). Full-waveform topographic lidar: State-of-the-art. *ISPRS Journal of Photogrammetry and Remote Sensing*, 64(1):1–16.
-- Wagner, W., Ullrich, A., Ducic, V., Melzer, T., & Studnicka, N. (2006). Gaussian decomposition and calibration of a novel small-footprint full-waveform digitising airborne laser scanner. *ISPRS Journal of Photogrammetry and Remote Sensing*, 60(2):100–112.
-- Degnan, J. J. (2016). Scanning, multibeam, single photon lidars for rapid, large scale, high resolution, topographic and bathymetric mapping. *Remote Sensing*, 8(11):958.
-- Stoker, J. M., Abdullah, Q. A., Nayegandhi, A., & Winehouse, J. (2016). Evaluation of single photon and Geiger mode lidar for the 3D Elevation Program. *Remote Sensing*, 8(9):767.
-- Krabill, W. B., Collins, J. G., Link, L. E., Swift, R. N., & Butler, M. L. (1984). Airborne laser topographic mapping results. *Photogrammetric Engineering & Remote Sensing*, 50(6):685–694.
-- Neumann, T. A., et al. (2019). The Ice, Cloud, and Land Elevation Satellite – 2 mission: A global geolocated photon product derived from the Advanced Topographic Laser Altimeter System. *Remote Sensing of Environment*, 233:111325.
-- Neuenschwander, A., & Pitts, K. (2019). The ATL08 land and vegetation product for the ICESat-2 Mission. *Remote Sensing of Environment*, 221:247–259.
-- Dubayah, R., et al. (2020). The Global Ecosystem Dynamics Investigation: High-resolution laser ranging of the Earth's forests and topography. *Science of Remote Sensing*, 1:100002.
-- Isenburg, M. (2013). LASzip: lossless compression of lidar data. *Photogrammetric Engineering & Remote Sensing*, 79(2):209–217.
-- Butler, H., Chambers, B., Hartzell, P., & Glennie, C. (2021). PDAL: An open source library for the processing and analysis of point clouds. *Computers & Geosciences*, 148:104680.
-- Roussel, J.-R., Auty, D., Coops, N. C., Tompalski, P., Goodbody, T. R. H., Meador, A. S., Bourdon, J.-F., de Boissieu, F., & Achim, A. (2020). lidR: An R package for analysis of Airborne Laser Scanning (ALS) data. *Remote Sensing of Environment*, 251:112061.
-- U.S. Geological Survey (2024). *Lidar Base Specification 2024 rev. A*. USGS National Geospatial Program.
-- ASPRS (2023; Edition 2, Version 2, 2024). *ASPRS Positional Accuracy Standards for Digital Geospatial Data*. American Society for Photogrammetry and Remote Sensing.
 - ASPRS (2019). *LAS Specification 1.4 – R15*. American Society for Photogrammetry and Remote Sensing.
+- ASPRS (2023; Edition 2, Version 2, 2024). *ASPRS Positional Accuracy Standards for Digital Geospatial Data*. American Society for Photogrammetry and Remote Sensing.
+- Baltsavias, E. P. (1999). Airborne laser scanning: basic relations and formulas. *ISPRS Journal of Photogrammetry and Remote Sensing*, 54(2–3):199–214. doi:10.1016/S0924-2716(99)00015-5
+- Butler, H., Chambers, B., Hartzell, P., & Glennie, C. (2021). PDAL: An open source library for the processing and analysis of point clouds. *Computers & Geosciences*, 148:104680. doi:10.1016/j.cageo.2020.104680
+- Degnan, J. J. (2016). Scanning, multibeam, single photon lidars for rapid, large scale, high resolution, topographic and bathymetric mapping. *Remote Sensing*, 8(11):958. doi:10.3390/rs8110958
+- Dubayah, R., et al. (2020). The Global Ecosystem Dynamics Investigation: High-resolution laser ranging of the Earth's forests and topography. *Science of Remote Sensing*, 1:100002. doi:10.1016/j.srs.2020.100002
+- Glennie, C. (2007). Rigorous 3D error analysis of kinematic scanning LIDAR systems. *Journal of Applied Geodesy*, 1(3):147–157. doi:10.1515/jag.2007.017
+- Glira, P., Pfeifer, N., Briese, C., & Ressl, C. (2015). A correspondence framework for ALS strip adjustments based on variants of the ICP algorithm. *Photogrammetrie – Fernerkundung – Geoinformation*, 2015(4):275–289. doi:10.1127/pfg/2015/0270
+- Habib, A., Bang, K. I., Kersting, A. P., & Chow, J. (2010). Alternative methodologies for LiDAR system calibration. *Remote Sensing*, 2(3):874–907. doi:10.3390/rs2030874
+- Hodgson, M. E., & Bresnahan, P. (2004). Accuracy of airborne lidar-derived elevation: empirical assessment and error budget. *Photogrammetric Engineering & Remote Sensing*, 70(3):331–339. doi:10.14358/PERS.70.3.331
+- Isenburg, M. (2013). LASzip: lossless compression of lidar data. *Photogrammetric Engineering & Remote Sensing*, 79(2):209–217. doi:10.14358/PERS.79.2.209
+- Krabill, W. B., Collins, J. G., Link, L. E., Swift, R. N., & Butler, M. L. (1984). Airborne laser topographic mapping results. *Photogrammetric Engineering & Remote Sensing*, 50(6):685–694.
+- Mallet, C., & Bretar, F. (2009). Full-waveform topographic lidar: State-of-the-art. *ISPRS Journal of Photogrammetry and Remote Sensing*, 64(1):1–16. doi:10.1016/j.isprsjprs.2008.09.007
+- Neuenschwander, A., & Pitts, K. (2019). The ATL08 land and vegetation product for the ICESat-2 Mission. *Remote Sensing of Environment*, 221:247–259. doi:10.1016/j.rse.2018.11.005
+- Neumann, T. A., et al. (2019). The Ice, Cloud, and Land Elevation Satellite – 2 mission: A global geolocated photon product derived from the Advanced Topographic Laser Altimeter System. *Remote Sensing of Environment*, 233:111325. doi:10.1016/j.rse.2019.111325
+- Renslow, M. S. (ed.) (2012). *Manual of Airborne Topographic Lidar*. ASPRS.
+- Roussel, J.-R., Auty, D., Coops, N. C., Tompalski, P., Goodbody, T. R. H., Meador, A. S., Bourdon, J.-F., de Boissieu, F., & Achim, A. (2020). lidR: An R package for analysis of Airborne Laser Scanning (ALS) data. *Remote Sensing of Environment*, 251:112061. doi:10.1016/j.rse.2020.112061
+- Schenk, T. (2001). *Modeling and analyzing systematic errors in airborne laser scanners*. Technical Notes in Photogrammetry No. 19, The Ohio State University.
+- Shan, J., & Toth, C. K. (eds.) (2018). *Topographic Laser Ranging and Scanning: Principles and Processing*, 2nd ed. CRC Press. doi:10.1201/9781315154381
+- Skaloud, J., & Lichti, D. (2006). Rigorous approach to bore-sight self-calibration in airborne laser scanning. *ISPRS Journal of Photogrammetry and Remote Sensing*, 61(1):47–59. doi:10.1016/j.isprsjprs.2006.07.003
+- Stoker, J. M., Abdullah, Q. A., Nayegandhi, A., & Winehouse, J. (2016). Evaluation of single photon and Geiger mode lidar for the 3D Elevation Program. *Remote Sensing*, 8(9):767. doi:10.3390/rs8090767
+- U.S. Geological Survey (2024, 2025). *Lidar Base Specification* (2024 rev. A; 2025 rev. A, online edition). USGS National Geospatial Program.
+- Vosselman, G., & Maas, H.-G. (eds.) (2010). *Airborne and Terrestrial Laser Scanning*. Whittles Publishing.
+- Wagner, W., Ullrich, A., Ducic, V., Melzer, T., & Studnicka, N. (2006). Gaussian decomposition and calibration of a novel small-footprint full-waveform digitising airborne laser scanner. *ISPRS Journal of Photogrammetry and Remote Sensing*, 60(2):100–112. doi:10.1016/j.isprsjprs.2005.12.001
+- Wehr, A., & Lohr, U. (1999). Airborne laser scanning—an introduction and overview. *ISPRS Journal of Photogrammetry and Remote Sensing*, 54(2–3):68–82. doi:10.1016/S0924-2716(99)00011-8

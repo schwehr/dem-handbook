@@ -27,24 +27,24 @@ Each standard encodes a test: which statistic, which threshold, which checkpoint
 
 | Standard | Vertical statistic | Threshold logic | Strata / checkpoint rule |
 |---|---|---|---|
-| NMAS 1947 ⟨H⟩ | Fraction of tested points in error by more than ½ contour interval | ≤ 10 % may exceed | Unspecified; "well-defined points" |
+| NMAS 1947 | Fraction of tested points in error by more than ½ contour interval | ≤ 10 % may exceed | Unspecified; "well-defined points" |
 | NSSDA 1998 | Accuracy$_z$ = 1.96 × RMSE$_z$ | Report, not pass/fail | ≥ 20 points, spread over quadrants |
 | ASPRS 2014 (Ed. 1) | NVA = 1.96 × RMSE$_z$; VVA = 95th percentile | Class by RMSE$_z$; VVA = 3 × RMSE$_z$ pass/fail | 20 NVA + 5 VVA at ≤ 500 km², rising with area |
 | ASPRS Ed. 2 (2023/2024) | NVA and VVA both as RMSE$_v$ (VVA reported as found, not pass/fail); 3D = √(RMSE$_x^2$+RMSE$_y^2$+RMSE$_z^2$) | Class by RMSE; checkpoint RMSE added in quadrature | ≥ 30, scaling to 120; per-land-cover reporting |
-| USGS LBS 2024 | RMSE$_v$ NVA by QL; VVA reported | QL0 5 cm; QL1/QL2 10 cm; QL3 20 cm | Edition 2 by reference; TIN from ground points |
+| USGS LBS 2024/2025 rev. A | RMSE$_v$ NVA by QL; VVA reported | QL0 5 cm; QL1/QL2 10 cm; QL3 20 cm | Edition 2 by reference; TIN from ground points |
 | IHO S-44 Ed. 6.1.0 | TVU$_{\max}$ = √(a² + (b·d)²) at 95 % | Order: Exclusive a=0.15, b=0.0075; Special 0.25/0.0075; 1a/1b 0.5/0.013; 2 1.0/0.023 | THU: 1 m; 2 m; 5 m + 5 % d; 20 m + 10 % d; feature detection by order |
 | ICAO Annex 15 / Doc 10066 | Accuracy and confidence per terrain/obstacle area | Area 1: 30 m / 90 %; Area 2: 3 m / 90 %; Area 3: 0.5 m / 90 %; Area 4: 1 m / 90 % (terrain, vertical) | Integrity classification (routine/essential/critical) |
 | INSPIRE Elevation | ISO 19157 positional accuracy elements | Report; no fixed threshold | Data quality metadata mandatory |
 
 *Table 53.1 — Test logic of the principal standards. S-44 and ICAO values are from the respective current editions; always cite the edition used.*
 
-**NMAS 1947 ⟨H⟩** was written for printed maps: horizontally, no more than 10 % of well-defined points may be in error by more than 1/30 inch at publication scale (1/50 inch for scales of 1:20,000 and smaller); vertically, no more than 10 % of interpolated elevations may exceed half the contour interval. It is a percentile test (the 90th percentile ≤ ½ CI), scale-dependent, and silent on sample size. Its legacy is the habit of stating accuracy as "meets NMAS for 2 ft contours," which carries over into "2-foot-contour-equivalent lidar."
+**NMAS 1947** was written for printed maps: horizontally, no more than 10 % of well-defined points may be in error by more than 1/30 inch at publication scale (1/50 inch for scales of 1:20,000 and smaller); vertically, no more than 10 % of interpolated elevations may exceed half the contour interval. It is a percentile test (the 90th percentile ≤ ½ CI), scale-dependent, and silent on sample size. Its legacy is the habit of stating accuracy as "meets NMAS for 2 ft contours," which carries over into "2-foot-contour-equivalent lidar."
 
 **NSSDA 1998** replaced the percentile with an RMSE and a multiplier: $\mathrm{Accuracy}_z = 1.9600\,\mathrm{RMSE}_z$ and $\mathrm{Accuracy}_r = 1.7308\,\mathrm{RMSE}_r$. It prescribes at least 20 checkpoints distributed so that at least 20 % fall in each quadrant and points are at least a tenth of the diagonal apart, requires checkpoints "of the highest accuracy feasible and practicable" (conventionally three times better), and provides the "Tested/Compiled to meet" language. Its weakness is that the 1.96 multiplier is a normality assumption; in vegetated terrain the residuals are skewed and heavy-tailed and the multiplier understates the 95th percentile (Zandbergen 2008).
 
 **ASPRS 2014 (Edition 1)** introduced accuracy *classes* named by RMSE (a "10-cm class" product), split vertical testing into **NVA** (non-vegetated: open terrain and urban, tested at 1.96 × RMSE$_z$) and **VVA** (vegetated: tested at the 95th percentile, with a pass/fail threshold of 3 × RMSE$_z$ of the class), set checkpoint counts by project area, and tied horizontal classes to RMSE$_x$ = RMSE$_y$. **Edition 2 (2023; Version 2, 2024)** made four substantive changes: accuracy is stated by RMSE alone (the 95 % multipliers are dropped from class definitions); VVA is computed as RMSE$_v$ like NVA (the Edition 1 95th-percentile VVA is gone) and is reported as found, no longer pass/fail, in recognition that its distribution and its reference are both ill-behaved; the checkpoint survey's own RMSE is combined with the test RMSE in quadrature, $\mathrm{RMSE}_{\text{reported}} = \sqrt{\mathrm{RMSE}_{\text{test}}^2 + \mathrm{RMSE}_{\text{check}}^2}$, in exchange for relaxing the old 3× requirement; and a **3D accuracy** $\mathrm{RMSE}_{3D}$ is defined. Minimum checkpoints rose to 30 with a cap of 120, and horizontal testing of lidar (via intensity-visible features or targets) is expected rather than waived.
 
-**USGS Lidar Base Specification 2024** maps the ASPRS classes onto **quality levels**: QL0 (RMSE$_v$ ≤ 5 cm, ≥ 8 pls/m²), QL1 (≤ 10 cm, ≥ 8 pls/m²), QL2 (≤ 10 cm, ≥ 2 pls/m²), QL3 (≤ 20 cm, ≥ 0.5 pls/m²), with VVA reported, NVA assessed against a TIN of ground-classified points, and relative-accuracy limits for smooth-surface precision and swath-overlap difference by QL ([Chapter 18](ch18-topographic-lidar.md)).
+**USGS Lidar Base Specification (2024 rev. A / 2025 rev. A)** maps the ASPRS classes onto **quality levels**: QL0 (RMSE$_v$ ≤ 5 cm, ≥ 8 pls/m²), QL1 (≤ 10 cm, ≥ 8 pls/m²), QL2 (≤ 10 cm, ≥ 2 pls/m²), QL3 (≤ 20 cm, ≥ 0.5 pls/m²), with VVA reported, NVA assessed against a TIN of ground-classified points, and relative-accuracy limits for smooth-surface precision and swath-overlap difference by QL ([Chapter 18](ch18-topographic-lidar.md)).
 
 **IHO S-44 Edition 6.1.0 (2022)** specifies a maximum allowable **Total Vertical Uncertainty** at 95 % as a function of depth $d$, $\mathrm{TVU}_{\max}(d) = \sqrt{a^2 + (b\,d)^2}$, where $a$ collects depth-independent terms (tide, draft, heave, datum) and $b\,d$ depth-proportional terms (sound speed, refraction). For Special Order ($a = 0.25$ m, $b = 0.0075$) at 20 m depth, $\mathrm{TVU}_{\max} = \sqrt{0.0625 + 0.0225} = 0.29$ m; for Order 1a ($a = 0.5$, $b = 0.013$) at 20 m, 0.56 m. **Total Horizontal Uncertainty** is likewise 95 %: 1 m (Exclusive), 2 m (Special), 5 m + 5 % of depth (1a/1b), 20 m + 10 % of depth (2). The crucial difference from the land standards is that S-44 is a *requirement on the uncertainty model* of every sounding—demonstrated by TPU computation, crosslines, and reference surfaces—rather than a post-hoc checkpoint test, and that it adds **feature detection** (cubic features of 0.5 m for Exclusive, 1 m for Special, 2 m to 40 m depth then 10 % of depth for 1a) and **feature search** coverage (200 %, 100 %, 100 %, 5 %, 5 %). Edition 6 also introduced a *matrix* approach that lets an authority specify each parameter independently of the orders ([Chapter 20](ch20-sonar.md), [Chapter 70](ch70-specifications-guided-tour.md)).
 
@@ -76,7 +76,7 @@ A checkpoint test tells you how wrong a product *was* where you tested it. An un
 
 ### 53.4.1 Component propagation
 
-For a measurement $z = f(x_1, \dots, x_m)$ with input uncertainties collected in a covariance matrix $\Sigma_x$, first-order propagation gives $\sigma_z^2 = J\,\Sigma_x\,J^{\mathsf T}$ with $J = \partial f/\partial x$ (JCGM 100). For airborne lidar the inputs are the GNSS position, the IMU attitude, the boresight angles, the lever arm, the scanner angle, and the range; Baltsavias (1999) gives the basic relations and Glennie (2007) the rigorous 3D treatment. The structure is instructive: a roll error $\delta\omega$ at range $R$ produces a vertical error that grows with scan angle $\beta$ as roughly $R\,\delta\omega\sin\beta$ and a horizontal error $R\,\delta\omega\cos\beta$—so at 1,500 m range, 0.005° (0.09 mrad) of roll is 13 cm horizontally at nadir and 5 cm vertically at 20° off-nadir—while a range error maps directly into the vertical at nadir. This is why vertical accuracy at nadir on flat ground is the easy case and why slope and scan angle must be reported with it.
+For a measurement $z = f(x_1, \dots, x_m)$ with input uncertainties collected in a covariance matrix $\Sigma_x$, first-order propagation gives $\sigma_z^2 = J\,\Sigma_x\,J^{\mathsf T}$ with $J = \partial f/\partial x$ (JCGM 100). For airborne lidar the inputs are the GNSS position, the IMU attitude, the boresight angles, the lever arm, the scanner angle, and the range; Baltsavias (1999) gives the basic relations, Hodgson & Bresnahan (2004) the empirical error budget, and Glennie (2007) the rigorous 3D treatment. The structure is instructive: a roll error $\delta\omega$ at range $R$ produces a vertical error that grows with scan angle $\beta$ as roughly $R\,\delta\omega\sin\beta$ and a horizontal error $R\,\delta\omega\cos\beta$—so at 1,500 m range, 0.005° (0.09 mrad) of roll is 13 cm horizontally at nadir and 5 cm vertically at 20° off-nadir—while a range error maps directly into the vertical at nadir. This is why vertical accuracy at nadir on flat ground is the easy case and why slope and scan angle must be reported with it.
 
 > **Uncertainty budget.** Representative 1σ vertical components for a modern airborne topographic lidar at 1,500 m AGL over flat hard ground (values indicative; derive your own from the manufacturer's specifications and your trajectory report):
 >
@@ -128,7 +128,7 @@ An accuracy report is evidence, and evidence must be reproducible. The ASPRS Edi
 9. **Exclusions**: every excluded checkpoint with reason.
 10. **Failure handling**: if the product fails, say which stratum, by how much, the likely cause, and what was done (re-adjustment, reflight, rejection, acceptance with a documented deviation). A failed test is a finding, not an embarrassment to be reworded.
 
-Confidence statements must match the test. Where a 95th percentile is also reported (the USGS LBS still asks for it in vegetated classes), remember that from 31 points it has a standard error of roughly the spread of the top three values, so "VVA 0.31 m" should read "VVA 0.31 m (95th percentile; 31 points; bootstrap 90 % interval 0.24–0.46 m)."
+Confidence statements must match the test. Where a 95th percentile is also reported (pre-2024 USGS LBS projects and legacy contracts report it in vegetated classes), remember that from 31 points it has a standard error of roughly the spread of the top three values, so "VVA 0.31 m" should read "VVA 0.31 m (95th percentile; 31 points; bootstrap 90 % interval 0.24–0.46 m)."
 
 ## 53.7 Beyond vertical
 
@@ -158,7 +158,7 @@ For a parcel-in-floodplain question the same logic applies cell by cell: with a 
 
 ## Then & now
 
-- **Contour-interval tests ⟨H⟩.** NMAS (1947) tested paper maps by percentile against half a contour interval; accuracy was a property of a map sheet and sample size went unmentioned.
+- **Contour-interval tests.** NMAS (1947) tested paper maps by percentile against half a contour interval; accuracy was a property of a map sheet and sample size went unmentioned.
 - **NSSDA RMSE (1998).** Digital data brought RMSE × 1.96, the 20-point minimum, and "tested/compiled to meet." Hydrography moved in parallel from S-44 Edition 3's fixed tables to Edition 4's (1998) depth-dependent TVU formula.
 - **Quality-level frameworks and stratified tests (2010s).** ASPRS 2014 introduced RMSE-named classes and the NVA/VVA split; the USGS LBS tied them to quality levels and pulse densities; S-44 Edition 5 (2008) added feature detection.
 - **Delivered uncertainty (2010s–).** BAG (2006 onward) and S-102 carry an uncertainty layer per cell; TanDEM-X ships a height error map; CUBE made uncertainty an input to gridding rather than an afterthought.
@@ -189,7 +189,7 @@ This chapter is about validating products; this section is about validating the 
 
 **The budget omits a term.** Budgets built only from random components (GNSS noise, ranging noise) and compared with a test that passed produce false confidence; the terms that bite are systematic—datum realization, geoid model, boresight drift, tidal zoning, sound-speed structure, canopy classification—and they appear in the test as bias by stratum, by strip, or by region. When test and budget disagree, the test is usually right about the magnitude and the budget about the cause; reconcile them rather than reporting whichever looks better.
 
-> **Try it.** Compute the standard statistics with confidence intervals from a checkpoint CSV (`id, x, y, z_ref, z_dem, stratum`). Expected output: a per-stratum table with $n$, mean, σ, RMSE with its 95 % chi-square interval, NMAD, 95th percentile with a bootstrap interval, and a flag list. For the example numbers of §53.6 the NVA row should show RMSE ≈ 0.079 m with an interval of roughly 0.065–0.100 m.
+> **Try it.** Compute the standard statistics with confidence intervals from a checkpoint CSV (`id, x, y, z_ref, z_dem, stratum`). Expected output: a per-stratum table with $n$, mean, σ, RMSE with its 95 % chi-square interval, NMAD, 95th percentile with a bootstrap interval, and a flag list. For the county lidar worked example in [Chapter 52](ch52-ground-truth.md) and §53.6, the NVA row shows test RMSE ≈ 0.079 m (`rmse_ed2` = 0.081 m) with a 95 % interval of roughly 0.065–0.100 m.
 >
 > ```python
 > import numpy as np, pandas as pd
@@ -230,20 +230,20 @@ This chapter is about validating products; this section is about validating the 
 
 - **ASPRS Positional Accuracy Standards for Digital Geospatial Data, Edition 2** (2023; Version 2, 2024) — RMSE classes, NVA/VVA, 3D accuracy, checkpoint error combination, reporting template.
 - **NSSDA** (FGDC-STD-007.3-1998) — RMSE × 1.96 and × 1.7308, tested/compiled language.
-- **U.S. Bureau of the Budget, National Map Accuracy Standards** (1947) — percentile contour test ⟨H⟩.
-- **USGS Lidar Base Specification 2024 rev. A** — QL0–QL3, NVA/VVA, relative accuracy limits, deliverables.
+- **U.S. Bureau of the Budget, National Map Accuracy Standards** (1947) — percentile contour test.
+- **USGS Lidar Base Specification 2024 rev. A / 2025 rev. A** — QL0–QL3, NVA/VVA, relative accuracy limits, deliverables.
 - **IHO S-44 Edition 6.1.0** (2022) — TVU/THU, orders, feature detection and search, matrix; **IHO S-67 Edition 1.0.0** (2020) — mariners' guide to accuracy of depth information in ENCs (CATZOC).
 - **NOAA Hydrographic Surveys Specifications and Deliverables** (current edition) — TPU, crossline, and reporting requirements for NOAA surveys.
 - **ICAO Annex 15** (16th edition, 2018) and **PANS-AIM Doc 10066** — terrain/obstacle accuracy, confidence, and integrity by area.
 - **ISO 19157-1:2023** — data-quality elements (positional, thematic, temporal accuracy; completeness; logical consistency) and evaluation reporting.
 - **JCGM 100:2008 (GUM)** and **JCGM 101:2008** — uncertainty propagation and Monte Carlo.
-- **FEMA Guidelines and Standards for Flood Risk Analysis and Mapping — Elevation Guidance** (current edition) (verify) — accepted elevation accuracy for floodplain mapping.
+- **FEMA Guidance for Flood Risk Analysis and Mapping: Elevation Guidance** (Guidance Document No. 47, November 2022, under *Guidelines and Standards for Flood Risk Analysis and Mapping*) — accepted elevation accuracy and datum requirements for floodplain mapping.
 - **INSPIRE Data Specification on Elevation** (D2.8.II.1, v3.0, 2013) — quality reporting requirements.
 
 ## Pitfalls
 
 - **Treating RMSE as the 95 % error** → the two are conflated in metadata → a 10 cm RMSE product has 95 % errors near 20 cm if normal and larger if not; always state the statistic and multiplier.
-- **Declaring VVA pass/fail, or reporting it as a 95th percentile under Edition 2** → Edition 1 habit → Edition 2 and LBS 2024 report VVA as RMSE$_v$ as found; test it, map it, explain it.
+- **Declaring VVA pass/fail, or reporting it as a 95th percentile under Edition 2** → Edition 1 habit → Edition 2 and LBS 2024/2025 rev. A report VVA as RMSE$_v$ as found; test it, map it, explain it.
 - **Nearest-cell checkpoint sampling** → it is one line of code → inflates error on slopes by up to ½ cell × slope; interpolate bilinearly or against a TIN.
 - **Ellipsoidal checkpoints against an orthometric DEM (or vice versa)** → the geoid field was not read → a smooth 20–40 m "bias"; check the datum before the first statistic.
 - **Propagating only random terms** → they are the ones in the spec sheet → budget predicts 5 cm, test finds a 12 cm strip bias; include datum, geoid, boresight, tide, sound speed, classification.
@@ -268,31 +268,31 @@ This chapter is about validating products; this section is about validating the 
 
 - ASPRS (2015). ASPRS Positional Accuracy Standards for Digital Geospatial Data (Edition 1, Version 1.0, November 2014). *Photogrammetric Engineering & Remote Sensing*, 81(3):A1–A26.
 - ASPRS (2023). *ASPRS Positional Accuracy Standards for Digital Geospatial Data, Edition 2* (Version 1.0.0, 2023; Version 2, 2024). American Society for Photogrammetry and Remote Sensing.
-- Baltsavias, E. P. (1999). Airborne laser scanning: Basic relations and formulas. *ISPRS Journal of Photogrammetry and Remote Sensing*, 54(2–3):199–214.
-- Calder, B. R., & Mayer, L. A. (2003). Automatic processing of high-rate, high-density multibeam echosounder data. *Geochemistry, Geophysics, Geosystems*, 4(6):1048.
+- Baltsavias, E. P. (1999). Airborne laser scanning: Basic relations and formulas. *ISPRS Journal of Photogrammetry and Remote Sensing*, 54(2–3):199–214. doi:10.1016/S0924-2716(99)00015-5
+- Calder, B. R., & Mayer, L. A. (2003). Automatic processing of high-rate, high-density multibeam echosounder data. *Geochemistry, Geophysics, Geosystems*, 4(6):1048. doi:10.1029/2002GC000486
 - FGDC (1998). *Geospatial Positioning Accuracy Standards, Part 3: National Standard for Spatial Data Accuracy*. FGDC-STD-007.3-1998.
-- Fisher, P. F., & Tate, N. J. (2006). Causes and consequences of error in digital elevation models. *Progress in Physical Geography*, 30(4):467–489.
-- Glennie, C. (2007). Rigorous 3D error analysis of kinematic scanning LIDAR systems. *Journal of Applied Geodesy*, 1(3):147–157.
+- Fisher, P. F., & Tate, N. J. (2006). Causes and consequences of error in digital elevation models. *Progress in Physical Geography*, 30(4):467–489. doi:10.1191/0309133306pp492ra
+- Glennie, C. (2007). Rigorous 3D error analysis of kinematic scanning LIDAR systems. *Journal of Applied Geodesy*, 1(3):147–157. doi:10.1515/jag.2007.017
 - Hare, R. (1995). Depth and position error budgets for multibeam echosounding. *International Hydrographic Review*, 72(2):37–69.
 - Hare, R., Godin, A., & Mayer, L. A. (1995). *Accuracy Estimation of Canadian Swath (Multibeam) and Sweep (Multitransducer) Sounding Systems*. Canadian Hydrographic Service / Geomatics Canada technical report, Ottawa.
-- Heuvelink, G. B. M. (1998). *Error Propagation in Environmental Modelling with GIS*. Taylor & Francis, London.
-- Hodgson, M. E., & Bresnahan, P. (2004). Accuracy of airborne lidar-derived elevation: Empirical assessment and error budget. *Photogrammetric Engineering & Remote Sensing*, 70(3):331–339.
-- Höhle, J., & Höhle, M. (2009). Accuracy assessment of digital elevation models by means of robust statistical methods. *ISPRS Journal of Photogrammetry and Remote Sensing*, 64(4):398–406.
+- Heuvelink, G. B. M. (1998). *Error Propagation in Environmental Modelling with GIS*. Taylor & Francis, London. doi:10.4324/9780203016114
+- Hodgson, M. E., & Bresnahan, P. (2004). Accuracy of airborne lidar-derived elevation: Empirical assessment and error budget. *Photogrammetric Engineering & Remote Sensing*, 70(3):331–339. doi:10.14358/PERS.70.3.331
+- Höhle, J., & Höhle, M. (2009). Accuracy assessment of digital elevation models by means of robust statistical methods. *ISPRS Journal of Photogrammetry and Remote Sensing*, 64(4):398–406. doi:10.1016/j.isprsjprs.2009.02.003
 - Holmes, K. W., Chadwick, O. A., & Kyriakidis, P. C. (2000). Error in a USGS 30-meter digital elevation model and its impact on terrain modeling. *Journal of Hydrology*, 233(1–4):154–173.
-- Hugonnet, R., Brun, F., Berthier, E., Dehecq, A., Mannerfelt, E. S., Eckert, N., & Farinotti, D. (2022). Uncertainty analysis of digital elevation models by spatial inference from stable terrain. *IEEE Journal of Selected Topics in Applied Earth Observations and Remote Sensing*, 15:6456–6472.
-- Hunter, G. J., & Goodchild, M. F. (1997). Modeling the uncertainty of slope and aspect estimates derived from spatial databases. *Geographical Analysis*, 29(1):35–49.
+- Hugonnet, R., Brun, F., Berthier, E., Dehecq, A., Mannerfelt, E. S., Eckert, N., & Farinotti, D. (2022). Uncertainty analysis of digital elevation models by spatial inference from stable terrain. *IEEE Journal of Selected Topics in Applied Earth Observations and Remote Sensing*, 15:6456–6472. doi:10.1109/JSTARS.2022.3188922
+- Hunter, G. J., & Goodchild, M. F. (1997). Modeling the uncertainty of slope and aspect estimates derived from spatial databases. *Geographical Analysis*, 29(1):35–49. doi:10.1111/j.1538-4632.1997.tb00944.x
 - IHO (2020). *S-67 Mariners' Guide to Accuracy of Depth Information in Electronic Navigational Charts*, Edition 1.0.0. International Hydrographic Organization.
 - IHO (2022). *S-44 Standards for Hydrographic Surveys*, Edition 6.1.0. International Hydrographic Organization.
-- James, M. R., Robson, S., & Smith, M. W. (2017). 3-D uncertainty-based topographic change detection with structure-from-motion photogrammetry: Precision maps for ground control and directly georeferenced surveys. *Earth Surface Processes and Landforms*, 42(12):1769–1788.
+- James, M. R., Robson, S., & Smith, M. W. (2017). 3-D uncertainty-based topographic change detection with structure-from-motion photogrammetry: Precision maps for ground control and directly georeferenced surveys. *Earth Surface Processes and Landforms*, 42(12):1769–1788. doi:10.1002/esp.4125
 - JCGM (2008). *Evaluation of Measurement Data — Guide to the Expression of Uncertainty in Measurement* (JCGM 100:2008) and *Supplement 1: Propagation of Distributions Using a Monte Carlo Method* (JCGM 101:2008). Joint Committee for Guides in Metrology.
-- Latypov, D. (2002). Estimating relative lidar accuracy information from overlapping flight lines. *ISPRS Journal of Photogrammetry and Remote Sensing*, 56(4):236–245.
-- Nuth, C., & Kääb, A. (2011). Co-registration and bias corrections of satellite elevation data sets for quantifying glacier thickness change. *The Cryosphere*, 5(1):271–290.
-- Oksanen, J., & Sarjakoski, T. (2005). Error propagation of DEM-based surface derivatives. *Computers & Geosciences*, 31(8):1015–1027.
-- Rizzoli, P., Martone, M., Gonzalez, C., Wecklich, C., Borla Tridon, D., Bräutigam, B., Bachmann, M., Schulze, D., Fritz, T., Huber, M., Wessel, B., Krieger, G., Zink, M., & Moreira, A. (2017). Generation and performance assessment of the global TanDEM-X digital elevation model. *ISPRS Journal of Photogrammetry and Remote Sensing*, 132:119–139.
-- Rolstad, C., Haug, T., & Denby, B. (2009). Spatially integrated geodetic glacier mass balance and its uncertainty based on geostatistical analysis: Application to the western Svartisen ice cap, Norway. *Journal of Glaciology*, 55(192):666–680.
-- Shortridge, A., & Messina, J. (2011). Spatial structure and landscape associations of SRTM error. *Remote Sensing of Environment*, 115(6):1576–1586.
-- Temme, A. J. A. M., Heuvelink, G. B. M., Schoorl, J. M., & Claessens, L. (2009). Geostatistical simulation and error propagation in geomorphometry. In Hengl, T., & Reuter, H. I. (eds.), *Geomorphometry: Concepts, Software, Applications*, Developments in Soil Science 33:121–140. Elsevier.
+- Latypov, D. (2002). Estimating relative lidar accuracy information from overlapping flight lines. *ISPRS Journal of Photogrammetry and Remote Sensing*, 56(4):236–245. doi:10.1016/S0924-2716(02)00047-3
+- Nuth, C., & Kääb, A. (2011). Co-registration and bias corrections of satellite elevation data sets for quantifying glacier thickness change. *The Cryosphere*, 5(1):271–290. doi:10.5194/tc-5-271-2011
+- Oksanen, J., & Sarjakoski, T. (2005). Error propagation of DEM-based surface derivatives. *Computers & Geosciences*, 31(8):1015–1027. doi:10.1016/j.cageo.2005.02.014
+- Rizzoli, P., Martone, M., Gonzalez, C., Wecklich, C., Borla Tridon, D., Bräutigam, B., Bachmann, M., Schulze, D., Fritz, T., Huber, M., Wessel, B., Krieger, G., Zink, M., & Moreira, A. (2017). Generation and performance assessment of the global TanDEM-X digital elevation model. *ISPRS Journal of Photogrammetry and Remote Sensing*, 132:119–139. doi:10.1016/j.isprsjprs.2017.08.008
+- Rolstad, C., Haug, T., & Denby, B. (2009). Spatially integrated geodetic glacier mass balance and its uncertainty based on geostatistical analysis: Application to the western Svartisen ice cap, Norway. *Journal of Glaciology*, 55(192):666–680. doi:10.3189/002214309789470950
+- Shortridge, A., & Messina, J. (2011). Spatial structure and landscape associations of SRTM error. *Remote Sensing of Environment*, 115(6):1576–1587. doi:10.1016/j.rse.2011.02.017.
+- Temme, A. J. A. M., Heuvelink, G. B. M., Schoorl, J. M., & Claessens, L. (2009). Geostatistical simulation and error propagation in geomorphometry. In Hengl, T., & Reuter, H. I. (eds.), *Geomorphometry: Concepts, Software, Applications*, Developments in Soil Science 33:121–140. Elsevier. doi:10.1016/S0166-2481(08)00005-6
 - U.S. Bureau of the Budget (1947). *United States National Map Accuracy Standards*. Washington, D.C.
-- U.S. Geological Survey (2024). *Lidar Base Specification 2024 rev. A*. National Geospatial Program.
-- Wechsler, S. P. (2007). Uncertainties associated with digital elevation models for hydrologic applications: A review. *Hydrology and Earth System Sciences*, 11(4):1481–1500.
-- Zandbergen, P. A. (2008). Positional accuracy of spatial data: Non-normal distributions and a critique of the National Standard for Spatial Data Accuracy. *Transactions in GIS*, 12(1):103–130.
+- U.S. Geological Survey (2024). *Lidar Base Specification 2024 rev. A* (and *2025 rev. A*, 2025). National Geospatial Program.
+- Wechsler, S. P. (2007). Uncertainties associated with digital elevation models for hydrologic applications: A review. *Hydrology and Earth System Sciences*, 11(4):1481–1500. doi:10.5194/hess-11-1481-2007
+- Zandbergen, P. A. (2008). Positional accuracy of spatial data: Non-normal distributions and a critique of the National Standard for Spatial Data Accuracy. *Transactions in GIS*, 12(1):103–130. doi:10.1111/j.1467-9671.2008.01088.x

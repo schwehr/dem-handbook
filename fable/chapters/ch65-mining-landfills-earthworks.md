@@ -47,7 +47,7 @@ The honest uncertainty of a DoD volume is treated in [Chapter 40](ch40-erosion-a
 
 $$\sigma_V \approx A \, \sigma_d \, \sqrt{\frac{1 + (n-1)\bar\rho}{n}} \;\approx\; A\,\sigma_d \big/ \sqrt{n_{\text{eff}}} ,$$
 
-where $\bar\rho$ is the mean pairwise correlation across the footprint. For a fully correlated error ($L \gg$ footprint) this reduces to $\sigma_V = A \sigma_d$—the whole footprint moves together, exactly as a base-surface bias does. Rolstad et al. (2009) and Anderson (2019) give the derivation; the practical message is that volume uncertainty is set by the *long-wavelength* error, which a single survey cannot see about itself and only independent control reveals.
+where $\bar\rho$ is the mean pairwise correlation across the footprint. For a fully correlated error ($L \gg$ footprint) this reduces to $\sigma_V = A \sigma_d$—the whole footprint moves together, exactly as a base-surface bias does. Rolstad et al. (2009), Wheaton et al. (2010), and Anderson (2019) give the derivation and thresholding framework; the practical message is that volume uncertainty is set by the *long-wavelength* error, which a single survey cannot see about itself and only independent control reveals.
 
 > **Worked example.** *Uncertainty of a 50,000 m³ stockpile volume from a UAV SfM survey.* Footprint area $A$ = 8,000 m², mean thickness 6.25 m. Check points on the pad give an RMSE$_z$ of 0.05 m for the top surface against RTK GNSS, with a residual semivariogram range of about 10 m (typical of SfM texture noise plus local tie-point density). Independent components:
 >
@@ -57,7 +57,7 @@ where $\bar\rho$ is the mean pairwise correlation across the footprint. For a fu
 > 4. Toe delineation: ±1 m in plan along a 350 m perimeter at a 2 m mean edge height: $\sigma_{V,4} \approx 350 \times 1 \times 2 \times 0.5$ ≈ **350 m³** (0.7 %) (the 0.5 reflects the triangular edge profile).
 > 5. Excluded objects: one loader (70 m³) removed; residual **20 m³**.
 >
-> Combined (root-sum-square, assuming independence): $\sigma_V \approx \sqrt{80^2 + 320^2 + 430^2 + 350^2 + 20^2}$ ≈ **650 m³**, i.e., 1.3 % at 1σ, about 2.6 % at 95 %. Converting to tonnes with a bulk density of 1.60 ± 0.08 t/m³ (5 % at 1σ—a *modest* figure for a moist, partly compacted aggregate): $M$ = 80,000 t with $\sigma_M / M = \sqrt{0.013^2 + 0.05^2}$ ≈ 5.2 %. The density term dominates by a factor of four; the top-surface precision that the software reported (0.05 m) contributes almost nothing. Report: $V$ = 49,600 m³ (after floor correction) ± 1,300 m³ (95 %); $M$ = 79,000 ± 8,000 t (95 %); base surface = pre-placement RTK survey of 2024-03-11; toe digitized on orthomosaic by J. Doe; density from 12 sand-cone tests on 2024-06-02.
+> Combined (root-sum-square, assuming independence): $\sigma_V \approx \sqrt{80^2 + 320^2 + 430^2 + 350^2 + 20^2}$ ≈ **650 m³**, i.e., 1.3 % at 1σ, about 2.6 % at 95 %. Converting to tonnes with a bulk density of 1.60 ± 0.08 t/m³ (5 % at 1σ—a *modest* figure for a moist, partly compacted aggregate): $M$ = 80,000 t before floor correction (79,360 t after) with $\sigma_M / M = \sqrt{0.013^2 + 0.05^2}$ ≈ 5.2 %. The density term dominates by a factor of four; the top-surface precision that the software reported (0.05 m) contributes almost nothing. Report: $V$ = 49,600 m³ (after floor correction) ± 1,300 m³ (95 %); $M$ = 79,400 ± 8,000 t (95 %); base surface = pre-placement RTK survey of 2024-03-11; toe digitized on orthomosaic by J. Doe; density from 12 sand-cone tests on 2024-06-02.
 
 ### 65.1.5 Density and tonnage
 
@@ -69,7 +69,7 @@ Volumes are measured; tonnes are paid for. The conversion $M = \rho_b V$ uses a 
 
 ### 65.2.1 UAV structure-from-motion
 
-Since about 2013, when consumer multirotors with stabilized cameras met commodity SfM software, UAV photogrammetry has been the default stockpile and site-survey method ([Chapter 22](ch22-photogrammetry-sfm.md)). A 15–30 minute flight at 60–120 m above ground yields a 2–4 cm ground sample distance (GSD), a dense point cloud, a DSM, and an orthomosaic for 20–80 ha; weekly or daily flights are routine at large sites, some from docked autonomous drones.
+Since about 2013, when consumer multirotors with stabilized cameras met commodity SfM software, UAV photogrammetry has been the default stockpile and site-survey method (Bemis et al. 2014; Hugenholtz et al. 2015; Carrivick, Smith, and Quincey 2016; [Chapter 22](ch22-photogrammetry-sfm.md)). A 15–30 minute flight at 60–120 m above ground yields a 2–4 cm ground sample distance (GSD), a dense point cloud, a DSM, and an orthomosaic for 20–80 ha; weekly or daily flights are routine at large sites, some from docked autonomous drones.
 
 Georeferencing is by **ground control points (GCPs)** surveyed with RTK/static GNSS or total station, or by **direct georeferencing** with onboard RTK/PPK GNSS tagging each exposure. Direct georeferencing removes the target labor but moves the control problem into the camera–antenna lever arm, exposure synchronization, and interior orientation; because camera-model errors map almost entirely into the vertical, a PPK-only block still needs check points to prove its height. Precision maps (James, Robson, and Smith 2017) show that PPK nadir blocks are weakest in height at the edges and corners and that one or two GCPs, or oblique imagery, suffice to constrain the datum shift and tilt the GNSS cannot.
 
@@ -90,10 +90,12 @@ Georeferencing is by **ground control points (GCPs)** surveyed with RTK/static G
 >   ]
 > }
 > EOF
-> # 2. Clip to the toe polygon; same grid for base surfaces.
+> # 2. Clip to the toe polygon; match base_pad.tif strictly to top_clip.tif's grid.
 > gdalwarp -cutline toe.gpkg -crop_to_cutline -dstnodata -9999 top.tif top_clip.tif
-> gdalwarp -cutline toe.gpkg -crop_to_cutline -dstnodata -9999 \
->          -te_srs EPSG:32610 pad_preplacement.tif base_pad.tif
+> grid=$(gdalinfo -json top_clip.tif | python3 -c \
+>   "import json,sys;d=json.load(sys.stdin);c=d['cornerCoordinates'];w,h=d['size'];print(f'-te {c[\"lowerLeft\"][0]} {c[\"lowerLeft\"][1]} {c[\"upperRight\"][0]} {c[\"upperRight\"][1]} -ts {w} {h}')")
+> gdalwarp -cutline toe.gpkg -dstnodata -9999 -t_srs EPSG:32610 $grid \
+>          pad_preplacement.tif base_pad.tif
 > ```
 >
 > ```python
@@ -103,8 +105,9 @@ Georeferencing is by **ground control points (GCPs)** surveyed with RTK/static G
 >     top = t.read(1, masked=True); a = abs(t.res[0]*t.res[1])
 >     base_pad = b.read(1, masked=True)
 > # Candidate 2: toe-line interpolation from the top surface's own edge cells.
-> edge = np.ma.getmaskarray(top) ^ np.roll(np.ma.getmaskarray(top), 1, 0)  # crude ring
-> yy, xx = np.nonzero(edge & ~np.ma.getmaskarray(top))
+> m = np.ma.getmaskarray(top)
+> edge = (m ^ np.roll(m, 1, 0)) | (m ^ np.roll(m, -1, 0)) | (m ^ np.roll(m, 1, 1)) | (m ^ np.roll(m, -1, 1))
+> yy, xx = np.nonzero(edge & ~m)
 > base_toe = griddata((yy, xx), top[yy, xx], tuple(np.indices(top.shape)), method="linear")
 > for name, base in [("pre-placement pad", base_pad), ("toe interpolation", base_toe)]:
 >     d = np.ma.masked_invalid(top - base)
@@ -166,7 +169,7 @@ Mine operators post **reclamation bonds** sized to the cost of regrading, coveri
 
 A landfill is designed to change continuously, settle for decades, generate gas, catch fire, and be worked on every hour. The **working face** advances by metres per day; **daily** and **intermediate cover** add 15–30 cm layers of soil, not waste, that must be separated in AUF accounting; the **final cover** (geomembrane, drainage, vegetative soil) is an engineered structure of its own.
 
-**Settlement** is the distinguishing process. Municipal waste compacts and decomposes, and the surface subsides by 10–30 % of waste thickness over 20–30 years, fastest in the first years (Sowers' model separates primary mechanical settlement over months from secondary, biodegradation-driven settlement over decades). A DoD between annual surveys therefore measures airspace consumed by new waste *minus* airspace recovered by settlement of old waste; separating them needs a settlement model or markers (plates, GNSS monuments) on closed areas. Operators must also maintain final-cover grades for drainage and gas control—a settled depression ponds water and increases leachate—and lidar or UAV DTMs of closed cells every one to two years, compared with the design cover surface, are the standard compliance evidence.
+**Settlement** is the distinguishing process. Municipal waste compacts and decomposes, and the surface subsides by 10–30 % of waste thickness over 20–30 years, fastest in the first years (Sowers 1973; his model separates primary mechanical settlement over months from secondary, biodegradation-driven settlement over decades). A DoD between annual surveys therefore measures airspace consumed by new waste *minus* airspace recovered by settlement of old waste; separating them needs a settlement model or markers (plates, GNSS monuments) on closed areas. Operators must also maintain final-cover grades for drainage and gas control—a settled depression ponds water and increases leachate—and lidar or UAV DTMs of closed cells every one to two years, compared with the design cover surface, are the standard compliance evidence.
 
 **Gas and fires.** Landfill gas escapes at cracks and settlement features; subsurface fires produce localized subsidence of metres, thermal hot spots, and steam and smoke that corrupt SfM reconstructions ([Chapter 27](ch27-moving-and-transient-objects.md)). InSAR measures landfill settlement where coherence holds (closed, covered cells) and fails over active faces.
 
@@ -186,7 +189,7 @@ A construction site is a sequence of design surfaces realized in order—strippi
 
 **Pit wall monitoring** is a safety function. **Slope stability radar** (ground-based real- or synthetic-aperture radar, commercial since the early 2000s) measures sub-millimetre line-of-sight displacement of a highwall every few minutes over a kilometre-scale face, with velocity and inverse-velocity alarms giving hours to days of warning; it is standard at large open pits. TLS adds geometry (bench and berm width, catch-bench integrity) and change in the radar's shadow. Highwalls are near-vertical or overhanging, so a 2.5D DEM represents them poorly ([Section 65.9](#659-pitfalls-particular-to-engineered-surfaces); [Chapter 35](ch35-voids-and-overhangs.md)); the right products are the point cloud, a mesh, or a projection onto a wall-parallel plane.
 
-**Pit volumes** are differences between successive pit-surface models, typically monthly from UAV flights, reconciled against truck counts and the block model's depleted tonnes; the three rarely agree within a few percent, and the reconciliation report is where survey, truck-factor, and density errors are apportioned. **Dewatering** lowers the water table over kilometres and causes compaction subsidence of centimetres to decimetres, detectable by InSAR and levelling; in karst it causes sinkholes.
+**Pit volumes** are differences between successive pit-surface models, typically monthly from UAV flights (Esposito et al. 2017b; cf. Esposito et al. 2017a for steep-face SfM monitoring), reconciled against truck counts and the block model's depleted tonnes; the three rarely agree within a few percent, and the reconciliation report is where survey, truck-factor, and density errors are apportioned. **Dewatering** lowers the water table over kilometres and causes compaction subsidence of centimetres to decimetres, detectable by InSAR and levelling; in karst it causes sinkholes.
 
 **Underground**, there is no GNSS and the survey is a traverse from surface control transferred down a shaft (plumb wires, gyro-theodolite, optical plummet), so uncertainty grows with distance from the shaft. **Cavity monitoring systems** (boom-mounted scanners lowered into a stope through a drill hole) measure **stope volumes** to compute dilution and overbreak against design—10,000–100,000 m³ with uncertainties of a few percent dominated by occlusion. Handheld **SLAM** scanners ([Chapter 15](ch15-slam.md)) map drives at walking speed with centimetre-to-decimetre drift per hundred metres unless closed on control; the same technology serves **cave surveys**, where loop closure against compass-and-tape stations is the only check available.
 
@@ -194,7 +197,7 @@ A construction site is a sequence of design surfaces realized in order—strippi
 
 ## 65.7 Tailings and dams
 
-**Tailings storage facilities (TSFs)** are among the largest engineered structures on Earth and fail at a rate—Mount Polley (Canada, 2014), Fundão/Mariana (Brazil, 2015), and Brumadinho (2019) among several significant failures per decade—that no other civil structure would be allowed. Three geometric quantities are monitored. The **crest elevation**, surveyed by GNSS on monuments and by UAV/lidar surfaces, must stay above design and be re-surveyed after each raise. The **freeboard**—pond level to the *lowest* point of the crest—must exceed a design minimum (commonly 1–2 m plus wave run-up, site-specific) through the design storm, which requires pond level and minimum crest in the same datum. And **deformation** of embankment and foundation is monitored by piezometers, inclinometers, prisms, continuous GNSS, ground-based radar, and satellite InSAR; geometric surveys find settlement and bulging, InSAR finds slow movement over the whole face.
+**Tailings storage facilities (TSFs)** are among the largest engineered structures on Earth and fail at a rate—Mount Polley (Canada, 2014), Fundão/Mariana (Brazil, 2015; Morgenstern et al. 2016), and Brumadinho (2019; Robertson et al. 2019) among several significant failures per decade—that no other civil structure would be allowed. Three geometric quantities are monitored. The **crest elevation**, surveyed by GNSS on monuments and by UAV/lidar surfaces, must stay above design and be re-surveyed after each raise. The **freeboard**—pond level to the *lowest* point of the crest—must exceed a design minimum (commonly 1–2 m plus wave run-up, site-specific) through the design storm, which requires pond level and minimum crest in the same datum. And **deformation** of embankment and foundation is monitored by piezometers, inclinometers, prisms, continuous GNSS, ground-based radar, and satellite InSAR; geometric surveys find settlement and bulging, InSAR finds slow movement over the whole face.
 
 The **beach** (exposed tailings between embankment and pond) and the **pond** are neither land nor water in this book's senses: beaches are soft and saturated, their slope and the pond's extent change with deposition and decant operations, and a UAV DSM of a wet beach is a surface of specular water, drying crust, and slurry whose "elevation" has little geotechnical meaning. Stored tailings volumes are computed between the beach/pond surface and the pre-deposition ground or last survey, with the pond's volume from a separate bathymetric survey (a small USV or drone-dropped sounder).
 
@@ -202,7 +205,7 @@ The **Global Industry Standard on Tailings Management** (GISTM, August 2020; ICM
 
 ## 65.8 Reclamation and post-mining landscapes
 
-Mine closure converts a pit, a dump, and a TSF into a landform that must be stable, drain without erosion, and support vegetation for centuries. The traditional **engineered landform**—terraced benches, uniform slopes, armored channels—is easy to survey against but concentrates runoff and gullies at bench edges. **Geomorphic reclamation** (the GeoFluv method, Bugosh; implemented in the Natural Regrade software) designs a drainage network and hillslopes with the geometry of stable natural landforms in the same climate, producing a complex curved surface that is harder to build and to check: tolerance is statistical (slope distributions, drainage density, sinuosity) rather than a vertical offset from a plane.
+Mine closure converts a pit, a dump, and a TSF into a landform that must be stable, drain without erosion, and support vegetation for centuries. The traditional **engineered landform**—terraced benches, uniform slopes, armored channels—is easy to survey against but concentrates runoff and gullies at bench edges. **Geomorphic reclamation** (the GeoFluv method, Bugosh and Epp 2019; implemented in the Natural Regrade software) designs a drainage network and hillslopes with the geometry of stable natural landforms in the same climate, producing a complex curved surface that is harder to build and to check: tolerance is statistical (slope distributions, drainage density, sinuosity) rather than a vertical offset from a plane.
 
 Post-closure **erosion monitoring** is a long-term DoD problem ([Chapter 40](ch40-erosion-and-geomorphic-change.md)): rills and gullies growing centimetres per year over hundreds of hectares, detectable by lidar or UAV at multi-year intervals if—and only if—the control network survives closure (monuments are routinely buried, graded over, or displaced by settlement). AOC compliance under SMCRA is assessed against the pre-mining topography, with the legacy-surface problems of [Section 65.3.5](#6535-reclamation-bonds). Subsidence over backfilled or abandoned workings continues for decades and is a known InSAR application.
 
@@ -302,7 +305,7 @@ A DoD-based *change* volume (airspace consumed, cut moved) is easier to defend t
 - **SMCRA (1977) and 30 CFR Chapter VII** — US Office of Surface Mining: approximate original contour, reclamation bonding and release.
 - **GISTM (2020)** — ICMM/UNEP/PRI Global Industry Standard on Tailings Management: monitoring, trigger levels, engineer of record, disclosure.
 - **ICOLD Bulletin 158, *Dam Surveillance Guide* (2018)** — monitoring of embankment dams.
-- **ASPRS Positional Accuracy Standards for Digital Geospatial Data, Edition 2 (2023)** — accuracy classes and reporting (NVA/VVA) for the DEMs and orthos UAV surveys produce.
+- **ASPRS Positional Accuracy Standards for Digital Geospatial Data, Edition 2 (2023; v2 2024)** — accuracy classes and reporting (NVA/VVA) for the DEMs and orthos UAV surveys produce.
 - **USACE EM 1110-1-1000, Photogrammetric and LiDAR Mapping (2015)** — mapping standards for Corps projects, including earthwork quantities.
 - **USACE EM 1110-2-1003, Hydrographic Surveying (2013)** — dredging payment surveys, the aquatic analogue of this chapter ([Chapter 66](ch66-coastal-marine-polar-lakes-rivers.md)).
 - **ISO 17123 series** — field procedures for testing geodetic and surveying instruments (levels, total stations, GNSS RTK, terrestrial laser scanners (Part 9).
@@ -342,24 +345,24 @@ A DoD-based *change* volume (airspace consumed, cut moved) is easier to defend t
 
 - Anderson, S. W. 2019. Uncertainty in quantitative analyses of topographic change: error propagation and the role of thresholding. *Earth Surface Processes and Landforms* 44(5):1015–1033. doi:10.1002/esp.4551
 - Bemis, S. P., S. Micklethwaite, D. Turner, M. R. James, S. Akciz, S. T. Thiele, and H. A. Bangash. 2014. Ground-based and UAV-based photogrammetry: a multi-scale, high-resolution mapping tool for structural geology and paleoseismology. *Journal of Structural Geology* 69:163–178. doi:10.1016/j.jsg.2014.10.007
-- Bugosh, N., and E. Epp. 2019. Evaluating sediment production from native and fluvial geomorphic-reclamation watersheds at La Plata Mine. *Catena* 174:383–398.
+- Bugosh, N., and E. Epp. 2019. Evaluating sediment production from native and fluvial geomorphic-reclamation watersheds at La Plata Mine. *Catena* 174:383–398. doi:10.1016/j.catena.2018.10.048
 - Carrivick, J. L., M. W. Smith, and D. J. Quincey. 2016. *Structure from Motion in the Geosciences*. Wiley-Blackwell, Chichester.
 - CIM. 2014. *CIM Definition Standards for Mineral Resources and Mineral Reserves*. Canadian Institute of Mining, Metallurgy and Petroleum.
-- Esposito, G., R. Salvini, F. Matano, M. Sacchi, M. Danzi, R. Somma, and C. Troise. 2017. Multitemporal monitoring of a coastal landslide through SfM-derived point cloud comparison. *The Photogrammetric Record* 32(160):459–479.
-- Esposito, G., G. Mastrorocco, R. Salvini, M. Oliveti, and P. Starita. 2017. Application of UAV photogrammetry for the multi-temporal estimation of surface extent and volumetric excavation in the Sa Pigada Bianca open-pit mine, Sardinia, Italy. *Environmental Earth Sciences* 76:103. doi:10.1007/s12665-017-6409-z
-- Gama, F. F., J. C. Mura, W. R. Paradella, and C. G. de Oliveira. 2020. Deformations prior to the Brumadinho dam collapse revealed by Sentinel-1 InSAR data using SBAS and PSI techniques. *Remote Sensing of Environment* 246:111859. doi:10.1016/j.rse.2020.111859
+- Esposito, G., R. Salvini, F. Matano, M. Sacchi, M. Danzi, R. Somma, and C. Troise. 2017a. Multitemporal monitoring of a coastal landslide through SfM-derived point cloud comparison. *The Photogrammetric Record* 32(160):459–479. doi:10.1111/phor.12218
+- Esposito, G., G. Mastrorocco, R. Salvini, M. Oliveti, and P. Starita. 2017b. Application of UAV photogrammetry for the multi-temporal estimation of surface extent and volumetric excavation in the Sa Pigada Bianca open-pit mine, Sardinia, Italy. *Environmental Earth Sciences* 76:103. doi:10.1007/s12665-017-6409-z
+- Gama, F. F., J. C. Mura, W. R. Paradella, and C. G. de Oliveira. 2020. Deformations prior to the Brumadinho dam collapse revealed by Sentinel-1 InSAR data using SBAS and PSI techniques. *Remote Sensing* 12(21):3664. doi:10.3390/rs12213664
 - Grebby, S., A. Sowter, J. Gluyas, D. Toll, D. Gee, A. Athab, and R. Girindran. 2021. Advanced analysis of satellite data reveals ground deformation precursors to the Brumadinho Tailings Dam collapse. *Communications Earth & Environment* 2:2. doi:10.1038/s43247-020-00079-2
 - Hugenholtz, C. H., J. Walker, O. Brown, and S. Myshak. 2015. Earthwork volumetrics with an unmanned aerial vehicle and softcopy photogrammetry. *Journal of Surveying Engineering* 141(1):06014003. doi:10.1061/(ASCE)SU.1943-5428.0000138
 - ICMM, UNEP, and PRI. 2020. *Global Industry Standard on Tailings Management*. August 2020.
 - James, M. R., and S. Robson. 2014. Mitigating systematic error in topographic models derived from UAV and ground-based image networks. *Earth Surface Processes and Landforms* 39(10):1413–1420. doi:10.1002/esp.3609
 - James, M. R., S. Robson, and M. W. Smith. 2017. 3-D uncertainty-based topographic change detection with structure-from-motion photogrammetry: precision maps for ground control and directly georeferenced surveys. *Earth Surface Processes and Landforms* 42(12):1769–1788. doi:10.1002/esp.4125
 - JORC. 2012. *Australasian Code for Reporting of Exploration Results, Mineral Resources and Ore Reserves (The JORC Code)*, 2012 edition. Joint Ore Reserves Committee of the AusIMM, AIG and MCA.
+- Morgenstern, N. R., S. G. Vick, C. B. Viotti, and B. D. Watts. 2016. *Fundão Tailings Dam Review Panel: Report on the Immediate Causes of the Failure of the Fundão Dam*. Cleary Gottlieb Steen & Hamilton LLP.
+- Robertson, P. K., L. de Melo, D. J. Williams, and G. W. Wilson. 2019. *Report of the Expert Panel on the Technical Causes of the Failure of Feijão Dam I*. Prepared for Vale S.A.
 - Rolstad, C., T. Haug, and B. Denby. 2009. Spatially integrated geodetic glacier mass balance and its uncertainty based on geostatistical analysis: application to the western Svartisen ice cap, Norway. *Journal of Glaciology* 55(192):666–680. doi:10.3189/002214309789470950
 - Sowers, G. F. 1973. Settlement of waste disposal fills. *Proceedings of the 8th International Conference on Soil Mechanics and Foundation Engineering*, Moscow, 2:207–210.
 - Tucci, G., A. Gebbia, A. Conti, L. Fiorini, and C. Lubello. 2019. Monitoring and computation of the volumes of stockpiles of bulk material by means of UAV photogrammetric surveying. *Remote Sensing* 11(12):1471. doi:10.3390/rs11121471
-- US Army Corps of Engineers. 2015. *Photogrammetric and LiDAR Mapping*, EM 1110-1-1000. Washington, DC.
 - US Army Corps of Engineers. 2013. *Hydrographic Surveying*, EM 1110-2-1003. Washington, DC.
-- US Environmental Protection Agency. 40 CFR Part 258 — Criteria for Municipal Solid Waste Landfills. *Code of Federal Regulations*.
+- US Army Corps of Engineers. 2015. *Photogrammetric and LiDAR Mapping*, EM 1110-1-1000. Washington, DC.
+- US Environmental Protection Agency. 1991. 40 CFR Part 258 — Criteria for Municipal Solid Waste Landfills. *Code of Federal Regulations*.
 - Wheaton, J. M., J. Brasington, S. E. Darby, and D. A. Sear. 2010. Accounting for uncertainty in DEMs from repeat topographic surveys: improved sediment budgets. *Earth Surface Processes and Landforms* 35(2):136–156. doi:10.1002/esp.1886
-- Robertson, P. K., L. de Melo, D. J. Williams, and G. W. Wilson. 2019. *Report of the Expert Panel on the Technical Causes of the Failure of Feijão Dam I*. Prepared for Vale S.A.
-- Morgenstern, N. R., S. G. Vick, C. B. Viotti, and B. D. Watts. 2016. *Fundão Tailings Dam Review Panel: Report on the Immediate Causes of the Failure of the Fundão Dam*. Cleary Gottlieb Steen & Hamilton LLP.

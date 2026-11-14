@@ -105,7 +105,7 @@ Bathymetry has its own conventions. Nautical charts use a small number of flat *
 
 ### 57.3.4 Diverging, discrete, and dual-encoded maps
 
-Change maps — a DEM of difference (DoD) from [Chapter 41](ch41-change-detection.md) — need a **diverging** map with a neutral centre at zero (vik, balance, RdBu) and *symmetric limits*, so that +2 m and −2 m are equally saturated. Letting software autoscale a DoD to its asymmetric min/max is the most common way to publish a change map that visually exaggerates one sign. Mask the band within the minimum detectable change in grey or white so that noise is not read as change.
+Change maps — a DEM of difference (DoD; see [Chapter 41](ch41-change-detection.md)) — need a **diverging** map with a neutral centre at zero (vik, balance, RdBu) and *symmetric limits*, so that +2 m and −2 m are equally saturated. Letting software autoscale a DoD to its asymmetric min/max is the most common way to publish a change map that visually exaggerates one sign. Mask the band within the minimum detectable change in grey or white so that noise is not read as change.
 
 **Discrete** (classed) maps turn a continuous DEM into a handful of bands. They are legible and easy to legend, but every class boundary is a visual edge, and a reader will treat it as a feature; place the boundaries where they mean something (flood stage, a safety contour, a datum) and never at round numbers for their own sake. Continuous maps avoid false edges but make it impossible to read a value to better than about one part in twenty.
 
@@ -118,15 +118,16 @@ A hillshade carries shape; a colormap carries value. Combining them — **dual e
 > gdaldem hillshade dtm.tif hs_multi.tif -multidirectional -alt 45 -z 1 -compute_edges -co COMPRESS=DEFLATE
 >
 > # 2. Colour relief with Crameri's batlow (10 anchor colours, min/max of your DEM)
-> python - <<'EOF'
+> python3 - <<'EOF'
 > import numpy as np
 > from cmcrameri import cm            # pip install cmcrameri
 > from osgeo import gdal
 > ds = gdal.Open("dtm.tif"); b = ds.GetRasterBand(1)
 > lo, hi = b.ComputeRasterMinMax(False)
+> span = (hi - lo) or 1.0
 > with open("batlow.txt", "w") as f:
 >     for v in np.linspace(lo, hi, 10):
->         r, g, bb, _ = cm.batlow((v - lo) / (hi - lo))
+>         r, g, bb, _ = cm.batlow((v - lo) / span)
 >         f.write(f"{v:.2f} {int(r*255)} {int(g*255)} {int(bb*255)}\n")
 >     f.write("nv 0 0 0 0\n")
 > EOF
@@ -229,7 +230,7 @@ Terrain changes ([Chapter 37](ch37-time-scales-of-change.md)), and two stills �
 
 Relief depiction predates the DEM by two centuries.
 
-- **Hachures (Lehmann 1799) ⟨H⟩** — slope-proportional strokes, a slope map in ink; they survive only as depression ticks.
+- **Hachures (Lehmann 1799)** — slope-proportional strokes, a slope map in ink; they survive only as depression ticks.
 - **Hand-painted Swiss relief (Imhof, 1920s–1960s)** — locally adjusted light, aerial perspective, generalized landform; still the benchmark for analytical methods.
 - **Analytical hillshade (Yoëli 1965)** — Lambertian shading computed from a terrain grid; Horn (1981) supplied the general gradient and reflectance-map theory.
 - **GIS hillshade default (1980s–1990s)** — 315°/45° became the visual vernacular; Mark's (1992) multidirectional alternative took two decades to reach default menus.
@@ -291,14 +292,14 @@ Visualization introduces error at three points: in what the rendering computes, 
 
 ## Standards & guides
 
-- IHO **S-4** *Regulations of the IHO for International (INT) Charts and Chart Specifications of the IHO*, ed. 4.9.0 (2021) — depth-tint conventions, isobath generalization, symbology for paper charts.
+- IHO **S-4** *Regulations of the IHO for International (INT) Charts and Chart Specifications of the IHO*, ed. 4.10.0 (2026) — depth-tint conventions, isobath generalization, symbology for paper charts.
 - IHO **S-52** *Specifications for Chart Content and Display Aspects of ECDIS*, ed. 6.1.1 (2015) with Presentation Library 4.0.x — depth-area colouring (two- and four-shade schemes), safety-contour display, day/dusk/night palettes.
 - IHO **S-102** *Bathymetric Surface Product Specification*, ed. 3.0.0 (2024) — gridded bathymetry with uncertainty for ECDIS overlay.
 - USGS **Topographic Map Symbols** and *US Topo Product Standard* — contour, index, supplementary, and depression-contour conventions.
 - **ColorBrewer** (Harrower & Brewer 2003) and the **Scientific Colour Maps** user guide (Crameri) — palette selection guidance including colour-blind safety.
 - **W3C WCAG 2.1** (2018) / 2.2 (2023) — contrast and non-text content requirements for web maps.
 - **OGC 3D Tiles 1.1** Community Standard (2023) — LOD streaming of terrain and point clouds.
-- ASPRS **LAS 1.4** specification — classification codes and attributes used for point-cloud colouring.
+- ASPRS **LAS 1.4** specification (R15, 2019) — classification codes and attributes used for point-cloud colouring.
 
 ## Pitfalls
 
@@ -327,33 +328,33 @@ Visualization introduces error at three points: in what the rendering computes, 
 
 ## References
 
-- Bernabé-Poveda, M. A., & Çöltekin, A. (2015). Prevalence of the terrain reversal effect in satellite imagery. *International Journal of Digital Earth*, 8(8), 640–655.
-- Borland, D., & Taylor, R. M. (2007). Rainbow color map (still) considered harmful. *IEEE Computer Graphics and Applications*, 27(2), 14–17.
+- Bernabé-Poveda, M. A., & Çöltekin, A. (2015). Prevalence of the terrain reversal effect in satellite imagery. *International Journal of Digital Earth*, 8(8), 640–655. https://doi.org/10.1080/17538947.2014.942714
+- Borland, D., & Taylor, R. M. (2007). Rainbow color map (still) considered harmful. *IEEE Computer Graphics and Applications*, 27(2), 14–17. https://doi.org/10.1109/MCG.2007.323435
 - Boucheny, C. (2009). *Visualisation scientifique de grands volumes de données: pour une approche perceptive*. PhD thesis, Université Joseph Fourier, Grenoble.
 - Chiba, T., Kaneta, S., & Suzuki, Y. (2008). Red Relief Image Map: new visualization method for three dimensional data. *International Archives of the Photogrammetry, Remote Sensing and Spatial Information Sciences*, XXXVII(B2), 1071–1076.
 - Crameri, F., Shephard, G. E., & Heron, P. J. (2020). The misuse of colour in science communication. *Nature Communications*, 11, 5444. https://doi.org/10.1038/s41467-020-19160-7
-- Doneus, M. (2013). Openness as visualization technique for interpretative mapping of airborne lidar derived digital terrain models. *Remote Sensing*, 5(12), 6427–6442.
-- Harrower, M., & Brewer, C. A. (2003). ColorBrewer.org: an online tool for selecting colour schemes for maps. *The Cartographic Journal*, 40(1), 27–37.
-- Hesse, R. (2010). LiDAR-derived Local Relief Models — a new tool for archaeological prospection. *Archaeological Prospection*, 17(2), 67–72.
-- Horn, B. K. P. (1981). Hill shading and the reflectance map. *Proceedings of the IEEE*, 69(1), 14–47.
-- Imhof, E. (1982). *Cartographic Relief Presentation* (H. J. Steward, Ed.). Berlin: Walter de Gruyter. (Original *Kartographische Geländedarstellung*, 1965.)
-- Jenny, B., Heitzler, M., Singh, D., Farmakis-Serebryakova, M., Liu, J. C., & Hurni, L. (2021). Cartographic relief shading with neural networks. *IEEE Transactions on Visualization and Computer Graphics*, 27(2), 1151–1160.
-- Kennelly, P. J., & Stewart, A. J. (2014). General sky models for illuminating terrains. *International Journal of Geographical Information Science*, 28(2), 383–406.
-- Kerbl, B., Kopanas, G., Leimkühler, T., & Drettakis, G. (2023). 3D Gaussian Splatting for real-time radiance field rendering. *ACM Transactions on Graphics*, 42(4), article 139.
-- Kokalj, Ž., & Hesse, R. (2017). *Airborne Laser Scanning Raster Data Visualization: A Guide to Good Practice*. Prostor, kraj, čas 14. Ljubljana: Založba ZRC.
-- Kokalj, Ž., & Somrak, M. (2019). Why not a single image? Combining visualizations to facilitate fieldwork and on-screen mapping. *Remote Sensing*, 11(7), 747.
+- Doneus, M. (2013). Openness as visualization technique for interpretative mapping of airborne lidar derived digital terrain models. *Remote Sensing*, 5(12), 6427–6442. https://doi.org/10.3390/rs5126427
+- Harrower, M., & Brewer, C. A. (2003). ColorBrewer.org: an online tool for selecting colour schemes for maps. *The Cartographic Journal*, 40(1), 27–37. https://doi.org/10.1179/000870403235002042
+- Hesse, R. (2010). LiDAR-derived Local Relief Models — a new tool for archaeological prospection. *Archaeological Prospection*, 17(2), 67–72. https://doi.org/10.1002/arp.374
+- Horn, B. K. P. (1981). Hill shading and the reflectance map. *Proceedings of the IEEE*, 69(1), 14–47. https://doi.org/10.1109/PROC.1981.11918
+- Imhof, E. (1982). *Cartographic Relief Presentation* (H. J. Steward, Ed.). Berlin: Walter de Gruyter. (Original *Kartographische Geländedarstellung*, 1965.) https://doi.org/10.1515/9783110844016
+- Jenny, B., Heitzler, M., Singh, D., Farmakis-Serebryakova, M., Liu, J. C., & Hurni, L. (2021). Cartographic relief shading with neural networks. *IEEE Transactions on Visualization and Computer Graphics*, 27(2), 1225–1235. https://doi.org/10.1109/TVCG.2020.3030456
+- Kennelly, P. J., & Stewart, A. J. (2014). General sky models for illuminating terrains. *International Journal of Geographical Information Science*, 28(2), 383–406. https://doi.org/10.1080/13658816.2013.848985
+- Kerbl, B., Kopanas, G., Leimkühler, T., & Drettakis, G. (2023). 3D Gaussian Splatting for real-time radiance field rendering. *ACM Transactions on Graphics*, 42(4), article 139. https://doi.org/10.1145/3592433
+- Kokalj, Ž., & Hesse, R. (2017). *Airborne Laser Scanning Raster Data Visualization: A Guide to Good Practice*. Prostor, kraj, čas 14. Ljubljana: Založba ZRC. https://doi.org/10.3986/9789612549848
+- Kokalj, Ž., & Somrak, M. (2019). Why not a single image? Combining visualizations to facilitate fieldwork and on-screen mapping. *Remote Sensing*, 11(7), 747. https://doi.org/10.3390/rs11070747
 - Kovesi, P. (2015). Good colour maps: how to design them. arXiv:1509.03700.
-- MacEachren, A. M., Robinson, A., Hopper, S., Gardner, S., Murray, R., Gahegan, M., & Hetzler, E. (2005). Visualizing geospatial information uncertainty: what we know and what we need to know. *Cartography and Geographic Information Science*, 32(3), 139–160.
-- MacEachren, A. M., Roth, R. E., O'Brien, J., Li, B., Swingley, D., & Gahegan, M. (2012). Visual semiotics & uncertainty visualization: an empirical study. *IEEE Transactions on Visualization and Computer Graphics*, 18(12), 2496–2505.
-- Mark, R. K. (1992). *Multidirectional, oblique-weighted, shaded-relief image of the Island of Hawaii*. USGS Open-File Report 92-422.
-- Marston, B. E., & Jenny, B. (2015). Improving the representation of major landforms in analytical relief shading. *International Journal of Geographical Information Science*, 29(7), 1144–1165.
-- Mildenhall, B., Srinivasan, P. P., Tancik, M., Barron, J. T., Ramamoorthi, R., & Ng, R. (2020). NeRF: representing scenes as neural radiance fields for view synthesis. *Proceedings of ECCV 2020*, LNCS 12346, 405–421.
-- Nuñez, J. R., Anderton, C. R., & Renslow, R. S. (2018). Optimizing colormaps with consideration for color vision deficiency to enable accurate interpretation of scientific data. *PLoS ONE*, 13(7), e0199239.
-- Patterson, T., & Jenny, B. (2011). The development and rationale of cross-blended hypsometric tints. *Cartographic Perspectives*, 69, 31–46.
-- Pingel, T. J., & Clarke, K. C. (2014). Perceptually shaded slope maps for the visualization of digital surface models. *The Cartographic Journal*, 51(4), 281–293.
+- MacEachren, A. M., Robinson, A., Hopper, S., Gardner, S., Murray, R., Gahegan, M., & Hetzler, E. (2005). Visualizing geospatial information uncertainty: what we know and what we need to know. *Cartography and Geographic Information Science*, 32(3), 139–160. https://doi.org/10.1559/1523040054738936
+- MacEachren, A. M., Roth, R. E., O'Brien, J., Li, B., Swingley, D., & Gahegan, M. (2012). Visual semiotics & uncertainty visualization: an empirical study. *IEEE Transactions on Visualization and Computer Graphics*, 18(12), 2496–2505. https://doi.org/10.1109/TVCG.2012.279
+- Mark, R. K. (1992). *Multidirectional, oblique-weighted, shaded-relief image of the Island of Hawaii*. USGS Open-File Report 92-422. https://doi.org/10.3133/ofr92422
+- Marston, B. E., & Jenny, B. (2015). Improving the representation of major landforms in analytical relief shading. *International Journal of Geographical Information Science*, 29(7), 1144–1165. https://doi.org/10.1080/13658816.2015.1009911
+- Mildenhall, B., Srinivasan, P. P., Tancik, M., Barron, J. T., Ramamoorthi, R., & Ng, R. (2020). NeRF: representing scenes as neural radiance fields for view synthesis. *Proceedings of ECCV 2020*, LNCS 12346, 405–421. https://doi.org/10.1007/978-3-030-58452-8_24
+- Nuñez, J. R., Anderton, C. R., & Renslow, R. S. (2018). Optimizing colormaps with consideration for color vision deficiency to enable accurate interpretation of scientific data. *PLoS ONE*, 13(7), e0199239. https://doi.org/10.1371/journal.pone.0199239
+- Patterson, T., & Jenny, B. (2011). The development and rationale of cross-blended hypsometric tints. *Cartographic Perspectives*, 69, 31–46. https://doi.org/10.14714/CP69.20
+- Pingel, T. J., & Clarke, K. C. (2014). Perceptually shaded slope maps for the visualization of digital surface models. *Cartographica*, 49(4), 225–240. https://doi.org/10.3138/carto.49.4.2141
 - Schütz, M. (2016). *Potree: Rendering Large Point Clouds in Web Browsers*. Diploma thesis, Technische Universität Wien.
-- Thyng, K. M., Greene, C. A., Hetland, R. D., Zimmerle, H. M., & DiMarco, S. F. (2016). True colors of oceanography: guidelines for effective and accurate colormap selection. *Oceanography*, 29(3), 9–13.
+- Thyng, K. M., Greene, C. A., Hetland, R. D., Zimmerle, H. M., & DiMarco, S. F. (2016). True colors of oceanography: guidelines for effective and accurate colormap selection. *Oceanography*, 29(3), 9–13. https://doi.org/10.5670/oceanog.2016.66
 - Yoëli, P. (1965). Analytical hill shading. *Surveying and Mapping*, 25(4), 573–579.
 - Yokoyama, R., Shirasawa, M., & Pike, R. J. (2002). Visualizing topography by openness: a new application of image processing to digital elevation models. *Photogrammetric Engineering & Remote Sensing*, 68(3), 257–265.
 - Zakšek, K., Oštir, K., & Kokalj, Ž. (2011). Sky-View Factor as a relief visualization technique. *Remote Sensing*, 3(2), 398–415. https://doi.org/10.3390/rs3020398
-- Zevenbergen, L. W., & Thorne, C. R. (1987). Quantitative analysis of land surface topography. *Earth Surface Processes and Landforms*, 12(1), 47–56.
+- Zevenbergen, L. W., & Thorne, C. R. (1987). Quantitative analysis of land surface topography. *Earth Surface Processes and Landforms*, 12(1), 47–56. https://doi.org/10.1002/esp.3290120107

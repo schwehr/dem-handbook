@@ -1,6 +1,6 @@
 # Appendix D — Standards and guide documents index
 
-An index of the standards, specifications, and guidance documents cited in the handbook, grouped by domain. Each row gives the identifier, title, issuing body, the current edition known to the authors at the time of writing, what the document governs for elevation work, and the chapter(s) where it is discussed. Editions change; where the authors could not confirm the latest edition against the issuer's site it is marked "(verify)". The guided tour of the most important documents is [Chapter 70](../chapters/ch70-specifications-guided-tour.md); legal instruments are discussed in [Chapter 68](../chapters/ch68-legal-issues.md) and [Chapter 69](../chapters/ch69-security-sovereignty-privacy-ethics.md).
+An index of the standards, specifications, and guidance documents cited in the handbook, grouped by domain. Each row gives the identifier, title, issuing body, the current edition at the time of revision (2026), what the document governs for elevation work, and the chapter(s) where it is discussed. Editions change frequently; always check the issuer's registry before writing a contract. The guided tour of the most important documents is [Chapter 70](../chapters/ch70-specifications-guided-tour.md); legal instruments are discussed in [Chapter 68](../chapters/ch68-legal-issues.md) and [Chapter 69](../chapters/ch69-security-sovereignty-privacy-ethics.md).
 
 ## D.1 Hydrographic
 
@@ -15,41 +15,41 @@ An index of the standards, specifications, and guidance documents cited in the h
 | IHO S-111 | Surface Currents Product Specification | IHO | Ed. 2.0.0 (Dec 2024) | Current fields for navigation | 62 |
 | IHO S-158:102 | Validation Checks for S-102 Bathymetric Surface | IHO | Ed. 1.0.0 (Dec 2025) | Conformance tests for S-102 datasets | 47, 70 |
 | IHO S-67 | Mariners' Guide to Accuracy of Depth Information in ENCs | IHO | Ed. 1.0.0 (2020) | Interpreting CATZOC and depth quality | 62 |
-| IHO S-4 | Regulations for International (INT) Charts and Chart Specifications | IHO | Ed. 4.9.0 (2021) (verify) | Chart symbology incl. source diagrams | 58, 62 |
-| IHO S-51 | Manual on Technical Aspects of UNCLOS (TALOS) | IHO/IAG/IOC | 5th ed. (2014) | Baselines, limits, and bathymetry for maritime boundaries | 68 |
+| IHO S-4 | Regulations for International (INT) Charts and Chart Specifications | IHO | Ed. 4.10.0 (Mar 2026) | Chart symbology incl. source diagrams | 58, 62 |
+| IHO C-51 | Manual on Technical Aspects of UNCLOS (TALOS) | IHO/IAG/IOC | 5th ed. (2014) | Baselines, limits, and bathymetry for maritime boundaries | 68 |
 | IHO S-32 | Hydrographic Dictionary | IHO | Online edition (continuously updated) | Terminology | App. A |
 | IHO C-13 | Manual on Hydrography | IHO | Ed. 1.0.0 (2005), corrections 2011 | Survey theory and practice | 20, 26 |
-| IHO B-11 | GEBCO Cook Book | IHO/IOC/GEBCO | Continuously updated (verify edition) | Bathymetric gridding and compilation methods | 48, 55 |
+| IHO B-11 | GEBCO Cook Book | IHO/IOC/GEBCO | Oct 2019 ed. (IOC Manuals & Guides 63; living document, first issued 2012) | Bathymetric gridding and compilation methods | 48, 55 |
 | IHO B-12 | Guidance on Crowdsourced Bathymetry | IHO | Ed. 3.0.0 (2023) | Volunteer depth collection and metadata | 20, 73 |
 | IHO B-13 | Guidance to Satellite-Derived Bathymetry | IHO | Ed. 1.0.0 (Mar 2024) | SDB methods, uncertainty, and charting use | 23, 70 |
 | NOAA HSSD | Hydrographic Surveys Specifications and Deliverables | NOAA OCS | 2024 edition (revised roughly annually) | US contract hydrographic deliverables, TPU, CUBE, BAG | 70 |
-| NOAA FPM | Field Procedures Manual | NOAA OCS | 2020 with subsequent updates | Field operations, calibration, QC | 25, 26, 70 |
+| NOAA FPM | Field Procedures Manual | NOAA OCS | April 2014 PDF; 2020+ living online edition | Field operations, calibration, QC | 25, 26, 70 |
 | NOS Hydrographic Manual | Hydrographic Manual, 4th ed. (Umbach) | NOAA NOS | 1976 (historical) | Pre-GPS procedures; interpreting legacy surveys | 72 |
 | NOAA SP CO-OPS 1 | Tidal Datums and Their Applications | NOAA CO-OPS | 2000 (2001 printing) | Tidal datum computation and transfer | 9 |
 | USACE EM 1110-2-1003 | Hydrographic Surveying | US Army Corps of Engineers | 2013 | Navigation-channel and dredging surveys | 65, 70 |
-| LINZ HYSPEC | Contract Specifications for Hydrographic Surveys | Land Information New Zealand | v2.0 (2021?) (verify) | NZ hydrographic contracts | 70 |
-| CHS Standards | Standards for Hydrographic Surveys | Canadian Hydrographic Service | Ed. 2 (2013) (verify) | Canadian survey requirements | 70 |
-| UKHO survey specifications | ADMIRALTY / UKHO Survey Specifications | UK Hydrographic Office | Programme-specific (verify) | UK and overseas-territory surveys | 70 |
-| AusSeabed / HIPP | Australian Multibeam Guidelines; HydroScheme specifications | Geoscience Australia / AHO | Multibeam Guidelines v2 (2020) (verify) | Australian acquisition and metadata | 70 |
+| LINZ HYSPEC | Contract Specifications for Hydrographic Surveys | Land Information New Zealand | v2.0 (July 2020); v3.0 update | NZ hydrographic contracts | 70 |
+| CHS Standards | Standards for Hydrographic Surveys | Canadian Hydrographic Service | Ed. 4 (Feb 2021) | Canadian survey requirements | 70 |
+| UKHO survey specifications | Civil Hydrography Programme (CHP) / ADMIRALTY Survey Specifications | MCA / UK Hydrographic Office | Programme-specific (CHP Seabed Mapping spec) | UK and overseas-territory surveys | 70 |
+| AusSeabed / HIPP | Australian Multibeam Guidelines; HydroScheme specifications | Geoscience Australia / AHO | Multibeam Guidelines v2 (July 2020; GA Record 2018/019) | Australian acquisition and metadata | 70 |
 | NOAA NBS / BlueTopo | National Bathymetric Source specification | NOAA OCS | Product documentation (2020–) | Supersession rules; uncertainty; source attribution | 48, 55 |
 
 ## D.2 Topographic lidar, photogrammetry, UAS
 
 | Identifier | Title | Issuer | Current edition | Governs | Chapters |
 |---|---|---|---|---|---|
-| USGS LBS | Lidar Base Specification | USGS NGP | 2024 rev. A | 3DEP deliverables; QL0–QL3; accuracy by land cover; hydro-flattening; classification | 18, 34, 70 |
+| USGS LBS | Lidar Base Specification | USGS NGP | 2024 rev. A (Jan 2024); 2025 rev. A (June 2025) | 3DEP deliverables; QL0–QL3; RMSE$_V$ accuracy reporting (aligned with ASPRS Ed. 2); hydro-flattening; Class 20/21 rules | 18, 34, 70 |
 | ASPRS PAS | Positional Accuracy Standards for Digital Geospatial Data | ASPRS | Edition 2, v1 (2023); v2 (June 2024) | RMSE$_H$/RMSE$_V$ accuracy classes (replacing Ed. 1 NVA/VVA); checkpoint requirements | 53, 70 |
 | ASPRS LAS | LAS Specification | ASPRS | 1.4 R15 (July 2019; R14 March 2019); topo-bathy domain profile (2019) | Point-cloud format, classification codes | 47 |
 | FGDC-STD-007.3 | National Standard for Spatial Data Accuracy | FGDC | 1998 | RMSE × 1.96 / 1.7308 at 95 %; ≥ 20 checkpoints | 53 |
 | NMAS | United States National Map Accuracy Standards | US Bureau of the Budget | 1947 (historical) | 90 % within ½ contour interval | 53, 58, 72 |
 | NDEP Guidelines | Guidelines for Digital Elevation Data | National Digital Elevation Program | v1.0 (2004) | FVA/CVA/SVA by land cover (precursor of NVA/VVA) | 53 |
-| FEMA G&S | Guidelines and Standards for Flood Risk Analysis and Mapping — Elevation Guidance | FEMA | Elevation Guidance (2023) (verify) | Elevation data for NFIP mapping | 61, 68 |
+| FEMA G&S | Guidance for Flood Risk Analysis and Mapping — Elevation Guidance | FEMA | Elevation Guidance (Nov 2022) | Elevation data for NFIP mapping | 61, 68 |
 | USACE EM 1110-1-1000 | Photogrammetric and LiDAR Mapping | USACE | 2015 | Engineering mapping accuracy | 65 |
-| ICSM LiDAR Specs | LiDAR Acquisition Specifications and Tender Template | ICSM (Australia/NZ) | v2.0 (2010?) (verify) | Australian lidar acquisition | 70 |
-| NRCan HRDEM | High Resolution Digital Elevation Model Product Specification | Natural Resources Canada | v1.x (verify) | Canadian national DEM products | 55 |
-| UK EA LiDAR | National LiDAR Programme specification | Environment Agency (England) | Programme documents (2016–) (verify) | 1 m national lidar | 55 |
-| AHN specs | AHN product specifications | Rijkswaterstaat / Het Waterschapshuis | AHN4/AHN5 documentation (verify) | Dutch national lidar | 55 |
-| ASPRS UAS Guidelines | Guidelines for UAS mapping (incl. accuracy) | ASPRS | 2017 (draft/approved; verify) | Small-UAS photogrammetric practice | 16, 22 |
+| ICSM LiDAR Specs | LiDAR Acquisition Specifications and Tender Template | ICSM (Australia/NZ) | v1.0 (Nov 2010) | Australian lidar acquisition | 70 |
+| NRCan HRDEM | High Resolution Digital Elevation Model Product Specification | Natural Resources Canada | Ed. 1.7 (May 2026) | Canadian national DEM products | 55 |
+| UK EA LiDAR | National LIDAR Programme specification | Environment Agency (England) | Phase 1 technical specification (2017–2023; ±15 cm RMSE) | 1 m national lidar | 55 |
+| AHN specs | AHN product specifications (*Kwaliteitsbeschrijving*) | Rijkswaterstaat / Het Waterschapshuis | AHN4/AHN5 quality descriptions (2020–) | Dutch national lidar | 55 |
+| ASPRS UAS Guidelines | Best Practices and Guidelines for Mapping with UAS | ASPRS | PAS Ed. 2, v2, Addendum V (June 2024) | Small-UAS photogrammetric and lidar practice | 16, 22 |
 | ISPRS/EuroSDR benchmarks | Dense matching, filtering, and classification benchmarks | ISPRS / EuroSDR | Various (2013–) | Method intercomparison datasets | 30, 52, App. H |
 
 ## D.3 Geodesy and datums
@@ -57,7 +57,7 @@ An index of the standards, specifications, and guidance documents cited in the h
 | Identifier | Title | Issuer | Current edition | Governs | Chapters |
 |---|---|---|---|---|---|
 | ISO 19111 | Geographic information — Referencing by coordinates | ISO/TC 211 | 2019 | CRS data model incl. dynamic frames and epochs | 8 |
-| IOGP 373-07-2 | Guidance Note 7-2: Coordinate conversions and transformations including formulas | IOGP Geomatics | 2024 (verify revision) | Transformation formulas used by EPSG/PROJ | 8, 10, App. B |
+| IOGP 373-07-2 | Guidance Note 7-2: Coordinate conversions and transformations including formulas | IOGP Geomatics | Report 373-07-02 (revised periodically with EPSG/ISO 19111; 2024+) | Transformation formulas used by EPSG/PROJ | 8, 10, App. B |
 | IOGP 373-25 | Guidance Note 25: Dynamic versus static CRS and use of the ITRF | IOGP | GN 373-25 (first issued 2019; check iogp.org for current revision) | Handling time-dependent coordinates | 38 |
 | OGC GGXF | Geodetic data Grid eXchange Format | OGC | 1.0 (OGC 22-051r7) | Standard container for geoid, deformation, and transformation grids | 8, 9, 38 |
 | NOAA TM NOS NGS-58 | Guidelines for Establishing GPS-Derived Ellipsoid Heights (2 cm and 5 cm) | NGS | 1997 | GNSS ellipsoidal height procedures | 12, 25 |
@@ -69,8 +69,8 @@ An index of the standards, specifications, and guidance documents cited in the h
 | IERS Conventions | IERS Conventions (2010), IERS Technical Note 36, with updates | IERS | 2010 + online updates | Reference frame and Earth-orientation models | 8, 38 |
 | ITRF2020 | International Terrestrial Reference Frame 2020 | IERS ITRS Centre | 2022 (Altamimi et al. 2023) | Current global frame, velocities, post-seismic models | 8, 38 |
 | GDA2020 Technical Manual | Geocentric Datum of Australia 2020 Technical Manual | ICSM | v1.8 (Apr 2024) | GDA2020, ATRF, transformations | 8, 38 |
-| NZGD2000 deformation model | NZGD2000 Deformation Model | LINZ | Version 2024xxxx (verify) | Patching coordinates for earthquakes | 38, 39 |
-| VDatum | Vertical Datum Transformation documentation | NOAA | v4.x (verify) | Tidal–orthometric–ellipsoidal transformations in US waters | 9, 66 |
+| NZGD2000 deformation model | NZGD2000 Deformation Model | LINZ | Version 20180701 (incl. Kaikōura patch) | Patching coordinates for earthquakes | 38, 39 |
+| VDatum | Vertical Datum Transformation documentation | NOAA | v4.8 (Sept 2025) | Tidal–orthometric–ellipsoidal transformations in US waters | 9, 66 |
 | IHO/IOC tidal guidance | Manual on Sea Level Measurement and Interpretation (IOC Manuals and Guides 14) | IOC/UNESCO | Vols. I–V (1985–2016) | Tide-gauge operation and datum definition | 9 |
 
 ## D.4 Aviation
@@ -78,16 +78,16 @@ An index of the standards, specifications, and guidance documents cited in the h
 | Identifier | Title | Issuer | Current edition | Governs | Chapters |
 |---|---|---|---|---|---|
 | ICAO Annex 15 | Aeronautical Information Services | ICAO | 16th ed. (2018) + amendments (Amdt 43, 2024) | eTOD requirements by area | 62, 70 |
-| ICAO Annex 4 | Aeronautical Charts | ICAO | 11th ed. (2009) + amendments (verify) | Chart content incl. terrain/obstacles | 58, 62 |
+| ICAO Annex 4 | Aeronautical Charts | ICAO | 11th ed. (July 2009) + amendments (Amdt 63, Aug 2026) | Chart content incl. terrain/obstacles | 58, 62 |
 | ICAO Doc 10066 | PANS-AIM | ICAO | 1st ed. (2018) + amendments | Data quality requirements (accuracy, resolution, integrity) | 62, 70 |
-| ICAO Doc 9881 | Guidelines for Electronic Terrain, Obstacle and Aerodrome Mapping Information | ICAO | 1st ed. (2010) (verify) | eTOD implementation | 62 |
+| ICAO Doc 9881 | Guidelines for Electronic Terrain, Obstacle and Aerodrome Mapping Information | ICAO | 1st ed. (2006) | eTOD implementation | 62 |
 | RTCA DO-276C / EUROCAE ED-98C | User Requirements for Terrain and Obstacle Data | RTCA / EUROCAE | DO-276C / ED-98C (2015) | Terrain/obstacle data numerical requirements | 62, 70 |
 | RTCA DO-200B / ED-76A | Standards for Processing Aeronautical Data | RTCA / EUROCAE | 2015 | Data-process assurance | 62 |
-| FAA AC 150/5300-18 | General Guidance and Specifications for Submission of Aeronautical Surveys to NGS | FAA | 18B (2009) (verify) | Airport survey standards | 62 |
-| FAA AC 150/5300-16, -17 | Aeronautical survey geodetic control / imagery requirements | FAA | 16A (2007), 17C (2011) (verify) | Airport geodetic control and imagery | 62 |
+| FAA AC 150/5300-18 | General Guidance and Specifications for Submission of Aeronautical Surveys to NGS | FAA | 18B (May 2009; Chg 1, Feb 2014; 18C cancelled 2016) | Airport survey standards | 62 |
+| FAA AC 150/5300-16, -17 | Aeronautical survey geodetic control / remote sensing standards | FAA | 16B (July 2019), 17C (Sept 2011, Chg 1) | Airport geodetic control and imagery/lidar | 62 |
 | 14 CFR Part 77 | Safe, Efficient Use, and Preservation of the Navigable Airspace | FAA | Current CFR | Obstruction evaluation surfaces | 62, 68 |
 | 14 CFR Part 107 | Small Unmanned Aircraft Systems | FAA | Current CFR | UAS operations (400 ft AGL etc.) | 16, 68 |
-| EUROCONTROL TOD Manual | Terrain and Obstacle Data Manual | EUROCONTROL | Ed. 2.1 (2015) (verify) | European eTOD implementation | 62 |
+| EUROCONTROL TOD Manual | Terrain and Obstacle Data Manual | EUROCONTROL | Ed. 3.0 (May 2021; EUROCONTROL-GUID-0158) | European eTOD implementation | 62 |
 
 ## D.5 Formats
 
@@ -114,7 +114,7 @@ An index of the standards, specifications, and guidance documents cited in the h
 | quantized-mesh | Quantized-mesh terrain format | Cesium | 1.0 | Web terrain tiles | 57 |
 | LandXML | LandXML schema | LandXML.org | 1.2 (2008) | Civil-engineering surfaces and alignments | 65 |
 | ASTM E2807 | Standard Specification for 3D Imaging Data Exchange (E57) | ASTM | E2807-11 (2019) | Terrestrial scan exchange | 47 |
-| GSF | Generic Sensor Format | Leidos / community | 3.09 (verify) | Multibeam exchange | 47 |
+| GSF | Generic Sensor Format | Leidos / community | v03.11 (Mar 2025; v03.10 July 2024) | Multibeam exchange | 47 |
 | IHO S-100 Part 10c | HDF5 Data Format | IHO | with S-100 Ed. 5.x | Encoding for S-102/S-104/S-111 | 47 |
 
 ## D.6 Metadata, quality, catalogs, archives
@@ -130,7 +130,7 @@ An index of the standards, specifications, and guidance documents cited in the h
 | FGDC-STD-001.2 / lidar profiles | Shoreline Metadata Profile; lidar metadata guidance | FGDC / USGS | 2001; LBS metadata requirements | Domain profiles of CSDGM | 49 |
 | STAC | SpatioTemporal Asset Catalog | STAC community | 1.1.0 (2024) + extensions (projection, raster, scientific, pointcloud) | Catalog items, collections, assets | 51 |
 | OGC API – Records | OGC API — Records — Part 1: Core | OGC | 1.0 (approved Apr 2025, published May 2025) | Catalog search API | 51 |
-| DCAT / GeoDCAT-AP | Data Catalog Vocabulary / Geospatial application profile | W3C / EU SEMIC | DCAT 3 (2024); GeoDCAT-AP 3.0 (verify) | Dataset descriptions for open-data portals | 51 |
+| DCAT / GeoDCAT-AP | Data Catalog Vocabulary / Geospatial application profile | W3C / EU SEMIC | DCAT 3 (Aug 2024); GeoDCAT-AP v3.0.0 (Oct 2024) | Dataset descriptions for open-data portals | 51 |
 | INSPIRE D2.8.II.1 | Data Specification on Elevation — Technical Guidelines | European Commission JRC | v3.0 (2013) | EU elevation data model and quality | 70 |
 | ISO 14721 | Open Archival Information System (OAIS) reference model | ISO / CCSDS | 2025 (3rd ed., Mar 2025; supersedes 2012) | Archive functions and packages | 50 |
 | ISO 16363 | Audit and certification of trustworthy digital repositories | ISO | 2012 | Repository assessment | 50 |
@@ -144,7 +144,7 @@ An index of the standards, specifications, and guidance documents cited in the h
 
 | Identifier | Title | Issuer | Current edition | Governs | Chapters |
 |---|---|---|---|---|---|
-| Directive 2007/2/EC | INSPIRE Directive | EU | 2007 (evaluation and revision in progress; verify) | Spatial data infrastructure; Annex II Elevation theme | 70 |
+| Directive 2007/2/EC | INSPIRE Directive | EU | 2007 (revision proposed Dec 2025 under GreenData4All, COM(2025) 985) | Spatial data infrastructure; Annex II Elevation theme | 70 |
 | Regulation (EU) 1089/2010 | Interoperability of spatial data sets and services | EU | 2010 + amendments | INSPIRE data models incl. Elevation | 70 |
 | Regulation (EU) 2023/138 | High-Value Datasets implementing regulation | EU | 2023 (applies from 2024-06) | Free, open elevation and other datasets by law | 68 |
 | Directive (EU) 2019/1024 | Open Data Directive | EU | 2019 | Public-sector information reuse | 68 |
@@ -181,7 +181,7 @@ An index of the standards, specifications, and guidance documents cited in the h
 | Identifier | Title | Issuer | Current edition | Governs | Chapters |
 |---|---|---|---|---|---|
 | OGC Topic 21 / ISO 19170-1 | Discrete Global Grid Systems Abstract Specification | OGC / ISO | OGC 20-040r3 (2021) | DGGS reference systems | 60 |
-| OGC API – DGGS | OGC API — Discrete Global Grid Systems | OGC | Draft (verify) | Web access to DGGS data | 60 |
+| OGC API – DGGS | OGC API — Discrete Global Grid Systems — Part 1: Core | OGC | v1.0 (OGC 21-038r1, Oct 2025) | Web access to DGGS data | 60 |
 | FGDC-STD-011-2001 | United States National Grid | FGDC | 2001 | USNG (MGRS-compatible) | 60 |
 | Open Location Code | Plus codes specification | Google (open source) | Spec on GitHub (2014–) | Short codes | 60 |
 | H3 / S2 documentation | H3 and S2 geometry library documentation | Uber / Google (open source) | H3 v4; S2 current | Hierarchical cell indexing | 60 |
@@ -226,4 +226,4 @@ An index of the standards, specifications, and guidance documents cited in the h
 | ISO 17123 series | Field procedures for testing geodetic and surveying instruments | ISO | Parts 1–9 (various dates) | Instrument testing (levels, total stations, GNSS, scanners) | 25 |
 | ALTA/NSPS | Minimum Standard Detail Requirements for ALTA/NSPS Land Title Surveys | ALTA / NSPS | 2021 | Boundary survey accuracy | 68 |
 | IAU WGCCRE reports | Report of the IAU Working Group on Cartographic Coordinates and Rotational Elements | IAU | 2015 report (Archinal et al. 2018) | Planetary body reference frames and shapes | 67 |
-| PDS4 | Planetary Data System standards | NASA PDS | Information Model 1.2x (verify) | Planetary data archiving | 67 |
+| PDS4 | Planetary Data System standards | NASA PDS | Information Model 1.26.0.0 (June 2026) | Planetary data archiving | 67 |

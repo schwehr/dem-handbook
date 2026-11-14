@@ -80,7 +80,7 @@ Oversampling is seductive because the hillshade of a finely interpolated grid lo
 
 ## 31.7 Overviews, pyramids, and level of detail
 
-Overviews (pyramids) are reduced-resolution copies of a grid stored alongside it so that a viewer or an analysis at coarse scale need not read every cell. Each level aggregates a 2 × 2 (or larger) block of the level below into one cell, and the aggregation rule defines what the overview means. **Average** gives a smooth, visually pleasing overview whose cells are area means—and whose maxima and minima are gone: a ridge crest, a tower, a channel thalweg, or a shoal disappears from the overview even though it is in the base level. **Nearest** keeps one of the four values arbitrarily (fast; preserves categorical data; makes elevation overviews noisy and position-dependent). **Minimum** and **maximum** preserve the shoal-biased or obstacle-biased semantics that charts and obstacle analyses require. **Bilinear**, **cubic**, **Lanczos**, and **Gauss** are smoothing kernels with different frequency responses; cubic and Lanczos can overshoot. GDAL's `gdaladdo -r {nearest,average,rms,bilinear,gauss,cubic,cubicspline,lanczos,average_magphase,mode}` exposes the choice; the COG driver's `OVERVIEW_RESAMPLING` creation option does the same.
+Overviews (pyramids) are reduced-resolution copies of a grid stored alongside it so that a viewer or an analysis at coarse scale need not read every cell. Each level aggregates a 2 × 2 (or larger) block of the level below into one cell, and the aggregation rule defines what the overview means. **Average** gives a smooth, visually pleasing overview whose cells are area means—and whose maxima and minima are gone: a ridge crest, a tower, a channel thalweg, or a shoal disappears from the overview even though it is in the base level. **Nearest** keeps one of the four values arbitrarily (fast; preserves categorical data; makes elevation overviews noisy and position-dependent). **Minimum** and **maximum** preserve the shoal-biased or obstacle-biased semantics that charts and obstacle analyses require. **Bilinear**, **cubic**, **Lanczos**, and **Gauss** are smoothing kernels with different frequency responses; cubic and Lanczos can overshoot. GDAL's `gdaladdo -r {nearest,average,rms,bilinear,gauss,cubic,cubicspline,lanczos,average_magphase,mode}` and the COG driver's `OVERVIEW_RESAMPLING` creation option expose most of those kernels but omit `min` and `max`; shoal- or obstacle-biased pyramids must be generated per level with `gdalwarp -ovr NONE -r min` (or `-r max`) and attached via `gdal raster overview add --overview-src`.
 
 Overviews lie in two ways. Semantic drift: a chart grid with min-binned base cells and average-resampled overviews shows deeper water when zoomed out—exactly the wrong direction. Silent use: tiled viewers and cloud platforms choose the overview level from the display scale, so a computation at a coarse output scale may run on an overview without the user knowing (Earth Engine's per-asset pyramid policy—mean, sample, min, max, or mode—is the documented example; [Chapter 29](ch29-processing-pipelines.md)). The rule is to choose the overview resampling to match the product semantics (min for charts, max for obstacles, average for scientific DEMs), to record it in metadata, and to perform quantitative work at the base level or on an overview whose aggregation is known ([Chapter 46](ch46-data-models.md), [Chapter 57](ch57-visualizing-dems.md)).
 
@@ -100,15 +100,14 @@ An interpolated value without an uncertainty is a guess with a decimal point. Fo
 >
 > ```bash
 > # 1. Split ground points 90/10 (deterministic: every 10th point is a checkpoint).
-> for s in "train 1" "check 0"; do set -- $s
->   pdal translate tile_ground.laz $1.csv \
->     -f filters.range --filters.range.limits="Classification[2:2]" \
->     -f filters.decimation --filters.decimation.step=10 --filters.decimation.offset=$2 \
->     --writers.text.order="X,Y,Z" --writers.text.keep_unspecified=false
-> done
+> pdal translate tile_ground.laz ground.csv \
+>   -f filters.range --filters.range.limits="Classification[2:2]" \
+>   --writers.text.format=csv --writers.text.order="X,Y,Z" --writers.text.keep_unspecified=false
+> awk 'NR==1 || (NR-1)%10 != 0' ground.csv > train.csv
+> awk 'NR==1 || (NR-1)%10 == 0' ground.csv > check.csv
 > ogr2ogr -f GPKG train.gpkg train.csv -oo X_POSSIBLE_NAMES=X -oo Y_POSSIBLE_NAMES=Y \
 >   -oo Z_POSSIBLE_NAMES=Z -a_srs EPSG:6339
-> read XMIN XMAX YMIN YMAX < <(gmt info train.csv -C -I1 | awk '{print $1,$2,$3,$4}')
+> read XMIN XMAX YMIN YMAX < <(gmt info train.csv -hi1 -C -I1 | awk '{print $1,$2,$3,$4}')
 > R="-R$XMIN/$XMAX/$YMIN/$YMAX"                       # common extent, 1 m cells
 > C="-txe $XMIN $XMAX -tye $YMIN $YMAX -tr 1 1 -ot Float32 -a_srs EPSG:6339 -zfield Z"
 >
@@ -117,8 +116,8 @@ An interpolated value without an uncertainty is a guess with a decimal point. Fo
 > gdal_grid -a invdist:power=2:radius=3:min_points=3 $C train.gpkg dtm_idw.tif
 > gdal_grid -a average:radius=1.0:min_points=1 $C train.gpkg dtm_mean.tif
 > gdal_grid -a linear:radius=5 $C train.gpkg dtm_tin.tif
-> gmt surface train.csv $R -I1 -T0.35 -r -Gdtm_spline.tif=gd:GTiff
-> gmt nearneighbor train.csv $R -I1 -S3 -N4 -r -Gdtm_nn.tif=gd:GTiff
+> gmt surface train.csv $R -I1 -T0.35 -r -hi1 -Gdtm_spline.tif=gd:GTiff
+> gmt nearneighbor train.csv $R -I1 -S3 -N4 -r -hi1 -Gdtm_nn.tif=gd:GTiff
 >
 > # 3. Residuals at the withheld points, per method.
 > python3 - <<'EOF'
@@ -141,7 +140,7 @@ An interpolated value without an uncertainty is a guess with a decimal point. Fo
 
 - **1930s–1960s.** Delaunay's triangulation (1934) and Voronoi's tessellation (1908) preceded their use in terrain by decades. Early DEMs were digitised from contours and gridded by hand-tuned local polynomial fits; the "flat triangle" and "contour ghost" artefacts of those products are still visible in some national DEMs.
 - **1968–1981.** Shepard's IDW (1968) for computer mapping; Matheron's geostatistics (1960s) and its DEM applications in the 1970s; the TIN as a terrain model (Peucker et al. 1978 ⟨H⟩) and Sibson's natural neighbour (1981) gave the field its exact local interpolators.
-- **1989–1990s.** Hutchinson's ANUDEM (1989) introduced drainage enforcement and became ArcInfo's TOPOGRID, then Topo to Raster; GMT's `surface` (Smith & Wessel 1990) brought tensioned minimum-curvature gridding to open-source geoscience; the SRTM mission (2000) fixed 3,601 × 3,601 node-registered 1° tiles as a de facto global convention.
+- **1989–1990s.** Hutchinson's ANUDEM (1989) introduced drainage enforcement and became ArcInfo's TOPOGRID, then Topo to Raster; GMT's `surface` (Smith & Wessel 1990) brought tensioned minimum-curvature gridding to open-source geoscience; the SRTM mission (2000) ⟨H⟩ fixed 3,601 × 3,601 node-registered 1° tiles as a de facto global convention.
 - **2002–2003.** Jakobsson, Calder & Mayer (2002) quantified random error in gridded bathymetric compilations; CUBE (2003) made the uncertainty layer a first-class output of hydrographic gridding, which the BAG format (2006) then standardised.
 - **2006.** Hengl's "Finding the right pixel size" gave practitioners defensible rules for cell size; Poisson surface reconstruction (Kazhdan et al. 2006) opened true-3D surface recovery for point clouds.
 - **2011–present.** Lidar densities made binning the dominant gridding method and shifted the hard questions from interpolator choice to cell semantics, registration, and masks; Cloud-optimized GeoTIFF (2016 onward) made overview resampling a published, inspectable property of every product; Amante & Eakins (2016) and successors turned cross-validation into per-cell uncertainty rasters for coastal DEMs.
@@ -198,12 +197,12 @@ Gridding error has three sources, and a validation plan must separate them becau
 
 ## Standards & guides
 
-- **OGC GeoTIFF 1.1 (2019)** — `GTRasterTypeGeoKey` values `RasterPixelIsArea` and `RasterPixelIsPoint`; the normative definition of grid registration for GeoTIFF products.
-- **OGC Cloud Optimized GeoTIFF (2023)** — internal overview requirements; resampling is a producer choice to be documented.
-- **USGS Lidar Base Specification** (online edition, 2024 revision) — DEM cell size by quality level, hydro-flattening breakline deliverables, the requirement that DEMs be derived from the classified point cloud, and nodata/void handling.
+- **OGC GeoTIFF 1.1** (OGC 2019) — `GTRasterTypeGeoKey` values `RasterPixelIsArea` and `RasterPixelIsPoint`; the normative definition of grid registration for GeoTIFF products.
+- **OGC Cloud Optimized GeoTIFF** (1.0, 2023) — internal overview requirements; resampling is a producer choice to be documented.
+- **USGS Lidar Base Specification** (2024 rev. A; 2025 rev. A; U.S. Geological Survey 2024) — DEM cell size by quality level, hydro-flattening breakline deliverables, the requirement that DEMs be derived from the classified point cloud, and nodata/void handling.
 - **IHO S-44 Edition 6.1.0 (2022)** and **IHO S-102 Bathymetric Surface Product Specification, Edition 3.0.0 (December 2024; in force from 2026-01-01)** — the depth-plus-uncertainty grid model, shoal-biased sounding selection, and gridding resolution guidance tied to feature detection.
-- **Open Navigation Surface BAG Format Specification (current edition)** — elevation and uncertainty layers, with the uncertainty type declared in metadata.
-- **ASPRS Positional Accuracy Standards for Digital Geospatial Data, Edition 2 (2023)** — accuracy testing of the gridded DEM (interpolated at checkpoints), NVA/VVA, and the statement that accuracy is assessed on the product, not the points.
+- **Open Navigation Surface BAG Format Specification** (Version 2.0.1, 2022) — elevation and uncertainty layers, with the uncertainty type declared in metadata.
+- **ASPRS Positional Accuracy Standards for Digital Geospatial Data, Edition 2** (2023; v2, 2024; ASPRS 2023) — accuracy testing of the gridded DEM (interpolated at checkpoints), NVA/VVA, and the statement that accuracy is assessed on the product, not the points.
 - **GMT documentation, "Grid registration"** — the clearest short treatment of gridline versus pixel registration and the half-cell relationship; not a standard but a de facto reference.
 - **NOAA NCEI coastal DEM development guidance (Amante & Eakins 2009; subsequent technical memoranda)** — gridding, void filling, and uncertainty practice for integrated topobathymetric DEMs.
 
@@ -233,22 +232,24 @@ Gridding error has three sources, and a validation plan must separate them becau
 
 ## References
 
-- Amante, C. J., & Eakins, B. W. (2016). Accuracy of interpolated bathymetry in digital elevation models. *Journal of Coastal Research*, SI 76, 123–133.
+- Amante, C. J., & Eakins, B. W. (2016). Accuracy of interpolated bathymetry in digital elevation models. *Journal of Coastal Research*, SI 76, 123–133. doi:10.2112/SI76-011
 - Amante, C., & Eakins, B. W. (2009). *ETOPO1 1 Arc-Minute Global Relief Model: Procedures, Data Sources and Analysis*. NOAA Technical Memorandum NESDIS NGDC-24.
-- Calder, B. R., & Mayer, L. A. (2003). Automatic processing of high-rate, high-density multibeam echosounder data. *Geochemistry, Geophysics, Geosystems*, 4(6), 1048.
-- Chilès, J.-P., & Delfiner, P. (2012). *Geostatistics: Modeling Spatial Uncertainty*, 2nd ed. Wiley.
-- Cressie, N. A. C. (1993). *Statistics for Spatial Data*, revised ed. Wiley.
+- Calder, B. R., & Mayer, L. A. (2003). Automatic processing of high-rate, high-density multibeam echosounder data. *Geochemistry, Geophysics, Geosystems*, 4(6), 1048. doi:10.1029/2002GC000486
+- Chilès, J.-P., & Delfiner, P. (2012). *Geostatistics: Modeling Spatial Uncertainty*, 2nd ed. Wiley. doi:10.1002/9781118136188
+- Cressie, N. A. C. (1993). *Statistics for Spatial Data*, revised ed. Wiley. doi:10.1002/9781119115151
 - Delaunay, B. (1934). Sur la sphère vide. *Bulletin de l'Académie des Sciences de l'URSS, Classe des sciences mathématiques et naturelles*, 6, 793–800.
-- Hengl, T. (2006). Finding the right pixel size. *Computers & Geosciences*, 32(9), 1283–1298.
-- Hutchinson, M. F. (1989). A new procedure for gridding elevation and stream line data with automatic removal of spurious pits. *Journal of Hydrology*, 106(3–4), 211–232.
-- Jakobsson, M., Calder, B., & Mayer, L. (2002). On the effect of random errors in gridded bathymetric compilations. *Journal of Geophysical Research: Solid Earth*, 107(B12), 2358.
+- Hengl, T. (2006). Finding the right pixel size. *Computers & Geosciences*, 32(9), 1283–1298. doi:10.1016/j.cageo.2005.11.008
+- Hutchinson, M. F. (1989). A new procedure for gridding elevation and stream line data with automatic removal of spurious pits. *Journal of Hydrology*, 106(3–4), 211–232. doi:10.1016/0022-1694(89)90073-5
+- Jakobsson, M., Calder, B., & Mayer, L. (2002). On the effect of random errors in gridded bathymetric compilations. *Journal of Geophysical Research: Solid Earth*, 107(B12), 2358. doi:10.1029/2001JB000616
 - Kazhdan, M., Bolitho, M., & Hoppe, H. (2006). Poisson surface reconstruction. *Proceedings of the Fourth Eurographics Symposium on Geometry Processing*, 61–70.
 - Mitas, L., & Mitasova, H. (1999). Spatial interpolation. In P. A. Longley, M. F. Goodchild, D. J. Maguire, & D. W. Rhind (Eds.), *Geographical Information Systems: Principles, Techniques, Management and Applications*, 2nd ed., Vol. 1, 481–492. Wiley.
-- Mitášová, H., & Mitáš, L. (1993). Interpolation by regularized spline with tension: I. Theory and implementation. *Mathematical Geology*, 25(6), 641–655.
-- Nuth, C., & Kääb, A. (2011). Co-registration and bias corrections of satellite elevation data sets for quantifying glacier thickness change. *The Cryosphere*, 5(1), 271–290.
+- Mitášová, H., & Mitáš, L. (1993). Interpolation by regularized spline with tension: I. Theory and implementation. *Mathematical Geology*, 25(6), 641–655. doi:10.1007/BF00893171
+- Nuth, C., & Kääb, A. (2011). Co-registration and bias corrections of satellite elevation data sets for quantifying glacier thickness change. *The Cryosphere*, 5(1), 271–290. doi:10.5194/tc-5-271-2011
 - Peucker, T. K., Fowler, R. J., Little, J. J., & Mark, D. M. (1978). The triangulated irregular network. *Proceedings of the Digital Terrain Models (DTM) Symposium*, American Society of Photogrammetry, St. Louis, 516–540.
-- Shepard, D. (1968). A two-dimensional interpolation function for irregularly-spaced data. *Proceedings of the 1968 23rd ACM National Conference*, 517–524.
+- Shepard, D. (1968). A two-dimensional interpolation function for irregularly-spaced data. *Proceedings of the 1968 23rd ACM National Conference*, 517–524. doi:10.1145/800186.810616
 - Sibson, R. (1981). A brief description of natural neighbour interpolation. In V. Barnett (Ed.), *Interpreting Multivariate Data*, 21–36. Wiley.
-- Smith, W. H. F., & Wessel, P. (1990). Gridding with continuous curvature splines in tension. *Geophysics*, 55(3), 293–305.
+- Smith, W. H. F., & Wessel, P. (1990). Gridding with continuous curvature splines in tension. *Geophysics*, 55(3), 293–305. doi:10.1190/1.1442837
+- Voronoi, G. (1908). Nouvelles applications des paramètres continus à la théorie des formes quadratiques. Deuxième mémoire. Recherches sur les parallélloèdres primitifs. *Journal für die reine und angewandte Mathematik*, 134, 198–287. doi:10.1515/crll.1908.134.198
 - OGC (2019). *OGC GeoTIFF Standard*, Version 1.1. Open Geospatial Consortium, OGC 19-008r4.
-- U.S. Geological Survey (2024). *Lidar Base Specification*, online edition. USGS National Geospatial Program.
+- ASPRS (2023). *ASPRS Positional Accuracy Standards for Digital Geospatial Data*, Edition 2 (v2, 2024). American Society for Photogrammetry and Remote Sensing.
+- U.S. Geological Survey (2024). *Lidar Base Specification 2024 rev. A* (updated as *2025 rev. A*, June 2025). USGS National Geospatial Program.

@@ -10,7 +10,7 @@ A map is a generalization of the world to a purpose, and the purpose determines 
 
 Scale drives generalization. At 1:24,000, 1 mm on paper is 24 m on the ground; at 1:250,000 it is 250 m. A 10 m wide stream is a double line at the first scale and a single line narrower than its true width at the second; a cluster of houses becomes a tinted built-up area; a contour is smoothed to the gullies that can be drawn apart. The **contour interval** follows from scale and relief: USGS 7.5′ quadrangles used 5, 10, 20, 40, or 80 ft depending on terrain; metric series commonly use 5, 10, or 20 m; 1:50,000 sheets in mountainous countries use 20 m (LINZ Topo50) or more. The interval is a promise about accuracy as well as a legibility choice, as the next paragraph makes explicit.
 
-The **United States National Map Accuracy Standards (NMAS)**, issued by the Bureau of the Budget on 17 June 1947 ⟨H⟩, fixed the promise for two generations of maps. Horizontally, for maps at scales larger than 1:20,000, not more than 10 % of well-defined points tested may be in error by more than 1/30 inch at publication scale (0.85 mm, i.e. 20 m at 1:24,000); for 1:20,000 and smaller, the limit is 1/50 inch (0.5 mm, i.e. 127 m at 1:250,000). Vertically, not more than 10 % of elevations tested may be in error by more than one-half the contour interval, with the test points permitted to be shifted horizontally by the horizontal tolerance before the vertical comparison is made. A map meeting the standard could print "This map complies with National Map Accuracy Standards" in its margin; one that did not had to say nothing. NMAS is a 90 % criterion with no explicit statistical model; later standards (ASPRS 1990 and 2014; [Chapter 53](ch53-accuracy-assessment.md)) replaced it with RMSE-based classes, but NMAS still defines what a legacy contour means. The 90 %/half-interval rule implies, for Gaussian errors, an RMSE of about 0.3 times the interval: a 20 ft (6.1 m) contour sheet promises roughly 1.8 m RMSE at best, and nothing finer.
+The **United States National Map Accuracy Standards (NMAS)**, issued by the Bureau of the Budget on 17 June 1947, fixed the promise for two generations of maps. Horizontally, for maps at scales larger than 1:20,000, not more than 10 % of well-defined points tested may be in error by more than 1/30 inch at publication scale (0.85 mm, i.e. 20 m at 1:24,000); for 1:20,000 and smaller, the limit is 1/50 inch (0.5 mm, i.e. 127 m at 1:250,000). Vertically, not more than 10 % of elevations tested may be in error by more than one-half the contour interval, with the test points permitted to be shifted horizontally by the horizontal tolerance before the vertical comparison is made. A map meeting the standard could print "This map complies with National Map Accuracy Standards" in its margin; one that did not had to say nothing. NMAS is a 90 % criterion with no explicit statistical model; later standards (ASPRS 1990 and 2014; [Chapter 53](ch53-accuracy-assessment.md)) replaced it with RMSE-based classes, but NMAS still defines what a legacy contour means. The 90 %/half-interval rule implies, for Gaussian errors, an RMSE of about 0.3 times the interval: a 20 ft (6.1 m) contour sheet promises roughly 1.8 m RMSE at best, and nothing finer.
 
 > **Definitions that bite.** *Scale* means three things. The **representative fraction** (1:24,000) is the nominal ratio of map distance to ground distance, valid exactly only where the projection's scale factor is 1. The **compilation scale** is the scale at which the map's content was generalized, which for a chart or a derived product may be much smaller than the display scale a screen allows — an ENC compiled at 1:80,000 zoomed to 1:5,000 shows no more information, only larger symbols, and ECDIS flags this as **overscale**. The **scale of the source data** — a 10 m DEM, 1:40,000 photography — bounds what either of the others can honestly claim. Confusing the three is how a 1:250,000-derived web layer ends up guiding a ground-level decision.
 
@@ -18,7 +18,8 @@ The **United States National Map Accuracy Standards (NMAS)**, issued by the Bure
 
 ### 58.2.1 The 7.5-minute series and the Historical Topographic Map Collection
 
-The USGS began systematic topographic mapping of the United States in 1879 ⟨H⟩, first on 1:250,000 and 1:125,000 sheets, then on the 15-minute 1:62,500 series. The **7.5-minute quadrangle** at 1:24,000 (1:25,000 for some metric sheets, 1:63,360 for Alaska) became the primary series after the Second World War; production ran from 1947 to 1992, when the roughly 55,000 sheets covering the conterminous United States were complete. Each sheet covers 7.5′ × 7.5′ — about 13 by 17 km at mid-latitudes — and was compiled photogrammetrically, then field-checked: surveyors walked the ground to verify names, classify roads, and confirm what the stereo plotter could not see under trees.
+The USGS, founded in 1879 ⟨H⟩, began systematic national topographic mapping of the United States in the early 1880s, first on 1:250,000 and 1:125,000 sheets, then on the 15-minute 1:62,500 series.
+The **7.5-minute quadrangle** at 1:24,000 (1:25,000 for some metric sheets, 1:63,360 for Alaska) became the primary series after the Second World War; production ran from 1947 to 1992, when the roughly 55,000 sheets covering the conterminous United States were complete. Each sheet covers 7.5′ × 7.5′ — about 13 by 17 km at mid-latitudes — and was compiled photogrammetrically, then field-checked: surveyors walked the ground to verify names, classify roads, and confirm what the stereo plotter could not see under trees.
 
 The sheets are a time capsule, and reading one requires knowing its vintage. Horizontal positions are on **NAD27** ⟨H⟩ for most of the series, with later editions showing NAD83 tick marks offset in the margin; the NAD27→NAD83 shift is tens of metres in most of the conterminous United States and over 100 m in places ([Chapter 8](ch08-horizontal-datums.md)). Elevations and contours are on **NGVD29**, which differs from NAVD88 by roughly −0.4 to +1.5 m across the country ([Chapter 9](ch09-vertical-datums.md)) — meaning that a spot height on a 1950s sheet is not comparable to a modern DEM to better than a metre without conversion, which is in any case finer than the sheet's own accuracy. The **declination diagram** gives magnetic declination for the sheet centre at the date of the survey; the magnetic field has moved since. Contour intervals are in feet; coordinates in the margin include geographic ticks, a UTM grid (full or ticks), and State Plane ticks in feet.
 
@@ -26,11 +27,11 @@ The **Historical Topographic Map Collection (HTMC)** scanned every edition of ev
 
 ### 58.2.2 US Topo
 
-In 2009 the USGS began publishing **US Topo**, a new 7.5-minute series produced not by field survey but by automated assembly of data from The National Map: 3DEP elevation ([Chapter 55](ch55-public-products.md)) for contours and shaded relief, NAIP orthoimagery as an optional layer, the National Hydrography Dataset, TIGER and other roads, structures, and boundaries, published as layered GeoPDF on a three-year refresh cycle (Moore 2011; USGS US Topo Product Standard). The gain is currency and complete coverage; the loss is everything field checking provided. Early US Topo editions lacked trails, many structures, some boundaries, and vegetation tint because no national database held them; several have since been added as sources appeared, and others remain absent. Contours are generated from the best available 3DEP DEM and smoothed for cartographic appearance, with the interval chosen per sheet; because the DEM may be 1 m lidar in one county and 10 m legacy data in the next, adjacent sheets can show contours of very different character and accuracy. The sheet's metadata states the elevation source. US Topo positions are on NAD83 and elevations on NAVD88, so a legacy sheet and its US Topo successor are on different datums horizontally and vertically — a difference that must be applied before any "then and now" comparison.
+In 2009 the USGS began publishing **US Topo**, a new 7.5-minute series produced not by field survey but by automated assembly of data from The National Map: 3DEP elevation ([Chapter 55](ch55-public-products.md)) for contours and shaded relief, NAIP orthoimagery as an optional layer, the National Hydrography Dataset, TIGER and other roads, structures, and boundaries, published as layered GeoPDF on a three-year refresh cycle (Moore 2011; Fishburn, Davis & Allord 2017). The gain is currency and complete coverage; the loss is everything field checking provided. Early US Topo editions lacked trails, many structures, some boundaries, and vegetation tint because no national database held them; several have since been added as sources appeared, and others remain absent. Contours are generated from the best available 3DEP DEM and smoothed for cartographic appearance, with the interval chosen per sheet; because the DEM may be 1 m lidar in one county and 10 m legacy data in the next, adjacent sheets can show contours of very different character and accuracy. The sheet's metadata states the elevation source. US Topo positions are on NAD83 and elevations on NAVD88, so a legacy sheet and its US Topo successor are on different datums horizontally and vertically — a difference that must be applied before any "then and now" comparison.
 
 ### 58.2.3 Other national series
 
-Other mapping agencies made the same transition from field-compiled sheets to database-derived products, with differences in what they kept. Great Britain's **Ordnance Survey** publishes the 1:25,000 Explorer and 1:50,000 Landranger series from the OS MasterMap database, with contours (5 m and 10 m intervals) derived from OS Terrain data on the Ordnance Datum Newlyn vertical datum and the OSGB36 National Grid. France's **IGN** publishes the TOP 25 (1:25,000) on the Lambert-93 projection and RGF93 datum, heights in IGN69 (mainland). **swisstopo**'s national map at 1:25,000, redesigned from 2014 with a fully digital production chain, retains the relief shading tradition described by Imhof and uses the LV95 frame and LN02/LHN95 heights. Japan's **GSI** 1:25,000 series is the national base map. New Zealand's **LINZ Topo50** (1:50,000) has 20 m contours on NZGD2000 / NZTM2000 with heights in NZVD2016 for newer editions (verify which editions). Every one of these series has an edition date, a horizontal datum, a vertical datum, and a contour interval in its margin, and every one of them changed at least one of those during its life.
+Other mapping agencies made the same transition from field-compiled sheets to database-derived products, with differences in what they kept. Great Britain's **Ordnance Survey** publishes the 1:25,000 Explorer and 1:50,000 Landranger series from the OS MasterMap database, with contours (5 m and 10 m intervals) derived from OS Terrain data on the Ordnance Datum Newlyn vertical datum and the OSGB36 National Grid. France's **IGN** publishes the TOP 25 (1:25,000) on the Lambert-93 projection and RGF93 datum, heights in IGN69 (mainland). **swisstopo**'s national map at 1:25,000, redesigned from 2014 with a fully digital production chain, retains the relief shading tradition described by Imhof (1982) and uses the LV95 frame and LN02/LHN95 heights. Japan's **GSI** 1:25,000 series is the national base map. New Zealand's **LINZ Topo50** (1:50,000) has 20 m contours on NZGD2000 / NZTM2000, with newer digital elevation and contour layers transitioning to NZVD2016 while printed sheets retain local MSL-based heights. Every one of these series has an edition date, a horizontal datum, a vertical datum, and a contour interval in its margin, and every one of them changed at least one of those during its life.
 
 <!-- figure: Figure 58.1 — The same 7.5′ area on a 1958 USGS quadrangle (NAD27/NGVD29, 20 ft contours, field-checked) and a 2022 US Topo (NAD83/NAVD88, 10 m contours from 1 m lidar), with the datum offset between them shown by overlaying the two road networks. -->
 
@@ -48,11 +49,11 @@ A contour is the intersection of the terrain with a horizontal plane, and in a D
 
 **Accuracy of the result.** A contour's positional accuracy is the DEM's vertical error divided by the local slope, plus the generalization displacement: $\sigma_{xy} \approx \sigma_z / \tan\beta \oplus \epsilon_{gen}$. On a 2° slope, 0.15 m of vertical error becomes 4.3 m of horizontal contour error; on a 30° slope, 0.26 m. This is why contours on flat ground are the least reliable lines on the map, and why supplementary contours on floodplains must be treated as indicative. Report contour accuracy as inherited from the DEM's assessed accuracy (NVA/VVA), not as a property of the lines.
 
-> **Try it.** Generate smoothed, topologically clean contours with index and depression attributes from a lidar DTM. Expected result: a GeoPackage with 1 m contours, an `index` field true on every fifth line, and a `depression` field flagging closed lows; viewing the elevation histogram first tells you whether the DEM is contour-derived.
+> **Try it.** Generate smoothed, topologically clean contours with index and depression attributes from a lidar DTM. Expected result: a GeoPackage with 1 m contours, an `idx` field true on every fifth line, and a `depression` field flagging closed lows; viewing the elevation histogram first tells you whether the DEM is contour-derived.
 >
 > ```bash
 > # 0. Histogram check for stair-steps (spikes at round values => contour-derived DEM)
-> gdalinfo -hist dtm.tif | tail -3
+> gdalinfo -hist dtm.tif | grep -A 1 "buckets from"
 >
 > # 1. Smooth a display copy (3x3 Gaussian-like kernel via gdal_calc, or use SAGA/Whitebox)
 > whitebox_tools -r=GaussianFilter -i=dtm.tif -o=dtm_g1.tif --sigma=1.0
@@ -60,11 +61,11 @@ A contour is the intersection of the terrain with a horizontal plane, and in a D
 > # 2. Contours at 1 m, attribute 'elev'; 3D lines so Z is carried
 > gdal_contour -a elev -i 1.0 -3d -f GPKG dtm_g1.tif contours.gpkg -nln contour
 >
-> # 3. Index contours and depressions (centre lower than the ring) with ogr2ogr/SQLite
+> # 3. Index contours and depressions (centre lower than the ring) with ogrinfo/SQLite
 > ogrinfo contours.gpkg -sql "ALTER TABLE contour ADD COLUMN idx INTEGER"
 > ogrinfo contours.gpkg -sql "UPDATE contour SET idx = (CAST(elev AS INTEGER) % 5 = 0)"
-> # Depression test: for closed rings, sample the DEM at the ring centroid (Python/rasterio)
-> python - <<'EOF'
+> # Depression test: for closed rings, sample the DEM at an interior point (Python/rasterio)
+> python3 - <<'EOF'
 > import geopandas as gpd, rasterio
 > from shapely.geometry import Polygon
 > g = gpd.read_file("contours.gpkg", layer="contour"); src = rasterio.open("dtm_g1.tif")
@@ -143,7 +144,7 @@ Two deserve emphasis. The **vertical datum** is the element most often missing f
 
 ## 58.8 Layout and generalization
 
-Generalization is the cartographer's set of controlled lies — selection, simplification, smoothing, displacement, exaggeration, aggregation, typification — and each one trades positional truth for legibility. Monmonier (1996) is the standard account for readers; Robinson et al. (1995) and Kraak and Ormeling (2020) treat the craft. For elevation maps the specific decisions are these.
+Generalization is the cartographer's set of controlled lies — selection, simplification, smoothing, displacement, exaggeration, aggregation, typification — and each one trades positional truth for legibility. Monmonier (1996) is the standard account for readers; Robinson et al. (1995), Brewer (2015), and Kraak and Ormeling (2020) treat the craft. For elevation maps the specific decisions are these.
 
 **Label placement.** Contour labels sit in the line (the line is broken for them), read uphill, and recur every 10–15 cm along index contours; spot heights are labelled to the right of the point; depth soundings *are* their labels and are positioned by the shoal-biased selection. Automated placement in QGIS or Mapnik handles 90 % of this; the remaining 10 % on steep slopes and in congested harbours is manual.
 
@@ -184,9 +185,13 @@ A finished map should be checked as a product, independently of the DEM's accura
 > bad = []
 > for idx, row in rivers.iterrows():
 >     line = row.geometry
+>     if line is None or line.length < 10.0: continue
+>     if line.geom_type == "MultiLineString":
+>         line = max(line.geoms, key=lambda g: g.length)
 >     d = np.arange(0, line.length, 10.0)                  # sample every 10 m
 >     pts = [line.interpolate(s) for s in d]
 >     z = np.array([v[0] for v in dem.sample([(p.x, p.y) for p in pts])])
+>     if len(z) < 2: continue
 >     rise = np.max(z[1:] - np.minimum.accumulate(z[:-1]))  # largest climb vs running min
 >     if rise > tol:
 >         bad.append((row["permanent_identifier"], round(float(rise), 2)))
@@ -198,9 +203,12 @@ A finished map should be checked as a product, independently of the DEM's accura
 
 ## Then & now
 
-The national topographic survey is older than many nation-states. The **Cassini** family's map of France (1756–1815) was the first national triangulation-based survey ⟨H⟩; Britain's **Ordnance Survey** began in 1791 with the Principal Triangulation and published its first one-inch sheet (Kent) in 1801 ⟨H⟩. Relief on these sheets was hachured; contours came into general topographic use during the nineteenth century. The **USGS** began its topographic programme in 1879 ⟨H⟩, and the sheets of the next seventy years were plane-tabled in the field, with contours sketched by topographers reading the ground through an alidade.
+The national topographic survey is older than many nation-states. The **Cassini** family's map of France (1756–1815) was the first national triangulation-based survey;
+Britain's **Ordnance Survey** began in 1791 with the Principal Triangulation ⟨H⟩
+and published its first one-inch sheet (Kent) in 1801. Relief on these sheets was hachured; contours came into general topographic use during the nineteenth century.
+The **USGS** (founded 1879 ⟨H⟩) began its national topographic programme in the early 1880s, and the sheets of the next seventy years were plane-tabled in the field, with contours sketched by topographers reading the ground through an alidade.
 
-**Photogrammetric compilation** displaced the plane table between the 1930s and the 1950s: stereo plotters (Multiplex, Kelsh, later analytical plotters) let an operator trace contours from aerial photography, with field checking reduced to names, classification, and the ground under trees. NMAS (1947) ⟨H⟩ was written for this process, and the 7.5′ series was completed under it. Nautical charts moved from lead-line fair sheets to echo-sounder and then multibeam surveys over the same decades, though much charted water still rests on the earlier work.
+**Photogrammetric compilation** displaced the plane table between the 1930s and the 1950s: stereo plotters (Multiplex, Kelsh, later analytical plotters) let an operator trace contours from aerial photography, with field checking reduced to names, classification, and the ground under trees. NMAS (1947) was written for this process, and the 7.5′ series was completed under it. Nautical charts moved from lead-line fair sheets to echo-sounder and then multibeam surveys over the same decades, though much charted water still rests on the earlier work.
 
 **DEM-derived cartography** arrived with national elevation databases. US Topo (2009–) draws its contours from 3DEP; OS, IGN, swisstopo, and LINZ moved to database-driven production in the 2000s–2010s; ENCs (S-57, 1990s–) replaced the paper chart as the legal carriage document on SOLAS vessels during the 2012–2018 ECDIS mandate, and S-101/S-102 (2020s) carry gridded bathymetry with uncertainty to the bridge. The map became a *view* of a database rather than an artefact, which is why edition dates, source diagrams, and datums — once printed on every sheet because the sheet was the only record — are now so easily lost in metadata nobody renders.
 
@@ -212,9 +220,9 @@ The national topographic survey is older than many nation-states. The **Cassini*
 
 **Line generalization.** The **Douglas–Peucker** algorithm (1973) keeps the endpoint pair, finds the vertex farthest from their chord, and recurses on each side if that distance exceeds a tolerance $\epsilon$; every retained vertex lies within $\epsilon$ of the original line, so the positional error introduced is bounded by $\epsilon$ (but the algorithm can create self-intersections). **Visvalingam–Whyatt** (1993) iteratively removes the vertex whose *effective area* — the triangle formed with its two neighbours — is smallest, which preserves shape character better for the same vertex count and has a natural area-based tolerance. For contours, use $\epsilon \le 0.5\,\Delta x$ (half a cell), since the contour's own positional uncertainty is already about $\sigma_z/\tan\beta$; for isobaths, generalize and then enforce the shoal-bias constraint by moving the simplified line seaward of the original wherever it crossed inshore. [Chapter 59](ch59-vector-data.md) §59.9 treats generalization in detail.
 
-**Grid convergence and scale factor.** For a transverse Mercator projection, the convergence angle (grid north minus true north) is to first order
+**Grid convergence and scale factor.** For a transverse Mercator projection (Snyder 1987), the convergence angle (grid north minus true north) is to first order
 $$\gamma \approx \Delta\lambda \,\sin\varphi \left(1 + \tfrac{1}{3}\Delta\lambda^2 \cos^2\varphi\,(1 + 3\eta^2)\right),$$
-with $\Delta\lambda$ the longitude from the central meridian in radians and $\eta^2 = e'^2 \cos^2\varphi$; the leading term suffices for a declination diagram. The point scale factor is $k \approx k_0\,(1 + \tfrac{1}{2}\Delta\lambda^2 \cos^2\varphi)$, so with $k_0 = 0.9996$ a UTM zone's scale ranges from 0.9996 at the central meridian to about 1.0010 at its edges on the equator: a 10 km scale bar drawn at the edge is about 1.4 m longer than one at the centre — negligible on paper, significant in a GIS measurement.
+with $\Delta\lambda$ the longitude from the central meridian in radians and $\eta^2 = e'^2 \cos^2\varphi$; the leading term suffices for a declination diagram. The point scale factor is $k \approx k_0\,(1 + \tfrac{1}{2}\Delta\lambda^2 \cos^2\varphi)$, so with $k_0 = 0.9996$ a UTM zone's scale ranges from 0.9996 at the central meridian to about 1.0010 at its edges on the equator: a 10 km scale bar drawn at the edge represents about 14 m (1.4 m per km) more projection distance than one at the centre — negligible on paper, significant in a GIS measurement.
 
 **Maximum Elevation Figure.** With $h$ the highest feature in the quadrangle and allowance $a$ (100 ft for a surveyed obstacle; 100 ft of source error plus 200 ft for uncharted obstacles when the feature is terrain), the MEF in feet is $\mathrm{MEF} = 100 \lceil (h + a)/100 \rceil$. Note the ceiling, not rounding: the number may only err high.
 
@@ -253,16 +261,16 @@ A map inherits the DEM's errors and adds its own. The error budget of a finished
 
 ## Standards & guides
 
-- **US Bureau of the Budget, 1947.** *United States National Map Accuracy Standards* ⟨H⟩. The 90 %/half-interval and 1/30″–1/50″ rules that define legacy map accuracy.
+- **US Bureau of the Budget, 1947.** *United States National Map Accuracy Standards*. The 90 %/half-interval and 1/30″–1/50″ rules that define legacy map accuracy.
 - **USGS, 2017.** *Standard for the U.S. Geological Survey Topographic Map* (successor to the 2011 *US Topo Product Standard*), Techniques and Methods 11-B2. Content, sources, symbology, and marginalia.
-- **USGS, 2015 (verify).** *Topographic Mapping* — general-interest publication on USGS topographic mapping history and methods.
-- **ASPRS, 2014 (edition 2, 2023).** *Positional Accuracy Standards for Digital Geospatial Data*. Replaces NMAS for digital products; contour accuracy inferred from DEM NVA/VVA.
-- **IHO S-4, edition 4.9.0 (2021).** Chart specifications: soundings, contours, tints, source diagrams, generalization.
+- **USGS, 1992.** *Topographic Mapping*. USGS General Information Product — general-interest publication on USGS topographic mapping history and methods.
+- **ASPRS, 2014 (Edition 2, 2023; v2 2024).** *Positional Accuracy Standards for Digital Geospatial Data*. Replaces NMAS for digital products; contour accuracy inferred from DEM RMSE$_V$ across NVA/VVA strata (with 95 % metrics in Ed. 1).
+- **IHO S-4, edition 4.10.0 (2026).** Chart specifications: soundings, contours, tints, source diagrams, generalization.
 - **IHO S-52, edition 6.1.1 (2015) with Presentation Library 4.0.x.** ECDIS presentation library; safety contour and depth shades.
 - **IHO S-57, edition 3.1 (2000) with supplements; IHO S-101, edition 1.0.0 (2018) to 2.0.0 (December 2024).** ENC product specifications; CATZOC in S-57 Appendix A and its S-101 successor.
 - **IHO S-102, edition 3.0.0 (2024).** Bathymetric Surface Product Specification; gridded depth and uncertainty for ECDIS overlay.
 - **IHO S-67, edition 1.0.0 (2020).** Mariners' guide to accuracy of depth information in ENCs.
-- **ICAO Annex 4** (*Aeronautical Charts*, 11th ed. 2009 with amendments) and **Annex 15 / PANS-AIM Doc 10066.** Chart content and eTOD area accuracy requirements.
+- **ICAO Annex 4** (*Aeronautical Charts*, 11th ed. 2009, through Amendment 63, 2026) and **Annex 15 / PANS-AIM Doc 10066.** Chart content and eTOD area accuracy requirements.
 - **FAA, current edition.** *Aeronautical Chart Users' Guide.* MEF rules and terrain/obstacle symbology.
 - **FGDC-STD-011-2001** (*United States National Grid*) and **FGDC-STD-013-2006** (*Digital Cartographic Standard for Geologic Map Symbolization*).
 - **Ordnance Survey and IGN cartographic specifications** (published legend sheets and symbol specifications for Explorer/Landranger and TOP 25).
@@ -298,23 +306,23 @@ A map inherits the DEM's errors and adds its own. The error budget of a finished
 ## References
 
 - Brewer, C. A. (2015). *Designing Better Maps: A Guide for GIS Users* (2nd ed.). Esri Press.
-- Douglas, D. H., & Peucker, T. K. (1973). Algorithms for the reduction of the number of points required to represent a digitized line or its caricature. *The Canadian Cartographer*, 10(2), 112–122.
+- Douglas, D. H., & Peucker, T. K. (1973). Algorithms for the reduction of the number of points required to represent a digitized line or its caricature. *The Canadian Cartographer*, 10(2), 112–122. https://doi.org/10.3138/FM57-6770-U75U-7727
 - Federal Aviation Administration (current edition). *Aeronautical Chart Users' Guide*. FAA Aeronautical Information Services.
 - Federal Geographic Data Committee (2001). *United States National Grid*, FGDC-STD-011-2001.
 - Federal Geographic Data Committee (2006). *Digital Cartographic Standard for Geologic Map Symbolization*, FGDC-STD-013-2006.
-- Fishburn, K. A., Davis, L. R., & Allord, G. J. (2017). *Standard for the U.S. Geological Survey Topographic Map*. USGS Techniques and Methods 11-B2.
-- Imhof, E. (1982). *Cartographic Relief Presentation* (H. J. Steward, Ed.). Walter de Gruyter. (Reissued Esri Press, 2007.)
-- International Civil Aviation Organization (2009, with amendments). *Annex 4 — Aeronautical Charts* (11th ed.).
+- Fishburn, K. A., Davis, L. R., & Allord, G. J. (2017). *Standard for the U.S. Geological Survey Topographic Map*. USGS Techniques and Methods 11-B2. https://doi.org/10.3133/tm11B2
+- Imhof, E. (1982). *Cartographic Relief Presentation* (H. J. Steward, Ed.). Walter de Gruyter. (Reissued Esri Press, 2007.) https://doi.org/10.1515/9783110844016
+- International Civil Aviation Organization (2009, with amendments through Amendment 63, 2026). *Annex 4 — Aeronautical Charts* (11th ed.).
 - International Hydrographic Organization (2000). *S-57: IHO Transfer Standard for Digital Hydrographic Data*, edition 3.1.
 - International Hydrographic Organization (2020). *S-67: Mariners' Guide to Accuracy of Depth Information in an Electronic Navigational Chart*, edition 1.0.0.
-- International Hydrographic Organization (2021). *S-4: Regulations of the IHO for International (INT) Charts and Chart Specifications of the IHO*, edition 4.9.0.
-- Jenny, B., Jenny, H., & Hurni, L. (2011). Terrain generalization with multi-scale pyramids constrained by curvature. *Cartography and Geographic Information Science*, 38(1), 110–116.
-- Kraak, M.-J., & Ormeling, F. (2020). *Cartography: Visualization of Geospatial Data* (4th ed.). CRC Press.
-- Monmonier, M. (1996). *How to Lie with Maps* (2nd ed.). University of Chicago Press.
+- International Hydrographic Organization (2026). *S-4: Regulations of the IHO for International (INT) Charts and Chart Specifications of the IHO*, edition 4.10.0.
+- Jenny, B., Jenny, H., & Hurni, L. (2011). Terrain generalization with multi-scale pyramids constrained by curvature. *Cartography and Geographic Information Science*, 38(2), 110–116. https://doi.org/10.1559/15230406382110
+- Kraak, M.-J., & Ormeling, F. (2020). *Cartography: Visualization of Geospatial Data* (4th ed.). CRC Press. https://doi.org/10.1201/9780429464195
+- Monmonier, M. (1996). *How to Lie with Maps* (2nd ed.). University of Chicago Press. https://doi.org/10.7208/chicago/9780226029009.001.0001
 - Moore, L. (2011). US Topo — a new national map series. *Directions Magazine*, May 2011.
 - Robinson, A. H., Morrison, J. L., Muehrcke, P. C., Kimerling, A. J., & Guptill, S. C. (1995). *Elements of Cartography* (6th ed.). Wiley.
-- Snyder, J. P. (1987). *Map Projections — A Working Manual*. U.S. Geological Survey Professional Paper 1395. ⟨H⟩
+- Snyder, J. P. (1987). *Map Projections — A Working Manual*. U.S. Geological Survey Professional Paper 1395. ⟨H⟩ https://doi.org/10.3133/pp1395
 - U.S. Bureau of the Budget (1947). *United States National Map Accuracy Standards*. Washington, DC.
-- U.S. Geological Survey (2015). *Topographic Mapping*. USGS General Information Product. (verify)
-- Visvalingam, M., & Whyatt, J. D. (1993). Line generalisation by repeated elimination of points. *The Cartographic Journal*, 30(1), 46–51.
+- U.S. Geological Survey (1992). *Topographic Mapping*. USGS General Information Product. https://doi.org/10.3133/70039398
+- Visvalingam, M., & Whyatt, J. D. (1993). Line generalisation by repeated elimination of points. *The Cartographic Journal*, 30(1), 46–51. https://doi.org/10.1179/000870493786962263
 - Zoraster, S., & Bayer, S. (1992). Automated cartographic sounding selection. *International Hydrographic Review*, 69(1), 57–61.

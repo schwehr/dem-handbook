@@ -27,9 +27,9 @@ The LAS specification (ASPRS, version 1.4, revision 15, 2019) defines the per-po
 | 15 | Transmission tower | Lattice towers and poles |
 | 16 | Wire-structure connector | Insulators and hardware |
 | 17 | Bridge deck | The deck only; abutments and piers are other classes |
-| 19 | Overhead structure | Conveyors, canopies, mining equipment (R15) |
-| 20 | Ignored ground | Ground near breaklines excluded from DTM gridding (R15) |
-| 21 / 22 | Snow / Temporal exclusion | Snow cover; features present only at acquisition time (R15) |
+| 19 | Overhead structure | Conveyors, canopies, mining equipment (R14/R15) |
+| 20 | Ignored ground | Ground near breaklines excluded from DTM gridding (R14/R15) |
+| 21 / 22 | Snow / Temporal exclusion | Snow cover; features present only at acquisition time (R14/R15) |
 
 Three features of the scheme bite. The **flags** (synthetic, key-point, withheld, overlap) are separate from the class; a point can be class 2 and withheld, and a gridder that ignores the bit will use it. The wire classes 13–16 and bridge deck 17 exist because the DTM, obstacle, and asset communities needed to say *different* things about the same points ([Chapter 33](ch33-wires-and-thin-structures.md), [Chapter 32](ch32-dsm-to-dtm.md)). And the standard says nothing about *how* to classify: two vendors delivering LAS 1.4 to the same specification can legitimately disagree about whether a stone retaining wall is ground or building, whether a culvert headwall is ground, and whether a parked car on a bridge is class 17.
 
@@ -138,14 +138,14 @@ Public benchmarks are how methods are compared, and their composition is why pub
 |---|---|---|---|---|---|
 | ISPRS Vaihingen 3D | 2012–14 | ALS, German town, ~4–8 pts/m² | ~1.2 M pts | 9 | Urban ALS semantic labelling; small, heavily studied |
 | Semantic3D | 2017 | TLS, Swiss urban/rural | ~4 billion pts | 8 | Dense terrestrial scenes |
-| DALES | 2020 | ALS, Dayton, Ohio, ~50 pts/m² | ~505 M pts, 10 km² | 8 | Large-area airborne labelling incl. power lines and poles |
+| DALES | 2020 | ALS, Surrey, BC, Canada, ~50 pts/m² | ~505 M pts, 10 km² | 8 | Large-area airborne labelling incl. power lines and poles |
 | OpenGF | 2021 | ALS, 9 terrain types, 4 countries | ~542 M pts, > 47 km² | 2 (ground / non-ground) | Ground filtering across terrain and density |
 | SensatUrban | 2021 | UAV photogrammetry, 3 UK cities | ~3 billion pts, 7.6 km² | 13 | City-scale photogrammetric clouds |
 | H3D (Hessigheim 3D) | 2021 | UAV lidar + mesh, German village, multi-epoch | ~ hundreds of M pts | 11 | Dense UAV lidar, mesh labelling, change |
 | US3D / DFC2019 | 2019 | WorldView-3 stereo + ALS, Jacksonville & Omaha | ~100 km² | 5 (+ height) | Satellite stereo semantics and DSM estimation |
 | STPLS3D | 2022 | Synthetic + real UAV photogrammetry | ~16 km² synthetic + real | up to 20 | Synthetic-to-real transfer |
 
-Sources: Niemeyer et al. 2014; Varney, Asari & Graehling 2020; Qin et al. 2021; Hu et al. 2021; Kölle et al. 2021; Le Saux et al. 2019; the Semantic3D and STPLS3D papers. Point counts are approximate; check current releases.
+Sources: Niemeyer et al. 2014; Varney, Asari & Graehling 2020; Qin et al. 2021; Hu et al. 2021; Kölle et al. 2021; Bosch et al. 2019; Le Saux et al. 2019; the Semantic3D and STPLS3D papers. Point counts are approximate; check current releases.
 
 Read these with three facts in mind. **Geography**: the sets are overwhelmingly European and North American temperate towns; 95 % on DALES says little about informal settlements, mangrove coasts, karst, or tundra. **Density and sensor**: DALES at ~50 pts/m² and Vaihingen at ~5 pts/m² are different worlds, and no public set covers the 0.5–2 pts/m² regime most national programmes delivered before 2015. **Leakage**: several sets split train and test as adjacent tiles of one city, so a model learns the local roofing material and tree species; a held-out tile is not a held-out *domain*. OpenGF is the welcome exception for ground filtering, spanning nine terrain types in four countries; it showed KPConv and RandLA-Net beating the classical filters on average but with large terrain-dependent variance (Qin et al. 2021).
 
@@ -185,7 +185,7 @@ Acceptance requires **QA/QC sampling with confidence intervals**. The standard d
 - **Statistical learning on eigenfeatures (c. 2005–2017).** Random forests and boosted trees on multi-scale covariance features with CRF smoothing (Niemeyer et al. 2014; Weinmann et al. 2015) made full-scene multi-class labelling routine.
 - **Point-cloud deep learning (2017–).** PointNet (2017), PointNet++, KPConv (2019), RandLA-Net (2020), and Point Transformer (2021), with large labelled sets (DALES 2020, OpenGF 2021, SensatUrban 2021) making airborne benchmarks meaningful.
 - **Foundation models (2023–).** SAM, Prithvi, and Clay offer prompt-based or fine-tuned labelling with little local training data; promising for proposal generation, unvalidated for production on elevation data.
-- **The LAS class list grew to say what the DTM needed said.** LAS 1.0 (2003) had classes 0–12; LAS 1.4 (2011) added wires 13–16, bridge deck 17, and high noise 18; revision 15 (2019) added 19–22. Each addition records a definitional dispute production had to resolve.
+- **The LAS class list grew to say what the DTM needed said.** LAS 1.0 (2003) ⟨H⟩ had classes 0–12; LAS 1.4 (2011) added wires 13–16, bridge deck 17, and high noise 18; R14 (March 2019; current R15, July 2019) added 19–22. Each addition records a definitional dispute production had to resolve.
 
 ## Mathematics
 
@@ -257,8 +257,8 @@ Errors in semantic labelling arise from five sources, and a validation plan shou
 
 ## Standards & guides
 
-- **ASPRS, LAS Specification 1.4 – R15 (2019).** Classification codes (incl. 13–16 wires, 17 bridge deck, 19–22 added in R15), flag bits, and the 8-bit class field of formats 6–10.
-- **USGS, Lidar Base Specification (2024 rev. A, or current revision).** Minimum class set for 3DEP deliverables, classification accuracy and consistency requirements, handling of bridges, water, and overlap in the DTM.
+- **ASPRS, LAS Specification 1.4 – R15 (2019).** Classification codes (incl. 13–16 wires, 17 bridge deck, 19–22 added in R14/R15), flag bits, and the 8-bit class field of formats 6–10.
+- **USGS, Lidar Base Specification (2024 rev. A; 2025 rev. A current).** Minimum class set for 3DEP deliverables, classification accuracy and consistency requirements, handling of bridges, water, class 20/21 rules, and overlap in the DTM.
 - **OGC CityGML 3.0 Conceptual Model (2021).** Building, bridge, tunnel, vegetation, water, and transportation classes and the LoD concept.
 - **IHO S-57 (ed. 3.1) and S-101 (ed. 1.x) feature catalogues; IHO S-44 Ed. 6.1.0 (2022).** Chart object classes that bathymetric detection must populate, and the feature-detection requirements that govern it.
 - **ISPRS benchmark protocols** (Vaihingen/Toronto; Sithole & Vosselman 2004 filter test) and IEEE GRSS Data Fusion Contest rules: the de facto evaluation protocols, with known limits on domain coverage.
@@ -287,24 +287,24 @@ Errors in semantic labelling arise from five sources, and a validation plan shou
 
 ## References
 
-- American Society for Photogrammetry and Remote Sensing (2019). *LAS Specification 1.4 – R15*. ASPRS, Bethesda, MD.
+- American Society for Photogrammetry and Remote Sensing (ASPRS) (2019). *LAS Specification 1.4 – R15*. ASPRS, Bethesda, MD.
 - Axelsson, P. (2000). DEM generation from laser scanner data using adaptive TIN models. *International Archives of Photogrammetry and Remote Sensing* 33(B4/1):110–117.
-- Bosch, M., Foster, K., Christie, G., Wang, S., Hager, G. D. & Brown, M. (2019). Semantic stereo for incidental satellite images. *IEEE Winter Conference on Applications of Computer Vision (WACV)*, 1524–1532.
-- Breiman, L. (2001). Random forests. *Machine Learning* 45(1):5–32.
-- Hu, Q., Yang, B., Xie, L., Rosa, S., Guo, Y., Wang, Z., Trigoni, N. & Markham, A. (2020). RandLA-Net: Efficient semantic segmentation of large-scale point clouds. *IEEE/CVF CVPR*, 11108–11117.
-- Hu, Q., Yang, B., Khalid, S., Xiao, W., Trigoni, N. & Markham, A. (2021). Towards semantic segmentation of urban-scale 3D point clouds: A dataset, benchmarks and challenges. *IEEE/CVF CVPR*, 4977–4987. (SensatUrban)
-- Kirillov, A., Mintun, E., Ravi, N., Mao, H., Rolland, C., Gustafson, L., Xiao, T., Whitehead, S., Berg, A. C., Lo, W.-Y., Dollár, P. & Girshick, R. (2023). Segment Anything. *IEEE/CVF ICCV*, 4015–4026.
-- Kölle, M., Laupheimer, D., Schmohl, S., Haala, N., Rottensteiner, F., Wegner, J. D. & Ledoux, H. (2021). The Hessigheim 3D (H3D) benchmark on semantic segmentation of high-resolution 3D point clouds and textured meshes from UAV LiDAR and multi-view-stereo. *ISPRS Open Journal of Photogrammetry and Remote Sensing* 1:100001.
-- Le Saux, B., Yokoya, N., Hänsch, R., Brown, M. & Hager, G. (2019). 2019 Data Fusion Contest [Technical Committees]. *IEEE Geoscience and Remote Sensing Magazine* 7(1):103–105.
-- Niemeyer, J., Rottensteiner, F. & Soergel, U. (2014). Contextual classification of lidar data and building object detection in urban areas. *ISPRS Journal of Photogrammetry and Remote Sensing* 87:152–165.
-- Olofsson, P., Foody, G. M., Herold, M., Stehman, S. V., Woodcock, C. E. & Wulder, M. A. (2014). Good practices for estimating area and assessing accuracy of land change. *Remote Sensing of Environment* 148:42–57.
-- Open Geospatial Consortium (2021). *OGC City Geography Markup Language (CityGML) Part 1: Conceptual Model Standard*, version 3.0. OGC 20-010.
-- Qi, C. R., Su, H., Mo, K. & Guibas, L. J. (2017a). PointNet: Deep learning on point sets for 3D classification and segmentation. *IEEE CVPR*, 652–660.
+- Bosch, M., Foster, K., Christie, G., Wang, S., Hager, G. D. & Brown, M. (2019). Semantic stereo for incidental satellite images. *IEEE Winter Conference on Applications of Computer Vision (WACV)*, 1524–1532. doi:10.1109/WACV.2019.00167
+- Breiman, L. (2001). Random forests. *Machine Learning* 45(1):5–32. doi:10.1023/A:1010933404324
+- Hu, Q., Yang, B., Xie, L., Rosa, S., Guo, Y., Wang, Z., Trigoni, N. & Markham, A. (2020). RandLA-Net: Efficient semantic segmentation of large-scale point clouds. *IEEE/CVF CVPR*, 11105–11114. doi:10.1109/CVPR42600.2020.01112
+- Hu, Q., Yang, B., Khalid, S., Xiao, W., Trigoni, N. & Markham, A. (2021). Towards semantic segmentation of urban-scale 3D point clouds: A dataset, benchmarks and challenges. *IEEE/CVF CVPR*, 4975–4985. doi:10.1109/CVPR46437.2021.00494
+- Kirillov, A., Mintun, E., Ravi, N., Mao, H., Rolland, C., Gustafson, L., Xiao, T., Whitehead, S., Berg, A. C., Lo, W.-Y., Dollár, P. & Girshick, R. (2023). Segment Anything. *IEEE/CVF ICCV*, 3992–4003. doi:10.1109/ICCV51070.2023.00371
+- Kölle, M., Laupheimer, D., Schmohl, S., Haala, N., Rottensteiner, F., Wegner, J. D. & Ledoux, H. (2021). The Hessigheim 3D (H3D) benchmark on semantic segmentation of high-resolution 3D point clouds and textured meshes from UAV LiDAR and multi-view-stereo. *ISPRS Open Journal of Photogrammetry and Remote Sensing* 1:100001. doi:10.1016/j.ophoto.2021.100001
+- Le Saux, B., Yokoya, N., Hänsch, R., Brown, M. & Hager, G. (2019). 2019 Data Fusion Contest [Technical Committees]. *IEEE Geoscience and Remote Sensing Magazine* 7(1):103–105. doi:10.1109/MGRS.2019.2893783
+- Niemeyer, J., Rottensteiner, F. & Soergel, U. (2014). Contextual classification of lidar data and building object detection in urban areas. *ISPRS Journal of Photogrammetry and Remote Sensing* 87:152–165. doi:10.1016/j.isprsjprs.2013.11.001
+- Olofsson, P., Foody, G. M., Herold, M., Stehman, S. V., Woodcock, C. E. & Wulder, M. A. (2014). Good practices for estimating area and assessing accuracy of land change. *Remote Sensing of Environment* 148:42–57. doi:10.1016/j.rse.2014.02.015
+- Open Geospatial Consortium (OGC) (2021). *OGC City Geography Markup Language (CityGML) Part 1: Conceptual Model Standard*, version 3.0. OGC 20-010.
+- Qi, C. R., Su, H., Mo, K. & Guibas, L. J. (2017a). PointNet: Deep learning on point sets for 3D classification and segmentation. *IEEE CVPR*, 77–85.
 - Qi, C. R., Yi, L., Su, H. & Guibas, L. J. (2017b). PointNet++: Deep hierarchical feature learning on point sets in a metric space. *Advances in Neural Information Processing Systems* 30.
-- Qin, N., Tan, W., Ma, L., Zhang, D. & Li, J. (2021). OpenGF: An ultra-large-scale ground filtering dataset built upon open ALS point clouds around the world. *IEEE/CVF CVPR Workshops*, 1082–1091.
+- Qin, N., Tan, W., Ma, L., Zhang, D. & Li, J. (2021). OpenGF: An ultra-large-scale ground filtering dataset built upon open ALS point clouds around the world. *IEEE/CVF CVPR Workshops*, 1082–1091. doi:10.1109/CVPRW53098.2021.00119
 - Sirko, W., Kashubin, S., Ritter, M., Annkah, A., Bouchareb, Y. S. E., Dauphin, Y., Keysers, D., Neumann, M., Cisse, M. & Quinn, J. (2021). Continental-scale building detection from high resolution satellite imagery. arXiv:2107.12283.
-- Sithole, G. & Vosselman, G. (2004). Experimental comparison of filter algorithms for bare-Earth extraction from airborne laser scanning point clouds. *ISPRS Journal of Photogrammetry and Remote Sensing* 59(1–2):85–101.
-- Thomas, H., Qi, C. R., Deschaud, J.-E., Marcotegui, B., Goulette, F. & Guibas, L. J. (2019). KPConv: Flexible and deformable convolution for point clouds. *IEEE/CVF ICCV*, 6411–6420.
-- Varney, N., Asari, V. K. & Graehling, Q. (2020). DALES: A large-scale aerial LiDAR data set for semantic segmentation. *IEEE/CVF CVPR Workshops*, 186–187.
-- Weinmann, M., Jutzi, B., Hinz, S. & Mallet, C. (2015). Semantic point cloud interpretation based on optimal neighborhoods, relevant features and efficient classifiers. *ISPRS Journal of Photogrammetry and Remote Sensing* 105:286–304.
-- Zhao, H., Jiang, L., Jia, J., Torr, P. & Koltun, V. (2021). Point Transformer. *IEEE/CVF ICCV*, 16259–16268.
+- Sithole, G. & Vosselman, G. (2004). Experimental comparison of filter algorithms for bare-Earth extraction from airborne laser scanning point clouds. *ISPRS Journal of Photogrammetry and Remote Sensing* 59(1–2):85–101. doi:10.1016/j.isprsjprs.2004.05.004
+- Thomas, H., Qi, C. R., Deschaud, J.-E., Marcotegui, B., Goulette, F. & Guibas, L. J. (2019). KPConv: Flexible and deformable convolution for point clouds. *IEEE/CVF ICCV*, 6410–6419. doi:10.1109/ICCV.2019.00651
+- Varney, N., Asari, V. K. & Graehling, Q. (2020). DALES: A large-scale aerial LiDAR data set for semantic segmentation. *IEEE/CVF CVPR Workshops*, 717–726. doi:10.1109/CVPRW50498.2020.00101
+- Weinmann, M., Jutzi, B., Hinz, S. & Mallet, C. (2015). Semantic point cloud interpretation based on optimal neighborhoods, relevant features and efficient classifiers. *ISPRS Journal of Photogrammetry and Remote Sensing* 105:286–304. doi:10.1016/j.isprsjprs.2015.01.016
+- Zhao, H., Jiang, L., Jia, J., Torr, P. & Koltun, V. (2021). Point Transformer. *IEEE/CVF ICCV*, 16239–16248. doi:10.1109/ICCV48922.2021.01595

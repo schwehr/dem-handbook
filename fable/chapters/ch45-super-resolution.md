@@ -10,7 +10,7 @@ Enhancement methods differ in the *source of the added information*, and that so
 
 **Interpolation upsampling** (bilinear, bicubic, thin-plate spline, kriging) adds no information: it produces a smooth surface through or near the existing samples at a finer grid. It is honest—nothing appears that was not implied by the data—and uninformative—nothing appears that was not implied by the data. Kriging adds a variance surface that is largest between samples, which is the correct statement of what upsampling knows ([Chapter 31](ch31-interpolation-and-gridding.md)).
 
-**Single-image super-resolution (SISR)** learns, from pairs of low- and high-resolution DEMs, a mapping that predicts the fine detail plausibly associated with a coarse pattern. Xu et al. (2015) applied non-local similarity; Chen et al. (2016) adapted SRCNN (Dong et al. 2016) to DEMs; D-SRGAN (Demiray, Sit & Demir 2021) applied an adversarial loss; later work added attention and feedback (Kubade et al. 2021), terrain-feature losses, and diffusion-style generative models. The added information is a **prior learned from the training terrain**: the model has seen what gullies look like at 1 m in the training region and draws them where the 30 m input has a valley. When the deployment terrain resembles the training terrain this works, in the sense that the output is statistically similar to real 1 m terrain; whether the drawn gully is in the right place is a separate question that PSNR does not answer.
+**Single-image super-resolution (SISR)** learns, from pairs of low- and high-resolution DEMs, a mapping that predicts the fine detail plausibly associated with a coarse pattern. Xu et al. (2015) applied non-local similarity; Chen et al. (2016) adapted SRCNN (Dong et al. 2016) to DEMs; D-SRGAN (Demiray, Sit & Demir 2021) applied an adversarial loss; later work added attention and feedback (Kubade et al. 2021), internal-external learning (Lin et al. 2022), terrain-feature losses, and diffusion-style generative models. The added information is a **prior learned from the training terrain**: the model has seen what gullies look like at 1 m in the training region and draws them where the 30 m input has a valley. When the deployment terrain resembles the training terrain this works, in the sense that the output is statistically similar to real 1 m terrain; whether the drawn gully is in the right place is a separate question that PSNR does not answer.
 
 **Multi-source fusion SR** combines the coarse DEM with an independent fine-resolution observation that is correlated with elevation: optical texture and shading (Argudo, Chica & Andújar 2018 trained a fully convolutional network on DEM + orthophoto pairs), SAR backscatter and coherence, a photogrammetric DSM with a lidar DTM, or a sparse but accurate dataset with a dense but biased one (Yue et al. 2015 posed multi-scale DEM fusion as regularised SR). The added information is real—a 0.5 m orthophoto genuinely constrains where the gully is—but it is indirect, and the model must learn or be told the mapping from image to height, which fails on uniform texture, shadows, and vegetation.
 
@@ -45,17 +45,17 @@ Denoising is enhancement that claims to remove what is not terrain. Each artefac
 > **Try it.** Remove striping from a DEM tile with a directional frequency-domain filter and check what else was removed. Expected outcome: the stripe wavenumber disappears from the spectrum; the before–after difference should contain only stripes—if it contains ridges or roads, the filter is too wide.
 >
 > ```bash
-> # 1. Inspect the spectrum (GMT 6): look for a peak at the stripe wavelength and azimuth
-> gmt grdfft dem.tif -Er+n -Gspectrum.txt      # radial power spectrum (text)
-> gmt grdfft dem.tif -Er+wk -Gspec2d.nc        # 2-D power grid in wavenumber space
+> # 1. Inspect the 1-D radial and directional wavelength spectra (GMT 6): look for a stripe peak
+> gmt grdfft dem.tif -Er+n+w -Gspectrum.txt    # radial power vs wavelength (text)
+> gmt grdfft dem.tif -Ex+w -Gspec_x.txt && gmt grdfft dem.tif -Ey+w -Gspec_y.txt
 >
-> # 2. Remove the stripe band: low-pass in the across-stripe direction with grdfilter
-> #    (stripe wavelength ~ 400 m across-track, azimuth 15°; here approximate with an
-> #    anisotropic Gaussian: wide along the stripes, narrow across)
-> gmt grdfilter dem.tif -Fg600/150 -D0 -Gdem_destriped.nc    # 600 m x 150 m Gaussian, rotate as needed
+> # 2. Isolate and subtract stripes (~400 m across-stripe x, coherent along y; rotate grid first if oblique):
+> #    high-pass < 600 m relief, then average 2,000 m along y to isolate the stripe field
+> gmt grdfilter dem.tif -Fg600 -D0 -Glow.nc && gmt grdmath dem.tif low.nc SUB = hp.nc
+> gmt grdfilter hp.nc -Fg150/2000 -D0 -Gremoved.nc
+> gmt grdmath dem.tif removed.nc SUB = dem_destriped.nc
 >
 > # 3. What was removed?
-> gmt grdmath dem.tif dem_destriped.nc SUB = removed.nc
 > gmt grdimage removed.nc -Cpolar -JX15c -Baf -png removed
 > ```
 >
@@ -92,7 +92,7 @@ Most of the ocean floor has never been measured directly; the global grids that 
 
 **Chart generalisation as the inverse problem.** A nautical chart deliberately *coarsens* the seafloor: soundings are selected shoal-biased, contours are smoothed seaward, and features are exaggerated for safety. Enhancing a chart-derived grid—removing terraces, interpolating between selected soundings—is the inverse of generalisation, and it is ill-posed in the dangerous direction: the generalisation removed the deep values and kept the shoal ones, so a smooth surface through chart soundings is biased shoal in a way that is safe for navigation and wrong for volume, habitat, and hydrodynamic modelling, and it can be biased *deep* between shoal soundings where a real shoal was omitted at that chart scale. Chart-derived bathymetry should carry the chart scale as its effective resolution and the chart's safety bias as a known, one-sided error ([Chapter 62](ch62-navigation-and-charting.md)).
 
-> **Case file.** The GEBCO_2014 to GEBCO_2024 grids added the TID layer and reported the fraction of the ocean floor constrained by direct measurement, which rose from about 6 % at the project's 2017 launch to roughly a quarter (26.1 % at the GEBCO_2024 release) of the seafloor at the 400 m grid resolution. The reported number matters less than the practice: a global product that states, cell by cell, what is measured and what is predicted, and whose users can mask either. No global land DEM enhanced by ML yet does this at the cell level, and the land community should adopt it.
+> **Case file.** The GEBCO_2014 through GEBCO_2026 grids added the TID layer and reported the fraction of the ocean floor constrained by direct measurement, which rose from roughly 6 % at Seabed 2030's 2017 launch to 26.1 % at GEBCO_2024, 27.3 % at GEBCO_2025, and 28.7 % at GEBCO_2026 (April 2026) at the grid's 15″ (~400–450 m at the equator) resolution. The reported number matters less than the practice: a global product that states, cell by cell, what is measured and what is predicted, and whose users can mask either. No global land DEM enhanced by ML yet does this at the cell level, and the land community should adopt it.
 
 ## 45.6 Validation: sharper is not truer
 
@@ -189,7 +189,7 @@ Enhanced DEMs fail in three ways, and the validation must be designed to catch e
 
 - **No formal specification for enhanced or super-resolved DEMs exists** (as of this writing). In its absence, this handbook recommends the following combination.
 - **ISO 19115-1:2014 / 19115-2:2019 lineage.** `LI_ProcessStep` and `LI_Source` entries for the enhancement method, training data, and inputs; `MD_Resolution` for both output cell size and effective resolution.
-- **ASPRS Positional Accuracy Standards, Ed. 2 (2023).** Accuracy reporting on independent checkpoints applies unchanged; enhanced products must be tested as products, over all cells.
+- **ASPRS Positional Accuracy Standards, Ed. 2** (2023; v2, 2024). Accuracy reporting on independent checkpoints applies unchanged; enhanced products must be tested as products, over all cells.
 - **GEBCO Type Identifier (TID) grid conventions** (GEBCO Compilation Group, current release documentation). The model for a per-cell measured/predicted flag layer; adopt an equivalent coding for land products.
 - **OGC BAG / IHO S-102 uncertainty layers.** Per-cell uncertainty carried with the surface; the natural home for stratum-based uncertainty of enhanced cells.
 - **OGC TrainingDML-AI (2023) and model cards (Mitchell et al. 2019).** Documentation of training data and model for learned enhancement ([Chapter 43](ch43-traditional-vs-ml.md)).
@@ -223,25 +223,25 @@ Enhanced DEMs fail in three ways, and the validation must be designed to catch e
 
 ## References
 
-- Argudo, O., Chica, A. & Andújar, C. (2018). Terrain super-resolution through aerial imagery and fully convolutional networks. *Computer Graphics Forum* 37(2):101–110.
-- Blau, Y. & Michaeli, T. (2018). The perception-distortion tradeoff. *IEEE/CVF CVPR*, 6228–6237.
-- Chen, Z., Wang, X., Xu, Z. & Hou, W. (2016). Convolutional neural network based DEM super resolution. *International Archives of the Photogrammetry, Remote Sensing and Spatial Information Sciences* XLI-B3:247–250.
-- Demiray, B. Z., Sit, M. & Demir, I. (2021). D-SRGAN: DEM super-resolution with generative adversarial networks. *SN Computer Science* 2:48.
-- Dong, C., Loy, C. C., He, K. & Tang, X. (2016). Image super-resolution using deep convolutional networks. *IEEE Transactions on Pattern Analysis and Machine Intelligence* 38(2):295–307.
+- Argudo, O., Chica, A. & Andújar, C. (2018). Terrain super-resolution through aerial imagery and fully convolutional networks. *Computer Graphics Forum* 37(2):101–110. doi:10.1111/cgf.13345
+- Blau, Y. & Michaeli, T. (2018). The perception-distortion tradeoff. *IEEE/CVF CVPR*, 6228–6237. doi:10.1109/CVPR.2018.00652
+- Chen, Z., Wang, X., Xu, Z. & Hou, W. (2016). Convolutional neural network based DEM super resolution. *International Archives of the Photogrammetry, Remote Sensing and Spatial Information Sciences* XLI-B3:247–250. doi:10.5194/isprs-archives-XLI-B3-247-2016
+- Demiray, B. Z., Sit, M. & Demir, I. (2021). D-SRGAN: DEM super-resolution with generative adversarial networks. *SN Computer Science* 2:48. doi:10.1007/s42979-020-00442-2
+- Dong, C., Loy, C. C., He, K. & Tang, X. (2016). Image super-resolution using deep convolutional networks. *IEEE Transactions on Pattern Analysis and Machine Intelligence* 38(2):295–307. doi:10.1109/TPAMI.2015.2439281
 - Gallant, J. C. & Read, A. (2009). Enhancing the SRTM data for Australia. *Proceedings of Geomorphometry 2009*, Zurich, 149–154.
-- Gallant, J. C. & Read, A. M. (2016). A near-global bare-Earth DEM from SRTM. *International Archives of the Photogrammetry, Remote Sensing and Spatial Information Sciences* XLI-B4:137–141.
-- GEBCO Compilation Group (2024). *GEBCO 2024 Grid* and Type Identifier (TID) grid documentation. British Oceanographic Data Centre / IHO–IOC. doi:10.5285/1c44ce99-0a0d-5f4f-e063-7086abc0ea0f
-- Guérin, É., Digne, J., Galin, É., Peytavie, A., Wolf, C., Benes, B. & Martinez, B. (2017). Interactive example-based terrain authoring with conditional generative adversarial networks. *ACM Transactions on Graphics* 36(6):228.
-- Hutchinson, M. F. (1989). A new procedure for gridding elevation and stream line data with automatic removal of spurious pits. *Journal of Hydrology* 106(3–4):211–232.
+- Gallant, J. C. & Read, A. M. (2016). A near-global bare-Earth DEM from SRTM. *International Archives of the Photogrammetry, Remote Sensing and Spatial Information Sciences* XLI-B4:137–141. doi:10.5194/isprs-archives-XLI-B4-137-2016
+- GEBCO Compilation Group (2024, 2025, 2026). *GEBCO_2024 / GEBCO_2025 / GEBCO_2026 Grid* and Type Identifier (TID) grid documentation. British Oceanographic Data Centre / IHO–IOC. doi:10.5285/1c44ce99-0a0d-5f4f-e063-7086abc0ea0f (2024)
+- Guérin, É., Digne, J., Galin, É., Peytavie, A., Wolf, C., Benes, B. & Martinez, B. (2017). Interactive example-based terrain authoring with conditional generative adversarial networks. *ACM Transactions on Graphics* 36(6):228. doi:10.1145/3130800.3130804
+- Hutchinson, M. F. (1989). A new procedure for gridding elevation and stream line data with automatic removal of spurious pits. *Journal of Hydrology* 106(3–4):211–232. doi:10.1016/0022-1694(89)90073-5
 - Kirk, R. L., Barrett, J. M. & Soderblom, L. A. (2003). Photoclinometry made simple…? *ISPRS Working Group IV/9 Workshop "Advances in Planetary Mapping"*, Houston, March 2003.
-- Kubade, A., Patel, D., Sharma, A. & Rajan, K. S. (2021). AFN: Attentional feedback network based 3D terrain super-resolution. *Computer Vision – ACCV 2020*, LNCS 12622:192–208.
-- Lin, X., Zhang, Q., Wang, H., Yao, C., Chen, C., Cheng, L. & Li, Z. (2022). A DEM super-resolution reconstruction network combining internal and external learning. *Remote Sensing* 14(9):2181.
-- Lindsay, J. B., Francioni, A. & Cockburn, J. M. H. (2019). LiDAR DEM smoothing and the preservation of drainage features. *Remote Sensing* 11(16):1926.
-- Mitchell, M., Wu, S., Zaldivar, A., Barnes, P., Vasserman, L., Hutchinson, B., Spitzer, E., Raji, I. D. & Gebru, T. (2019). Model cards for model reporting. *Proceedings of the Conference on Fairness, Accountability, and Transparency*, 220–229.
-- Perona, P. & Malik, J. (1990). Scale-space and edge detection using anisotropic diffusion. *IEEE Transactions on Pattern Analysis and Machine Intelligence* 12(7):629–639.
-- Smith, W. H. F. & Sandwell, D. T. (1997). Global sea floor topography from satellite altimetry and ship depth soundings. *Science* 277(5334):1956–1962.
-- Sun, X., Rosin, P. L., Martin, R. R. & Langbein, F. C. (2007). Fast and effective feature-preserving mesh denoising. *IEEE Transactions on Visualization and Computer Graphics* 13(5):925–938.
-- Tozer, B., Sandwell, D. T., Smith, W. H. F., Olson, C., Beale, J. R. & Wessel, P. (2019). Global bathymetry and topography at 15 arc sec: SRTM15+. *Earth and Space Science* 6(10):1847–1864.
-- Xu, Z., Wang, X., Chen, Z., Xiong, D., Ding, M. & Hou, W. (2015). Nonlocal similarity based DEM super resolution. *ISPRS Journal of Photogrammetry and Remote Sensing* 110:48–54.
-- Yamazaki, D., Ikeshima, D., Tawatari, R., Yamaguchi, T., O'Loughlin, F., Neal, J. C., Sampson, C. C., Kanae, S. & Bates, P. D. (2017). A high-accuracy map of global terrain elevations. *Geophysical Research Letters* 44(11):5844–5853.
-- Yue, L., Shen, H., Yuan, Q. & Zhang, L. (2015). Fusion of multi-scale DEMs using a regularized super-resolution method. *International Journal of Geographical Information Science* 29(12):2095–2120.
+- Kubade, A., Patel, D., Sharma, A. & Rajan, K. S. (2021). AFN: Attentional feedback network based 3D terrain super-resolution. *Computer Vision – ACCV 2020*, LNCS 12622:192–208. doi:10.1007/978-3-030-69525-5_12
+- Lin, X., Zhang, Q., Wang, H., Yao, C., Chen, C., Cheng, L. & Li, Z. (2022). A DEM super-resolution reconstruction network combining internal and external learning. *Remote Sensing* 14(9):2181. doi:10.3390/rs14092181
+- Lindsay, J. B., Francioni, A. & Cockburn, J. M. H. (2019). LiDAR DEM smoothing and the preservation of drainage features. *Remote Sensing* 11(16):1926. doi:10.3390/rs11161926
+- Mitchell, M., Wu, S., Zaldivar, A., Barnes, P., Vasserman, L., Hutchinson, B., Spitzer, E., Raji, I. D. & Gebru, T. (2019). Model cards for model reporting. *Proceedings of the Conference on Fairness, Accountability, and Transparency*, 220–229. doi:10.1145/3287560.3287596
+- Perona, P. & Malik, J. (1990). Scale-space and edge detection using anisotropic diffusion. *IEEE Transactions on Pattern Analysis and Machine Intelligence* 12(7):629–639. doi:10.1109/34.56205
+- Smith, W. H. F. & Sandwell, D. T. (1997). Global sea floor topography from satellite altimetry and ship depth soundings. *Science* 277(5334):1956–1962. doi:10.1126/science.277.5334.1956
+- Sun, X., Rosin, P. L., Martin, R. R. & Langbein, F. C. (2007). Fast and effective feature-preserving mesh denoising. *IEEE Transactions on Visualization and Computer Graphics* 13(5):925–938. doi:10.1109/TVCG.2007.1065
+- Tozer, B., Sandwell, D. T., Smith, W. H. F., Olson, C., Beale, J. R. & Wessel, P. (2019). Global bathymetry and topography at 15 arc sec: SRTM15+. *Earth and Space Science* 6(10):1847–1864. doi:10.1029/2019EA000658
+- Xu, Z., Wang, X., Chen, Z., Xiong, D., Ding, M. & Hou, W. (2015). Nonlocal similarity based DEM super resolution. *ISPRS Journal of Photogrammetry and Remote Sensing* 110:48–54. doi:10.1016/j.isprsjprs.2015.10.009
+- Yamazaki, D., Ikeshima, D., Tawatari, R., Yamaguchi, T., O'Loughlin, F., Neal, J. C., Sampson, C. C., Kanae, S. & Bates, P. D. (2017). A high-accuracy map of global terrain elevations. *Geophysical Research Letters* 44(11):5844–5853. doi:10.1002/2017GL072874
+- Yue, L., Shen, H., Yuan, Q. & Zhang, L. (2015). Fusion of multi-scale DEMs using a regularized super-resolution method. *International Journal of Geographical Information Science* 29(12):2095–2120. doi:10.1080/13658816.2015.1063639

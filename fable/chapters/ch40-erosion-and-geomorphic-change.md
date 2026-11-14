@@ -57,9 +57,8 @@ The choice of error model is the crux. A single σ for the whole survey is simpl
 > dh = aligned - ref                            # DoD, new minus old
 > # 2. Heteroscedastic error model: sigma_dh as a function of slope and curvature
 > slope, maxc = xdem.terrain.get_terrain_attribute(ref, ["slope", "maximum_curvature"])
-> err = xdem.spatialstats.infer_heteroscedasticity_from_stable(
->     dvalues=dh, list_var=[slope, maxc], stable_mask=stable)
-> sig = err[0]                                  # raster of per-cell sigma_dh
+> sig, _, _ = xdem.spatialstats.infer_heteroscedasticity_from_stable(
+>     dvalues=dh, list_var=[slope, maxc], unstable_mask=aoi)
 > # 3. Threshold at 95 % LoD
 > lod = 1.96 * sig
 > dh_thr = dh.copy(); dh_thr.data[np.abs(dh.data) < lod.data] = np.nan
@@ -68,7 +67,7 @@ The choice of error model is the crux. A single σ for the whole survey is simpl
 > cell_area = ref.res[0] * ref.res[1]
 > vol_net = np.nansum(dh_thr.data[inside.data]) * cell_area
 > _, params, _ = xdem.spatialstats.infer_spatial_correlation_from_stable(
->     dvalues=dh, list_models=["Gaussian", "Spherical"], stable_mask=stable)
+>     dvalues=dh / sig, list_models=["Gaussian", "Spherical"], unstable_mask=aoi)
 > n_eff = xdem.spatialstats.number_effective_samples(area=inside.data.sum()*cell_area,
 >                                                     params_variogram_model=params)
 > sig_mean = float(np.nanmean(sig.data[inside.data])) / np.sqrt(n_eff)
@@ -110,7 +109,7 @@ River change is measured along three axes: the bed (vertical), the banks (latera
 
 **Braided rivers** (New Zealand's Waimakariri, Alaska's Tanana, the Himalayan Brahmaputra tributaries) rework their entire active bed over years to decades; Lane et al. (2003) and Brasington et al. (2003) established DoD-based budgets on the Waimakariri and the Feshie as the GCD method's proving ground, and repeat SfM from UAVs now resolves braid-bar dynamics at sub-metre resolution over kilometres ([Chapter 22](ch22-photogrammetry-sfm.md)). The wetted channel remains the gap: optical SfM sees the water surface (or a refracted bed, correctable to ~0.1 depth for clear water), lidar sees the surface, and only bathymetric lidar or sonar sees the bed, so most braided-river DoDs carry a "wet" mask where change is unknown.
 
-**Dams** change rivers in both directions. Downstream, sediment starvation causes incision (metres over decades below large dams — the Missouri below Gavins Point, the Colorado below Glen Canyon) and bed armouring; upstream, the reservoir traps sediment and loses capacity. **Reservoir sedimentation surveys** — repeat bathymetry on the original pre-impoundment topography (often the 1930s–1960s contour maps, digitized) — quantify the loss: global reservoir capacity declines by roughly 0.5–1 % per year from sedimentation, and individual reservoirs in high-yield catchments (Loess Plateau, Himalaya, parts of the U.S. Southwest) have lost most of their capacity in decades. USACE EM 1110-2-4000 sets out the survey and computation practice (range-line and contour methods, now multibeam DoD against the pre-impoundment surface); the dominant uncertainty is the pre-impoundment surface itself, whose contour-map accuracy (±half a contour interval, i.e. ±0.75–1.5 m) over a reservoir of tens of km² dwarfs the modern survey's error, and whose datum (often a local project datum or NGVD 29) must be reconciled with the new survey's.
+**Dams** change rivers in both directions. Downstream, sediment starvation causes incision (metres over decades below large dams — the Missouri below Gavins Point, the Colorado below Glen Canyon) and bed armouring; upstream, the reservoir traps sediment and loses capacity. **Reservoir sedimentation surveys** — repeat bathymetry on the original pre-impoundment topography (often the 1930s–1960s contour maps, digitized; cf. James et al. 2012 on historic-map DoDs) — quantify the loss: global reservoir capacity declines by roughly 0.5–1 % per year from sedimentation, and individual reservoirs in high-yield catchments (Loess Plateau, Himalaya, parts of the U.S. Southwest) have lost most of their capacity in decades. USACE EM 1110-2-4000 sets out the survey and computation practice (range-line and contour methods, now multibeam DoD against the pre-impoundment surface); the dominant uncertainty is the pre-impoundment surface itself, whose contour-map accuracy (±half a contour interval, i.e. ±0.75–1.5 m) over a reservoir of tens of km² dwarfs the modern survey's error, and whose datum (often a local project datum or NGVD 29) must be reconciled with the new survey's.
 
 **Post-fire debris flows** convert a hillslope into a sediment source within one storm. After the 2017 Thomas Fire, the January 2018 Montecito debris flows mobilized ~10⁶ m³ from the burned catchments; pre- and post-event lidar quantified channel scour (several metres) and fan deposition, and such pairs now inform the USGS debris-flow hazard models used for post-fire warning. The pre-fire lidar's date relative to the fire and the post-event lidar's date relative to subsequent storms are the critical metadata.
 
@@ -190,17 +189,17 @@ For a spherical variogram with range $L$ and area $A \gg L^2$, $n_{\text{eff}} \
 
 **Open source:** **GCD** (Geomorphic Change Detection; Riverscapes Consortium — the reference implementation of Wheaton et al. 2010 with fuzzy-inference error surfaces, probabilistic thresholding, and budget segregation; standalone and ArcGIS add-in; caveat: the standalone version lags the add-in); **xdem** (co-registration, heteroscedastic error, variograms, $n_{\text{eff}}$; the Hugonnet et al. method); **py4dgeo** and **CloudCompare** (M3C2 for point clouds; [Chapter 41](ch41-change-detection.md)); **LSDTopoTools**, **TopoToolbox** (MATLAB), **Landlab** (Python), **WhiteboxTools** (morphometrics, channel extraction, knickpoint analysis; caveat: each uses its own slope/flow algorithms — state which); **GRASS GIS** (`r.slope.aspect`, `r.watershed`, `r.series` for time stacks); **GDAL** (`gdal_calc.py`, `gdaldem`); **R** packages `terra`, `whitebox`, `rgee` for scripted DoD and morphometrics.
 
-**Free but closed:** **DSAS** (USGS; ArcGIS Pro add-in, v5.1+, for shoreline-change rates with regression statistics; caveat: requires an ArcGIS licence); **Coastal Toolkits** from various agencies.
+**Free but closed:** **DSAS** (USGS; ArcMap add-in in v5.1, standalone application using GeoPackages in v6.0+ for shoreline-change rates with regression statistics; v5.1 required an ArcGIS Desktop licence); **Coastal Toolkits** from various agencies.
 
 **Commercial:** **ArcGIS Pro** (Cut Fill, raster calculator, Surface Difference; caveat: no built-in LoD or correlation-aware uncertainty); **Global Mapper** (volume between surfaces; same caveat); **Trimble Business Center** and **Leica Infinity** earthwork modules (volumes for construction; uncertainty is not reported); **TerraSolid TerraModeler** (surface differencing at production scale).
 
 ## Standards & guides
 
-- **USGS DSAS v5.1 User Guide** (Himmelstoss et al. 2021, OFR 2021-1091) — transect casting, rate statistics, uncertainty of shoreline positions.
-- **USACE EM 1110-2-4000**, *Sedimentation Investigations of Rivers and Reservoirs* (1989; check for current revision) — reservoir survey methods and capacity computation.
+- **USGS DSAS User Guide** (v5.1, Himmelstoss et al. 2021, OFR 2021-1091; standalone v6.0+, 2024) — transect casting, rate statistics, uncertainty of shoreline positions.
+- **USACE EM 1110-2-4000**, *Sedimentation Investigations of Rivers and Reservoirs* (1995; rev. 2025) — reservoir survey methods and capacity computation.
 - **Riverscapes Consortium GCD documentation** (current) — error-surface construction, thresholding options, budget segregation.
 - **FGDC Shoreline Metadata Profile** (FGDC-STD-001.2-2001) — required attributes for shoreline proxies, tide stage, datum.
-- **USGS Lidar Base Specification** (current ed.) — defines the DTM products most repeat-lidar DoDs are built from; relevant to surface-definition consistency.
+- **USGS Lidar Base Specification** (2024 rev. A; 2025 rev. A current) — defines the DTM products most repeat-lidar DoDs are built from; relevant to surface-definition consistency.
 - **IHO S-44** (ed. 6.1.0) — uncertainty requirements for the bathymetric surveys used in nearshore and reservoir change.
 - **WGMS Guidelines for geodetic mass-balance reporting** (Zemp et al. 2013 and WGMS practice) — density conversion, uncertainty components.
 
@@ -234,27 +233,27 @@ For a spherical variogram with range $L$ and area $A \gg L^2$, $n_{\text{eff}} \
 
 - Berthier, E., Floricioiu, D., Gardner, A. S., Gourmelen, N., Jakob, L., Paul, F., Treichler, D., Wouters, B., Belart, J. M. C., Dehecq, A., Dussaillant, I., Hugonnet, R., Kääb, A., Krieger, L., Pálsson, F. & Zemp, M. (2023). Measuring glacier mass changes from space — a review. *Reports on Progress in Physics*, 86:036801. doi:10.1088/1361-6633/acaf8e
 - Brasington, J., Langham, J. & Rumsby, B. (2003). Methodological sensitivity of morphometric estimates of coarse fluvial sediment transport. *Geomorphology*, 53(3–4):299–316. doi:10.1016/S0169-555X(02)00320-3
-- Dehecq, A., Millan, R., Berthier, E., Gourmelen, N., Trouvé, E. & Vionnet, V. (2016). Elevation changes inferred from TanDEM-X data over the Mont-Blanc area: Impact of the X-band interferometric bias. *IEEE JSTARS*, 9(8):3870–3882.
+- Dehecq, A., Millan, R., Berthier, E., Gourmelen, N., Trouvé, E. & Vionnet, V. (2016). Elevation changes inferred from TanDEM-X data over the Mont-Blanc area: Impact of the X-band interferometric bias. *IEEE JSTARS*, 9(8):3870–3882. doi:10.1109/JSTARS.2016.2581482
 - Himmelstoss, E. A., Henderson, R. E., Kratzmann, M. G. & Farris, A. S. (2021). *Digital Shoreline Analysis System (DSAS) version 5.1 user guide*. USGS Open-File Report 2021-1091. doi:10.3133/ofr20211091
 - Hooke, R. LeB. (2000). On the history of humans as geomorphic agents. *Geology*, 28(9):843–846.
 - Hugonnet, R., McNabb, R., Berthier, E., Menounos, B., Nuth, C., Girod, L., Farinotti, D., Huss, M., Dussaillant, I., Brun, F. & Kääb, A. (2021). Accelerated global glacier mass loss in the early twenty-first century. *Nature*, 592:726–731. doi:10.1038/s41586-021-03436-z
 - Hugonnet, R., Brun, F., Berthier, E., Dehecq, A., Mannerfelt, E. S., Eckert, N. & Farinotti, D. (2022). Uncertainty analysis of digital elevation models by spatial inference from stable terrain. *IEEE JSTARS*, 15:6456–6472. doi:10.1109/JSTARS.2022.3188922
 - Huss, M. (2013). Density assumptions for converting geodetic glacier volume change to mass change. *The Cryosphere*, 7:877–887. doi:10.5194/tc-7-877-2013
 - James, L. A., Hodgson, M. E., Ghoshal, S. & Latiolais, M. M. (2012). Geomorphic change detection using historic maps and DEM differencing: The temporal dimension of geospatial analysis. *Geomorphology*, 137(1):181–198. doi:10.1016/j.geomorph.2010.10.039
-- James, M. R. & Robson, S. (2012). Straightforward reconstruction of 3D surfaces and topography with a camera: Accuracy and geoscience application. *Journal of Geophysical Research: Earth Surface*, 117:F03017.
-- Lane, S. N., Chandler, J. H. & Richards, K. S. (1994). Developments in monitoring and modelling small-scale river bed topography. *Earth Surface Processes and Landforms*, 19(4):349–368.
+- James, M. R. & Robson, S. (2012). Straightforward reconstruction of 3D surfaces and topography with a camera: Accuracy and geoscience application. *Journal of Geophysical Research: Earth Surface*, 117:F03017. doi:10.1029/2011JF002289
+- Lane, S. N., Chandler, J. H. & Richards, K. S. (1994). Developments in monitoring and modelling small-scale river bed topography. *Earth Surface Processes and Landforms*, 19(4):349–368. doi:10.1002/esp.3290190406
 - Lane, S. N., Westaway, R. M. & Hicks, D. M. (2003). Estimation of erosion and deposition volumes in a large, gravel-bed, braided river using synoptic remote sensing. *Earth Surface Processes and Landforms*, 28(3):249–271. doi:10.1002/esp.483
-- Morton, R. A. & Miller, T. L. (2005). *National assessment of shoreline change: Part 2, Historical shoreline changes and associated coastal land loss along the U.S. Southeast Atlantic Coast*. USGS Open-File Report 2005-1401.
-- Mudd, S. M., Attal, M., Milodowski, D. T., Grieve, S. W. D. & Valters, D. A. (2014). A statistical framework to quantify spatial variation in channel gradients using the integral method of channel profile analysis. *Journal of Geophysical Research: Earth Surface*, 119(2):138–152.
+- Morton, R. A. & Miller, T. L. (2005). *National assessment of shoreline change: Part 2, Historical shoreline changes and associated coastal land loss along the U.S. Southeast Atlantic Coast*. USGS Open-File Report 2005-1401. doi:10.3133/ofr20051401
+- Mudd, S. M., Attal, M., Milodowski, D. T., Grieve, S. W. D. & Valters, D. A. (2014). A statistical framework to quantify spatial variation in channel gradients using the integral method of channel profile analysis. *Journal of Geophysical Research: Earth Surface*, 119(2):138–152. doi:10.1002/2013JF002981
 - Nuth, C. & Kääb, A. (2011). Co-registration and bias corrections of satellite elevation data sets for quantifying glacier thickness change. *The Cryosphere*, 5:271–290. doi:10.5194/tc-5-271-2011
 - Passalacqua, P., Belmont, P., Staley, D. M., Simley, J. D., Arrowsmith, J. R., Bode, C. A., Crosby, C., DeLong, S. B., Glenn, N. F., Kelly, S. A., Lague, D., Sangireddy, H., Schaffrath, K., Tarboton, D. G., Wasklewicz, T. & Wheaton, J. M. (2015). Analyzing high resolution topography for advancing the understanding of mass and energy transfer through landscapes: A review. *Earth-Science Reviews*, 148:174–193. doi:10.1016/j.earscirev.2015.05.012
-- Rolstad, C., Haug, T. & Denby, B. (2009). Spatially integrated geodetic glacier mass balance and its uncertainty based on geostatistical analysis: application to the western Svartisen ice cap, Norway. *Journal of Glaciology*, 55(192):666–680.
-- Ruggiero, P. & List, J. H. (2009). Improving accuracy and statistical reliability of shoreline position and change rate estimates. *Journal of Coastal Research*, 25(5):1069–1081.
-- Schwanghart, W. & Scherler, D. (2014). TopoToolbox 2 — MATLAB-based software for topographic analysis and modeling in Earth surface sciences. *Earth Surface Dynamics*, 2:1–7.
+- Rolstad, C., Haug, T. & Denby, B. (2009). Spatially integrated geodetic glacier mass balance and its uncertainty based on geostatistical analysis: application to the western Svartisen ice cap, Norway. *Journal of Glaciology*, 55(192):666–680. doi:10.3189/002214309789470950
+- Ruggiero, P. & List, J. H. (2009). Improving accuracy and statistical reliability of shoreline position and change rate estimates. *Journal of Coastal Research*, 25(5):1069–1081. doi:10.2112/08-1051.1
+- Schwanghart, W. & Scherler, D. (2014). TopoToolbox 2 — MATLAB-based software for topographic analysis and modeling in Earth surface sciences. *Earth Surface Dynamics*, 2:1–7. doi:10.5194/esurf-2-1-2014
 - Shugar, D. H., Jacquemart, M., Shean, D., et al. (2021). A massive rock and ice avalanche caused the 2021 disaster at Chamoli, Indian Himalaya. *Science*, 373(6552):300–306. doi:10.1126/science.abh4455
-- Westoby, M. J., Brasington, J., Glasser, N. F., Hambrey, M. J. & Reynolds, J. M. (2012). 'Structure-from-Motion' photogrammetry: A low-cost, effective tool for geoscience applications. *Geomorphology*, 179:300–314.
+- Westoby, M. J., Brasington, J., Glasser, N. F., Hambrey, M. J. & Reynolds, J. M. (2012). 'Structure-from-Motion' photogrammetry: A low-cost, effective tool for geoscience applications. *Geomorphology*, 179:300–314. doi:10.1016/j.geomorph.2012.08.021
 - Wheaton, J. M., Brasington, J., Darby, S. E. & Sear, D. A. (2010). Accounting for uncertainty in DEMs from repeat topographic surveys: improved sediment budgets. *Earth Surface Processes and Landforms*, 35(2):136–156. doi:10.1002/esp.1886
 - Wilkinson, B. H. & McElroy, B. J. (2007). The impact of humans on continental erosion and sedimentation. *GSA Bulletin*, 119(1–2):140–156. doi:10.1130/B25899.1
-- Wolman, M. G. & Miller, J. P. (1960). Magnitude and frequency of forces in geomorphic processes. *Journal of Geology*, 68(1):54–74.
+- Wolman, M. G. & Miller, J. P. (1960). Magnitude and frequency of forces in geomorphic processes. *Journal of Geology*, 68(1):54–74. doi:10.1086/626637
 - Zemp, M., Thibert, E., Huss, M., Stumm, D., Rolstad Denby, C., Nuth, C., Nussbaumer, S. U., Moholdt, G., Mercer, A., Mayer, C., Joerg, P. C., Jansson, P., Hynek, B., Fischer, A., Escher-Vetter, H., Elvehøy, H. & Andreassen, L. M. (2013). Reanalysing glacier mass balance measurement series. *The Cryosphere*, 7:1227–1245. doi:10.5194/tc-7-1227-2013
-- Zhang, W. & Montgomery, D. R. (1994). Digital elevation model grid size, landscape representation, and hydrologic simulations. *Water Resources Research*, 30(4):1019–1028.
+- Zhang, W. & Montgomery, D. R. (1994). Digital elevation model grid size, landscape representation, and hydrologic simulations. *Water Resources Research*, 30(4):1019–1028. doi:10.1029/93WR03553

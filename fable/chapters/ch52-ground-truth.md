@@ -38,7 +38,7 @@ A checkpoint campaign is a survey in its own right, with a specification, a plan
 
 ### 52.2.1 How many
 
-ASPRS Positional Accuracy Standards Edition 2 (2023; Version 2, 2024) set a minimum of 30 checkpoints per project, scaling with area to a cap of 120, with vertical results reported separately for non-vegetated (NVA) and vegetated (VVA) land cover; Edition 1 (2014) had started at 20 plus 5 for projects up to 500 km². The USGS Lidar Base Specification 2024 incorporates Edition 2 by reference. Thirty is roughly the smallest sample for which an RMSE has a tolerable confidence interval: the Mathematics section shows a 95 % interval of about 0.80–1.34 times the sample value at $n = 30$ and 0.68–1.92 at $n = 8$. "RMSE 9 cm from 8 checkpoints" is an anecdote, not a result.
+ASPRS Positional Accuracy Standards Edition 2 (2023; Version 2, 2024) set a minimum of 30 checkpoints per project, scaling with area to a cap of 120, with vertical results reported separately for non-vegetated (NVA) and vegetated (VVA) land cover; Edition 1 (2014) had started at 20 plus 5 for projects up to 500 km². The USGS Lidar Base Specification (2024 rev. A / 2025 rev. A) incorporates Edition 2 by reference. Thirty is roughly the smallest sample for which an RMSE has a tolerable confidence interval: the Mathematics section shows a 95 % interval of about 0.80–1.34 times the sample value at $n = 30$ and 0.68–1.92 at $n = 8$. "RMSE 9 cm from 8 checkpoints" is an anecdote, not a result.
 
 The better question is "how many do I need to detect the failure I care about?" Distinguishing a 10 cm product from a 13 cm one at useful power pushes the open-terrain count toward 60–100, and every stratum you report needs its own 30: a campaign with 25 points on roads and 5 in forest has tested the roads.
 
@@ -136,7 +136,7 @@ Every checkpoint has an error budget, and under ASPRS Edition 2 it enters the pr
 > | Rod tip / surface roughness | 0.5 | Pavement |
 > | Geoid model | 0 | Cancels; same model both sides |
 > | Surface change | 0 | Pavement, 3 months |
-> | **Combined (RSS)** | **≈ 2.1** | Random ≈ 1.9; bias ≈ 1.0 |
+> | **Combined (RSS)** | **≈ 2.1–2.2** | Random ≈ 1.9–2.0 (two independent setups vs single setup); bias ≈ 1.0 |
 >
 > Against a QL2 product (10 cm RMSE_v class) the checkpoint contributes $(2.1/10)^2 \approx 4\%$ of observed variance—negligible. Against a QL0 product (5 cm) about 18 %, and against a UAS SfM survey claiming 2 cm it dominates: that claim cannot be tested with these checkpoints at all.
 
@@ -168,11 +168,12 @@ Checkpoint tables are small, expensive, and durable, yet they are routinely deli
 
 ## Then & now
 
-- **Levelled benchmarks and triangulation stations ⟨H⟩.** Into the 1980s, truth was a monument: a brass disc with a levelled height in a national adjustment (Sea Level Datum of 1929, later NGVD29; Ordnance Datum Newlyn) and a triangulated position. The US National Map Accuracy Standards of 1947 ⟨H⟩ tested "90 % of elevations interpolated from contours within half a contour interval," assuming the tester had better heights than the map.
+- **Levelled benchmarks and triangulation stations** (from early national triangulations such as Great Britain's in 1791 and survey marks such as the 1833 Buttermilk station ⟨H⟩).
+  Into the 1980s, truth was a monument: a brass disc with a levelled height in a national adjustment (Sea Level Datum of 1929, later NGVD29; Ordnance Datum Newlyn) and a triangulated position. The US National Map Accuracy Standards of 1947 tested "90 % of elevations interpolated from contours within half a contour interval," assuming the tester had better heights than the map.
 - **GPS campaigns (1990s).** Dual-frequency static GPS delivered centimetre ellipsoidal heights in hours; NGS-58 (1997) codified the procedures and the geoid model became the limiting factor for orthometric heights. NSSDA (1998) replaced the contour test with an RMSE statistic and asked for checkpoints three times more accurate than the data tested.
 - **CORS, OPUS, and real-time networks (2000s).** Online processing (NGS OPUS from 2001) and real-time networks made independent 3 cm checkpoints a matter of minutes; counts and stratification grew accordingly.
-- **Spaceborne laser altimetry as near-global reference.** ICESat (2003) assessed SRTM within three years; ICESat-2 (2018), GEDI (2019), and open national lidar changed the default from "the agency says it meets spec" to "we checked."
-- **Standards.** NMAS 1947 ⟨H⟩ → NSSDA 1998 → ASPRS 2014 (NVA/VVA, quality classes) → Edition 2 (2023/2024: 30-point minimum, checkpoint error in the budget, VVA reported but not pass/fail, 3D accuracy). S-44 moved from fixed depth-accuracy tables to the TVU formula in Edition 4 (1998) and added feature-detection language through Editions 5 and 6. The arc is from trusting the reference to budgeting it.
+- **Spaceborne laser altimetry as near-global reference.** ICESat (2003) ⟨H⟩ assessed SRTM within three years; ICESat-2 (2018) ⟨H⟩, GEDI (launched December 2018 ⟨H⟩; science operations 2019), and open national lidar changed the default from "the agency says it meets spec" to "we checked."
+- **Standards.** NMAS 1947 → NSSDA 1998 → ASPRS 2014 (NVA/VVA, quality classes) → Edition 2 (2023/2024: 30-point minimum, checkpoint error in the budget, VVA reported but not pass/fail, 3D accuracy). S-44 moved from fixed depth-accuracy tables to the TVU formula in Edition 4 (1998) and added feature-detection language through Editions 5 and 6. The arc is from trusting the reference to budgeting it.
 
 ## Mathematics
 
@@ -220,7 +221,7 @@ This chapter's subject is validation, so this section concentrates on the questi
 - **NSSDA** (FGDC-STD-007.3-1998) — RMSE × 1.96 vertical statistic, "tested to meet" language, checkpoint accuracy and distribution guidance.
 - **NOAA TM NOS NGS-58** (1997) and **NGS-59** (2008) — GPS-derived ellipsoid and orthometric heights; **NOAA TM NOS NGS 92** (2024), *Classifications, Standards, and Specifications for GNSS Geodetic Control Surveys Using OPUS Projects* — replaces NGS-58/59 for surveys submitted through OPUS Projects.
 - **NGS User Guidelines for Single Base Real Time GNSS Positioning** (Henning 2011) — RTK/RTN checkpoint protocols.
-- **USGS Lidar Base Specification 2024 rev. A** — checkpoint survey, TIN-based NVA/VVA assessment, deliverables.
+- **USGS Lidar Base Specification 2024 rev. A / 2025 rev. A** — checkpoint survey, TIN-based NVA/VVA assessment, deliverables.
 - **IHO S-44 Edition 6.1.0** (2022) — orders, TVU/THU, feature detection, crosslines and reference checks.
 - **NOAA Field Procedures Manual** and **Hydrographic Surveys Specifications and Deliverables** (current editions) — reference-surface and patch-test procedures, crossline requirements.
 - **ISO 19157-1:2023** — quality elements, direct external evaluation against reference data, reporting.
@@ -250,33 +251,33 @@ This chapter's subject is validation, so this section concentrates on the questi
 
 ## References
 
-- Adam, M., Urbazaev, M., Dubois, C., & Schmullius, C. (2020). Accuracy assessment of GEDI terrain elevation and canopy height estimates in European temperate forests. *Remote Sensing*, 12(23):3948.
+- Adam, M., Urbazaev, M., Dubois, C., & Schmullius, C. (2020). Accuracy assessment of GEDI terrain elevation and canopy height estimates in European temperate forests. *Remote Sensing*, 12(23):3948. doi:10.3390/rs12233948
 - ASPRS (2015). ASPRS Positional Accuracy Standards for Digital Geospatial Data (Edition 1, Version 1.0, November 2014). *Photogrammetric Engineering & Remote Sensing*, 81(3):A1–A26.
 - ASPRS (2023). *ASPRS Positional Accuracy Standards for Digital Geospatial Data, Edition 2* (Version 1.0.0, August 2023; Version 2, 2024). American Society for Photogrammetry and Remote Sensing.
 - Bielski, C., López-Vázquez, C., Grohmann, C. H., Guth, P. L., Hawker, L., Gesch, D., Trevisani, S., Herrera-Cruz, V., Riazanoff, S., Corseaux, A., Reuter, H. I., & Strobl, P. (2024). Novel approach for ranking DEMs: Copernicus DEM improves one arc second open global topography. *IEEE Transactions on Geoscience and Remote Sensing*, 62:4503922. doi:10.1109/TGRS.2024.3368015.
-- Brunt, K. M., Neumann, T. A., & Smith, B. E. (2019). Assessment of ICESat-2 ice sheet surface heights, based on comparisons over the interior of the Antarctic ice sheet. *Geophysical Research Letters*, 46(22):13072–13078.
-- Carabajal, C. C., & Harding, D. J. (2006). SRTM C-band and ICESat laser altimetry elevation comparisons as a function of tree cover and relief. *Photogrammetric Engineering & Remote Sensing*, 72(3):287–298.
-- Dubayah, R., Blair, J. B., Goetz, S., et al. (2020). The Global Ecosystem Dynamics Investigation: High-resolution laser ranging of the Earth's forests and topography. *Science of Remote Sensing*, 1:100002.
+- Brunt, K. M., Neumann, T. A., & Smith, B. E. (2019). Assessment of ICESat-2 ice sheet surface heights, based on comparisons over the interior of the Antarctic ice sheet. *Geophysical Research Letters*, 46(22):13072–13078. doi:10.1029/2019GL084886
+- Carabajal, C. C., & Harding, D. J. (2006). SRTM C-band and ICESat laser altimetry elevation comparisons as a function of tree cover and relief. *Photogrammetric Engineering & Remote Sensing*, 72(3):287–298. doi:10.14358/PERS.72.3.287
+- Dubayah, R., Blair, J. B., Goetz, S., et al. (2020). The Global Ecosystem Dynamics Investigation: High-resolution laser ranging of the Earth's forests and topography. *Science of Remote Sensing*, 1:100002. doi:10.1016/j.srs.2020.100002
 - FGDC (1998). *Geospatial Positioning Accuracy Standards, Part 3: National Standard for Spatial Data Accuracy*. FGDC-STD-007.3-1998.
-- Gesch, D. B. (2018). Best practices for elevation-based assessments of sea-level rise and coastal flooding exposure. *Frontiers in Earth Science*, 6:230.
-- Gesch, D. B., Oimoen, M. J., & Evans, G. A. (2014). *Accuracy assessment of the U.S. Geological Survey National Elevation Dataset, and comparison with other large-area elevation datasets—SRTM and ASTER*. USGS Open-File Report 2014-1008.
-- Guth, P. L., & Geoffroy, T. M. (2021). LiDAR point cloud and ICESat-2 evaluation of 1 second global digital elevation models: Copernicus wins. *Transactions in GIS*, 25(5):2245–2261.
-- Guth, P. L., Van Niekerk, A., Grohmann, C. H., et al. (2021). Digital Elevation Models: Terminology and definitions. *Remote Sensing*, 13(18):3581.
+- Gesch, D. B. (2018). Best practices for elevation-based assessments of sea-level rise and coastal flooding exposure. *Frontiers in Earth Science*, 6:230. doi:10.3389/feart.2018.00230
+- Gesch, D. B., Oimoen, M. J., & Evans, G. A. (2014). *Accuracy assessment of the U.S. Geological Survey National Elevation Dataset, and comparison with other large-area elevation datasets—SRTM and ASTER*. USGS Open-File Report 2014-1008. doi:10.3133/ofr20141008
+- Guth, P. L., & Geoffroy, T. M. (2021). LiDAR point cloud and ICESat-2 evaluation of 1 second global digital elevation models: Copernicus wins. *Transactions in GIS*, 25(5):2245–2261. doi:10.1111/tgis.12825
+- Guth, P. L., Van Niekerk, A., Grohmann, C. H., et al. (2021). Digital Elevation Models: Terminology and definitions. *Remote Sensing*, 13(18):3581. doi:10.3390/rs13183581
 - Hare, R., Eakins, B., & Amante, C. (2011). Modelling bathymetric uncertainty. *International Hydrographic Review*, No. 6:31–42.
 - Henning, W. (2011). *User Guidelines for Single Base Real Time GNSS Positioning*, Version 2.1. NOAA National Geodetic Survey (a Version 3.1 followed in 2014).
-- Hodgson, M. E., & Bresnahan, P. (2004). Accuracy of airborne lidar-derived elevation: Empirical assessment and error budget. *Photogrammetric Engineering & Remote Sensing*, 70(3):331–339.
-- Höhle, J., & Höhle, M. (2009). Accuracy assessment of digital elevation models by means of robust statistical methods. *ISPRS Journal of Photogrammetry and Remote Sensing*, 64(4):398–406.
+- Hodgson, M. E., & Bresnahan, P. (2004). Accuracy of airborne lidar-derived elevation: Empirical assessment and error budget. *Photogrammetric Engineering & Remote Sensing*, 70(3):331–339. doi:10.14358/PERS.70.3.331
+- Höhle, J., & Höhle, M. (2009). Accuracy assessment of digital elevation models by means of robust statistical methods. *ISPRS Journal of Photogrammetry and Remote Sensing*, 64(4):398–406. doi:10.1016/j.isprsjprs.2009.02.003
 - IHO (2022). *S-44 Standards for Hydrographic Surveys*, Edition 6.1.0. International Hydrographic Organization.
-- Liu, A., Cheng, X., & Chen, Z. (2021). Performance evaluation of GEDI and ICESat-2 laser altimeter data for terrain and canopy height retrievals. *Remote Sensing of Environment*, 264:112571.
-- Markus, T., Neumann, T., Martino, A., et al. (2017). The Ice, Cloud, and land Elevation Satellite-2 (ICESat-2): Science requirements, concept, and implementation. *Remote Sensing of Environment*, 190:260–273.
-- Medeiros, S., Hagen, S., Weishampel, J., & Angelo, J. (2015). Adjusting lidar-derived digital terrain models in coastal marshes based on estimated aboveground biomass density. *Remote Sensing*, 7(4):3507–3525.
-- Neuenschwander, A. L., Guenther, E., White, J. C., Duncanson, L., & Montesano, P. (2020). Validation of ICESat-2 terrain and canopy heights in boreal forests. *Remote Sensing of Environment*, 251:112110.
-- Qin, N., Tan, W., Ma, L., Zhang, D., & Li, J. (2021). OpenGF: An ultra-large-scale ground filtering dataset built upon open ALS point clouds around the world. *CVPR Workshops*, 1082–1091.
-- Reutebuch, S. E., McGaughey, R. J., Andersen, H.-E., & Carson, W. W. (2003). Accuracy of a high-resolution lidar terrain model under a conifer forest canopy. *Canadian Journal of Remote Sensing*, 29(5):527–535.
-- Schmid, K. A., Hadley, B. C., & Wijekoon, N. (2011). Vertical accuracy and use of topographic LIDAR data in coastal marshes. *Journal of Coastal Research*, 27(6A):116–132.
-- Sithole, G., & Vosselman, G. (2004). Experimental comparison of filter algorithms for bare-Earth extraction from airborne laser scanning point clouds. *ISPRS Journal of Photogrammetry and Remote Sensing*, 59(1–2):85–101.
-- Stoker, J., & Miller, B. (2022). The accuracy and consistency of 3D Elevation Program data: A systematic analysis. *Remote Sensing*, 14(4):940.
-- U.S. Geological Survey (2024). *Lidar Base Specification 2024 rev. A*. National Geospatial Program.
-- Varney, N., Asari, V. K., & Graehling, Q. (2020). DALES: A large-scale aerial LiDAR data set for semantic segmentation. *CVPR Workshops*, 186–187.
+- Liu, A., Cheng, X., & Chen, Z. (2021). Performance evaluation of GEDI and ICESat-2 laser altimeter data for terrain and canopy height retrievals. *Remote Sensing of Environment*, 264:112571. doi:10.1016/j.rse.2021.112571
+- Markus, T., Neumann, T., Martino, A., et al. (2017). The Ice, Cloud, and land Elevation Satellite-2 (ICESat-2): Science requirements, concept, and implementation. *Remote Sensing of Environment*, 190:260–273. doi:10.1016/j.rse.2016.12.029
+- Medeiros, S., Hagen, S., Weishampel, J., & Angelo, J. (2015). Adjusting lidar-derived digital terrain models in coastal marshes based on estimated aboveground biomass density. *Remote Sensing*, 7(4):3507–3525. doi:10.3390/rs70403507
+- Neuenschwander, A. L., Guenther, E., White, J. C., Duncanson, L., & Montesano, P. (2020). Validation of ICESat-2 terrain and canopy heights in boreal forests. *Remote Sensing of Environment*, 251:112110. doi:10.1016/j.rse.2020.112110
+- Qin, N., Tan, W., Ma, L., Zhang, D., & Li, J. (2021). OpenGF: An ultra-large-scale ground filtering dataset built upon open ALS point clouds around the world. *CVPR Workshops*, 1082–1091. doi:10.1109/CVPRW53098.2021.00119
+- Reutebuch, S. E., McGaughey, R. J., Andersen, H.-E., & Carson, W. W. (2003). Accuracy of a high-resolution lidar terrain model under a conifer forest canopy. *Canadian Journal of Remote Sensing*, 29(5):527–535. doi:10.5589/m03-022
+- Schmid, K. A., Hadley, B. C., & Wijekoon, N. (2011). Vertical accuracy and use of topographic LIDAR data in coastal marshes. *Journal of Coastal Research*, 27(6A):116–132. doi:10.2112/JCOASTRES-D-10-00188.1
+- Sithole, G., & Vosselman, G. (2004). Experimental comparison of filter algorithms for bare-Earth extraction from airborne laser scanning point clouds. *ISPRS Journal of Photogrammetry and Remote Sensing*, 59(1–2):85–101. doi:10.1016/j.isprsjprs.2004.05.004
+- Stoker, J., & Miller, B. (2022). The accuracy and consistency of 3D Elevation Program data: A systematic analysis. *Remote Sensing*, 14(4):940. doi:10.3390/rs14040940
+- U.S. Geological Survey (2024). *Lidar Base Specification 2024 rev. A* (and *2025 rev. A*, 2025). National Geospatial Program.
+- Varney, N., Asari, V. K., & Graehling, Q. (2020). DALES: A large-scale aerial LiDAR data set for semantic segmentation. *2020 IEEE/CVF Conference on Computer Vision and Pattern Recognition Workshops (CVPRW)*, 717–726. doi:10.1109/CVPRW50498.2020.00101.
 - Zilkoski, D. B., D'Onofrio, J. D., & Frakes, S. J. (1997). *Guidelines for Establishing GPS-Derived Ellipsoid Heights (Standards: 2 cm and 5 cm), Version 4.3*. NOAA Technical Memorandum NOS NGS-58.
 - Zilkoski, D. B., Carlson, E. E., & Smith, C. L. (2008). *Guidelines for Establishing GPS-Derived Orthometric Heights*. NOAA Technical Memorandum NOS NGS-59.

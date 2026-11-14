@@ -8,7 +8,7 @@
 
 ### 24.1.1 From gravity to orthometric heights
 
-The orthometric height $H$ of a point is its distance above the geoid along the plumb line, and the geoid is an equipotential surface of Earth's gravity field. Ellipsoidal heights $h$ from GNSS are converted by $H = h - N$, where the **geoid undulation** $N$ comes from a gravity-field model — a global spherical-harmonic model (EGM2008 to degree 2190, roughly 9 km half-wavelength; XGM2019e; the GRACE/GOCE-based satellite-only models to degree 200–300) refined regionally by terrestrial, airborne, and marine gravity in a national geoid model (GEOID18 and, from the modernised NSRS, NAPGD2022 in the United States; the Canadian CGG2013a; AUSGeoid2020; OSGM15 in Britain). [Chapter 7](ch07-shape-of-the-earth.md) and [Chapter 9](ch09-vertical-datums.md) describe the heights; here the question is how the gravity data and the DEM interact.
+The orthometric height $H$ of a point is its distance above the geoid along the plumb line, and the geoid is an equipotential surface of Earth's gravity field. Ellipsoidal heights $h$ from GNSS are converted by $H = h - N$, where the **geoid undulation** $N$ comes from a gravity-field model — a global spherical-harmonic model (EGM2008 to degree 2190, roughly 9 km half-wavelength, Pavlis et al. 2012; XGM2019e; the GRACE/GOCE-based satellite-only models to degree 200–300) refined regionally by terrestrial, airborne, and marine gravity in a national geoid model (GEOID18 and, from the modernised NSRS, NAPGD2022 in the United States; the Canadian CGG2013a; AUSGeoid2020; OSGM15 in Britain). [Chapter 7](ch07-shape-of-the-earth.md) and [Chapter 9](ch09-vertical-datums.md) describe the heights; here the question is how the gravity data and the DEM interact.
 
 Gravity observed on the ground must be **reduced** to isolate the signal of the geoid. The **free-air correction** accounts for the observation height above the reference ellipsoid (0.3086 mGal m$^{-1}$); the **Bouguer correction** removes the attraction of the rock slab between the station and the datum ($2\pi G\rho\,h = 0.1119$ mGal m$^{-1}$ for $\rho = 2{,}670$ kg m$^{-3}$); and the **terrain correction** accounts for the fact that the surface is not a flat slab — hills above the station pull upward and valleys below it are missing mass, both of which make the slab correction too large, so the terrain correction is always positive. Hammer (1939) tabulated it for concentric zones read from a topographic map by hand; today it is computed from a DEM by summing the attraction of **prisms** (Nagy 1966; Nagy, Papp & Benedek 2000 for the closed-form prism and its singularities) or, more efficiently, by FFT methods (Forsberg 1985) out to 167 km (Hayford–Bowie zone O) with inner-zone refinement from a fine DEM. In mountainous terrain the terrain correction reaches tens of milligals and its error, dominated by the DEM's error and resolution within the first kilometre, can be milligals; since 1 mGal of systematic gravity error over 100 km corresponds to roughly 1–2 cm of geoid, the DEM quality matters at the level modern geoid models aim for (1–2 cm). The **residual terrain model (RTM)** technique (Forsberg 1984) uses the high-frequency part of the DEM — the difference between the detailed DEM and a smoothed reference surface — to compute the short-wavelength gravity and geoid signal that global models omit, which is what GGMplus (Hirt et al. 2013) did to extend EGM2008 to about 200 m resolution worldwide using SRTM.
 
@@ -18,7 +18,7 @@ Here is the loop. A DEM is used to compute terrain corrections and RTM effects; 
 
 ### 24.1.3 Airborne and satellite gravity
 
-Surface gravimetry is sparse and inconsistent across borders and absent over oceans, ice, and jungle. **Satellite gravimetry** — CHAMP (2000), GRACE (2002–2017), GOCE (2009–2013), GRACE-FO (2018–) — determines the long and medium wavelengths (down to roughly 80–100 km) homogeneously, and GRACE's time-variable field tracks ice-mass loss and groundwater depletion ([Chapter 38](ch38-plate-motion-and-vlm.md)). **Airborne gravimetry** fills the gap between satellite and surface: the US **GRAV-D** program (2007–) flew the entire United States and territories at about 6 km altitude and 10 km line spacing with the explicit goal of a 1–2 cm geoid for the 2022 modernised vertical datum, and similar campaigns underlie Greenland and Antarctic gravity grids. Airborne gravity requires sub-centimetre-per-second-squared separation of the aircraft's accelerations from gravity, which depends on kinematic GNSS of the aircraft and, again, on a DEM-free free-air reduction to flight altitude. Over ice sheets and polar margins the same airborne gravity (Operation IceBridge, OMG, ICECAP) is inverted for **sub-ice bathymetry**: where radar sounding fails (warm ice, water-filled troughs, fjords with floating ice), the gravity low over a deep trough constrains its depth to perhaps ± 50–100 m given assumptions about rock density and sediment, and this is how the cavities under Thwaites and Totten and the fjords of Greenland entered BedMachine (Tinto & Bell 2011; Greenbaum et al. 2015; An et al. 2019). Over oceans, the altimeter-derived gravity and its inversion to bathymetry were covered in [Chapter 21](ch21-radar-sar-insar.md) and [Chapter 23](ch23-satellite-derived-bathymetry.md).
+Surface gravimetry is sparse and inconsistent across borders and absent over oceans, ice, and jungle. **Satellite gravimetry** — CHAMP (2000), GRACE (2002–2017), GOCE (2009–2013), GRACE-FO (2018–) — determines the long and medium wavelengths (down to roughly 80–100 km) homogeneously, and GRACE's time-variable field tracks ice-mass loss and groundwater depletion ([Chapter 38](ch38-plate-motion-and-vlm.md)). **Airborne gravimetry** fills the gap between satellite and surface: the US **GRAV-D** program (2007–) flew the entire United States and territories at about 6 km altitude and 10 km line spacing with the explicit goal of a 1–2 cm geoid for the modernised NSRS vertical datum, and similar campaigns underlie Greenland and Antarctic gravity grids. Airborne gravity requires sub-centimetre-per-second-squared separation of the aircraft's accelerations from gravity, which depends on kinematic GNSS of the aircraft and, again, on a DEM-free free-air reduction to flight altitude. Over ice sheets and polar margins the same airborne gravity (Operation IceBridge, OMG, ICECAP) is inverted for **sub-ice bathymetry**: where radar sounding fails (warm ice, water-filled troughs, fjords with floating ice), the gravity low over a deep trough constrains its depth to perhaps ± 50–100 m given assumptions about rock density and sediment, and this is how the cavities under Thwaites and Totten and the fjords of Greenland entered BedMachine (Tinto & Bell 2011; Greenbaum et al. 2015; Morlighem et al. 2017, 2020; An et al. 2019). Over oceans, the altimeter-derived gravity and its inversion to bathymetry were covered in [Chapter 21](ch21-radar-sar-insar.md) and [Chapter 23](ch23-satellite-derived-bathymetry.md).
 
 ### 24.1.4 Isostasy, flexure, and what topography is plausible
 
@@ -66,7 +66,7 @@ Three modes of fusion are legitimate; a fourth is not.
 
 **What not to do** is to blend a predicted surface with measured surfaces so that the distinction is lost, or to report the accuracy of the measured cells as the accuracy of the grid. [Chapter 48](ch48-compositing.md) gives the rules; the one that matters here is that geophysical inference is always a *source type*, carried as an attribute, never silently merged.
 
-> **Case file.** The Southern Ocean south of Australia contains seafloor cells in global grids whose only constraint was gravity and depth–age. When the search for Malaysia Airlines flight MH370 began in 2014, the pre-search bathymetry in the priority area was predominantly satellite-predicted, with reported local errors of hundreds of metres and features such as a 1,400 m-high seamount and 1,000 m-deep fault valleys absent or mislocated. The Geoscience Australia bathymetric survey (2014–2017) mapped about 279,000 km² with multibeam before the sonar search could proceed, and the differences between the predicted and measured grids were published as a direct illustration of what "predicted bathymetry" means (Picard, Brooke & Coffin 2017; feature dimensions as reported there (verify)).
+> **Case file.** The southeastern Indian Ocean west of Australia contains seafloor cells in global grids whose only pre-2014 constraint was satellite-derived gravity and depth–age. When the underwater search for Malaysia Airlines flight MH370 began in 2014, the pre-search bathymetry in the priority area (around Broken Ridge and the Diamantina Escarpment) was predominantly satellite-predicted, with local errors of hundreds of metres and features such as seamounts rising roughly 1,500 m above the abyssal floor and deep rift valleys absent or mislocated. Between June 2014 and June 2016 Geoscience Australia's Phase 1 survey mapped approximately 279,000 km² with shipboard multibeam before the deep-tow sonar search could proceed, publishing the comparison between predicted and measured grids as a textbook illustration of what "predicted bathymetry" resolves and misses (Picard, Brooke & Coffin 2017).
 
 ## Then & now
 
@@ -82,7 +82,7 @@ Three modes of fusion are legitimate; a fourth is not.
 - **2000–2013.** CHAMP, GRACE (2002), GOCE (2009) transform the long-wavelength gravity field; EGM2008 (2008).
 - **2007.** NGS begins GRAV-D airborne gravity for the modernised US vertical datum; Müller et al. (2008) global age grid.
 - **2013–2017.** GGMplus (2013); EMAG2v3 (2017); BedMachine Greenland (2017) uses gravity-derived fjord bathymetry; MH370 search survey (2014–2017).
-- **2020–2026.** WMM2020 and WMM2025; IGRF-13 (2020) and IGRF-14 (2024); NAPGD2022 and the modernised NSRS released by NGS as beta products in 2026, with NAVD 88 still official pending adoption (verify current status).
+- **2020–2026.** WMM2020 and WMM2025; IGRF-13 (2020) and IGRF-14 (2024); NGS releases the final public beta of NAPGD2022 and the modernised NSRS in September 2026 for public review ahead of formal FGCS adoption targeted for 2027, with NAVD 88 and NAD 83 still official in the interim.
 
 The through-line is that gravity has moved from the explanation of a surveying anomaly to the definition of the height system itself, and the DEM has moved from a map read by hand for terrain corrections to a dataset whose errors propagate into the geoid.
 
@@ -90,11 +90,11 @@ The through-line is that gravity has moved from the explanation of a surveying a
 
 **Free-air and Bouguer.** Free-air anomaly: $\Delta g_{FA} = g_{\mathrm{obs}} - \gamma_0 + 0.3086\,h$ (mGal, $h$ in m). Simple Bouguer anomaly: $\Delta g_{B} = \Delta g_{FA} - 2\pi G\rho\,h = \Delta g_{FA} - 0.04193\,\rho\,h$ with $\rho$ in g cm$^{-3}$ (0.1119 mGal m$^{-1}$ at 2.67). Complete Bouguer: add the terrain correction $\delta g_T \ge 0$ and, for distant zones, the curvature (Bullard B) correction (LaFehr 1991; Hinze et al. 2005 for modern standards).
 
-**Nagy prism.** The vertical attraction at the origin of a right rectangular prism of density $\rho$ occupying $[x_1, x_2] \times [y_1, y_2] \times [z_1, z_2]$ is
+**Nagy prism.** With $z$ positive downward, the downward vertical attraction at the origin of a right rectangular prism of density $\rho$ occupying $[x_1, x_2] \times [y_1, y_2] \times [z_1, z_2]$ is
 
-$$g_z = G\rho \,\Big|\Big|\Big|\; x\ln(y + r) + y\ln(x + r) - z\arctan\frac{xy}{zr} \;\Big|_{x_1}^{x_2}\Big|_{y_1}^{y_2}\Big|_{z_1}^{z_2},$$
+$$g_z = -G\rho \,\Big|\Big|\Big|\; x\ln(y + r) + y\ln(x + r) - z\arctan\frac{xy}{zr} \;\Big|_{x_1}^{x_2}\Big|_{y_1}^{y_2}\Big|_{z_1}^{z_2},$$
 
-with $r = \sqrt{x^2 + y^2 + z^2}$ (Nagy 1966; Nagy, Papp & Benedek 2000 give the singular cases). A terrain correction sums this over DEM cells (as prisms from the station height to the cell's surface height) within the inner zone, and uses faster approximations (line masses, FFT) beyond a few kilometres.
+with $r = \sqrt{x^2 + y^2 + z^2}$ (Nagy 1966; Nagy, Papp & Benedek 2000 give the singular cases). A terrain correction sums this over DEM cells (as prisms between the station height and the cell's surface height) within the inner zone, and uses faster approximations (line masses, FFT) beyond a few kilometres.
 
 **Parker's forward formula.** For a density interface $h(\mathbf{x})$ (positive up) at mean depth $d$ below the observation plane,
 
@@ -131,7 +131,7 @@ where $t_c$ is the crustal thickness; it tends to the Bouguer value at short wav
 > resid = g_obs - g_dem
 > print("residual RMS (mGal):", np.sqrt(np.nanmean((resid - np.nanmean(resid))**2)))
 > # Save the residual grid; inspect in QGIS against DEM tile edges and a forest mask.
-> vd.make_xarray_grid(coords, resid, data_names="resid").to_netcdf("gravity_residual.nc")
+> vd.make_xarray_grid(coords, resid, data_names="resid", extra_coords_names="upward").to_netcdf("gravity_residual.nc")
 > ```
 
 ## Validation & uncertainty
@@ -142,7 +142,7 @@ Geophysical surfaces and corrections carry three kinds of uncertainty that must 
 
 **Inversion uncertainty.** Gravity inversion for an interface is non-unique: a shallow low-contrast body and a deep high-contrast body produce similar anomalies. Report the assumed density contrast and the sensitivity of the depth to it ($\partial d/\partial\Delta\rho$), the regularisation used, and — where the inversion was calibrated against direct measurements (ship soundings, boreholes, radar picks) — the residuals at withheld calibration points by distance from the nearest constraint. For gravity-derived sub-ice or seafloor depths, typical uncertainties are 50–100 m near constraints and several hundred metres far from them; a published grid without such a layer should be assumed to be at the worse end.
 
-**Model-epoch and reference uncertainty.** Magnetic declination must be evaluated for the observation date with the model valid for that date, and the model's own uncertainty stated (the WMM technical report quotes a global RMS declination error of a few tenths of a degree, larger near the poles (verify)). Geoid models have a stated accuracy (GEOID18: about 1–2 cm relative over short distances, several centimetres absolute (verify)) and an epoch; using a geoid of one realisation with GNSS heights in another frame introduces decimetre errors ([Chapter 9](ch09-vertical-datums.md)).
+**Model-epoch and reference uncertainty.** Magnetic declination must be evaluated for the observation date with the model valid for that date, and the model's own uncertainty stated (the WMM2025 technical report quotes a global RMS declination error of 0.36° at 2025.0 rising to 0.40° at 2030.0, and larger near the magnetic poles). Geoid models have a stated accuracy (GEOID18: 1.39 cm RMS against GPS-on-benchmarks across CONUS and 1.6 cm relative RMS over baselines under 10 km, NOAA TR NOS NGS 72; several centimetres in sparser regions) and an epoch; using a geoid of one realisation with GNSS heights in another frame introduces decimetre errors ([Chapter 9](ch09-vertical-datums.md)).
 
 **Tests.** (1) Forward-model gravity from the DEM and compare with observed gravity (Try it); residual maps that show DEM structure are DEM problems. (2) For any gravity- or age-predicted bathymetry, withhold whole cruises and report RMS by distance to constraint. (3) For buried-surface grids, cross-plot the picked depth at line intersections (mis-ties) and report the RMS mis-tie; a mis-tie larger than the claimed vertical accuracy means the claim is wrong. (4) For declination, check the model value against a known true bearing (a surveyed baseline) once per campaign. (5) For any product that passed through a geoid, record the geoid model and the DEM it used, and avoid validating that DEM with heights that depend on it.
 
@@ -172,7 +172,7 @@ Geophysical surfaces and corrections carry three kinds of uncertainty that must 
 - **NGS GRAV-D Project Plan and Technical Reports** (2007–): airborne gravity specifications for the modernised NSRS.
 - **IAGA IGRF release notes** (IGRF-13, 2020; IGRF-14, November 2024) and the **WMM Technical Report** (WMM2025, NOAA NCEI/BGS): model validity, epoch, and error statements.
 - **GEBCO Cook Book (IHO-IOC B-11)**: chapters on gravity-predicted bathymetry and source identification.
-- **SEG / EAGE recommended practices** for seismic horizon picking and time–depth conversion (project-specific (verify)).
+- **SUT OSIG *Guidance Notes for the Planning and Execution of Geophysical and Geotechnical Ground Investigations for Offshore Renewable Energy Developments*** (2014; rev. 2022) and **BOEM geophysical survey guidelines** (2020): line spacing, sub-bottom horizon picking, mis-tie reporting, and time–depth conversion.
 - **ASTM D6429 (standard guide for selecting surface geophysical methods)** and **ASTM D6431 / D6432** (resistivity, GPR): procedures for near-surface surveys.
 
 ## Pitfalls
@@ -202,35 +202,36 @@ Geophysical surfaces and corrections carry three kinds of uncertainty that must 
 
 ## References
 
-- Alken, P., Thébault, E., Beggan, C. D., Amit, H., Aubert, J., Baerenzung, J., et al. (2021). International Geomagnetic Reference Field: the thirteenth generation. *Earth, Planets and Space*, 73:49.
-- An, L., Rignot, E., Chauche, N., Holland, D. M., Holland, D., Jakobsson, M., et al. (2019). Bathymetry of southeast Greenland from Oceans Melting Greenland (OMG) data. *Geophysical Research Letters*, 46(20):11197–11205.
-- Cande, S. C., & Kent, D. V. (1992). A new geomagnetic polarity time scale for the Late Cretaceous and Cenozoic. *Journal of Geophysical Research*, 97(B10):13917–13951.
-- Cande, S. C., & Kent, D. V. (1995). Revised calibration of the geomagnetic polarity timescale for the Late Cretaceous and Cenozoic. *Journal of Geophysical Research*, 100(B4):6093–6095.
-- Dorman, L. M., & Lewis, B. T. R. (1970). Experimental isostasy: 1. Theory of the determination of the Earth's isostatic response to a concentrated load. *Journal of Geophysical Research*, 75(17):3357–3365.
+- Alken, P., Thébault, E., Beggan, C. D., Amit, H., Aubert, J., Baerenzung, J., et al. (2021). International Geomagnetic Reference Field: the thirteenth generation. *Earth, Planets and Space*, 73:49. doi:10.1186/s40623-020-01288-x
+- An, L., Rignot, E., Chauche, N., Holland, D. M., Holland, D., Jakobsson, M., et al. (2019). Bathymetry of southeast Greenland from Oceans Melting Greenland (OMG) data. *Geophysical Research Letters*, 46(20):11197–11205. doi:10.1029/2019GL083953
+- Cande, S. C., & Kent, D. V. (1992). A new geomagnetic polarity time scale for the Late Cretaceous and Cenozoic. *Journal of Geophysical Research*, 97(B10):13917–13951. doi:10.1029/92JB01202
+- Cande, S. C., & Kent, D. V. (1995). Revised calibration of the geomagnetic polarity timescale for the Late Cretaceous and Cenozoic. *Journal of Geophysical Research*, 100(B4):6093–6095. doi:10.1029/94JB03098
+- Dorman, L. M., & Lewis, B. T. R. (1970). Experimental isostasy: 1. Theory of the determination of the Earth's isostatic response to a concentrated load. *Journal of Geophysical Research*, 75(17):3357–3365. doi:10.1029/JB075i017p03357
 - Forsberg, R. (1984). *A Study of Terrain Reductions, Density Anomalies and Geophysical Inversion Methods in Gravity Field Modelling*. Report 355, Department of Geodetic Science and Surveying, Ohio State University.
-- Forsberg, R. (1985). Gravity field terrain effect computations by FFT. *Bulletin Géodésique*, 59(4):342–360.
-- Forsyth, D. W. (1985). Subsurface loading and estimates of the flexural rigidity of continental lithosphere. *Journal of Geophysical Research*, 90(B14):12623–12632.
-- Greenbaum, J. S., Blankenship, D. D., Young, D. A., Richter, T. G., Roberts, J. L., Aitken, A. R. A., et al. (2015). Ocean access to a cavity beneath Totten Glacier in East Antarctica. *Nature Geoscience*, 8:294–298.
-- Hammer, S. (1939). Terrain corrections for gravimeter stations. *Geophysics*, 4(3):184–194.
-- Hinze, W. J., Aiken, C., Brozena, J., Coakley, B., Dater, D., Flanagan, G., et al. (2005). New standards for reducing gravity data: The North American gravity database. *Geophysics*, 70(4):J25–J32.
-- Hirt, C., Claessens, S., Fecher, T., Kuhn, M., Pail, R., & Rexer, M. (2013). New ultrahigh-resolution picture of Earth's gravity field. *Geophysical Research Letters*, 40(16):4279–4283.
-- LaFehr, T. R. (1991). An exact solution for the gravity curvature (Bullard B) correction. *Geophysics*, 56(8):1179–1184.
-- Langston, C. A. (1979). Structure under Mount Rainier, Washington, inferred from teleseismic body waves. *Journal of Geophysical Research*, 84(B9):4749–4762.
+- Forsberg, R. (1985). Gravity field terrain effect computations by FFT. *Bulletin Géodésique*, 59(4):342–360. doi:10.1007/BF02521068
+- Forsyth, D. W. (1985). Subsurface loading and estimates of the flexural rigidity of continental lithosphere. *Journal of Geophysical Research*, 90(B14):12623–12632. doi:10.1029/JB090iB14p12623
+- Greenbaum, J. S., Blankenship, D. D., Young, D. A., Richter, T. G., Roberts, J. L., Aitken, A. R. A., et al. (2015). Ocean access to a cavity beneath Totten Glacier in East Antarctica. *Nature Geoscience*, 8:294–298. doi:10.1038/ngeo2388
+- Hammer, S. (1939). Terrain corrections for gravimeter stations. *Geophysics*, 4(3):184–194. doi:10.1190/1.1440495
+- Hinze, W. J., Aiken, C., Brozena, J., Coakley, B., Dater, D., Flanagan, G., et al. (2005). New standards for reducing gravity data: The North American gravity database. *Geophysics*, 70(4):J25–J32. doi:10.1190/1.1988183
+- Hirt, C., Claessens, S., Fecher, T., Kuhn, M., Pail, R., & Rexer, M. (2013). New ultrahigh-resolution picture of Earth's gravity field. *Geophysical Research Letters*, 40(16):4279–4283. doi:10.1002/grl.50838
+- LaFehr, T. R. (1991). An exact solution for the gravity curvature (Bullard B) correction. *Geophysics*, 56(8):1179–1184. doi:10.1190/1.1443138
+- Langston, C. A. (1979). Structure under Mount Rainier, Washington, inferred from teleseismic body waves. *Journal of Geophysical Research*, 84(B9):4749–4762. doi:10.1029/JB084iB09p04749
 - Laske, G., Masters, G., Ma, Z., & Pasyanos, M. (2013). Update on CRUST1.0 — A 1-degree global model of Earth's crust. *Geophysical Research Abstracts*, 15, EGU2013-2658.
-- Meyer, B., Saltus, R., & Chulliat, A. (2017). *EMAG2v3: Earth Magnetic Anomaly Grid (2-arc-minute resolution), Version 3*. NOAA National Centers for Environmental Information.
-- Morlighem, M., Williams, C. N., Rignot, E., An, L., Arndt, J. E., Bamber, J. L., et al. (2017). BedMachine v3: Complete bed topography and ocean bathymetry mapping of Greenland from multibeam echo sounding combined with mass conservation. *Geophysical Research Letters*, 44(21):11051–11061.
-- Morlighem, M., Rignot, E., Binder, T., Blankenship, D., Drews, R., Eagles, G., et al. (2020). Deep glacial troughs and stabilizing ridges unveiled beneath the margins of the Antarctic ice sheet. *Nature Geoscience*, 13:132–137.
-- Müller, R. D., Sdrolias, M., Gaina, C., & Roest, W. R. (2008). Age, spreading rates, and spreading asymmetry of the world's ocean crust. *Geochemistry, Geophysics, Geosystems*, 9:Q04006.
-- Müller, R. D., Zahirovic, S., Williams, S. E., Cannon, J., Seton, M., Bower, D. J., et al. (2019). A global plate model including lithospheric deformation along major rifts and orogens since the Triassic. *Tectonics*, 38(6):1884–1907.
-- Nagy, D. (1966). The gravitational attraction of a right rectangular prism. *Geophysics*, 31(2):362–371.
-- Nagy, D., Papp, G., & Benedek, J. (2000). The gravitational potential and its derivatives for the prism. *Journal of Geodesy*, 74(7–8):552–560.
-- Parker, R. L. (1973). The rapid calculation of potential anomalies. *Geophysical Journal of the Royal Astronomical Society*, 31(4):447–455.
-- Parsons, B., & Sclater, J. G. (1977). An analysis of the variation of ocean floor bathymetry and heat flow with age. *Journal of Geophysical Research*, 82(5):803–827.
-- Pavlis, N. K., Holmes, S. A., Kenyon, S. C., & Factor, J. K. (2012). The development and evaluation of the Earth Gravitational Model 2008 (EGM2008). *Journal of Geophysical Research: Solid Earth*, 117:B04406.
+- Meyer, B., Saltus, R., & Chulliat, A. (2017). *EMAG2v3: Earth Magnetic Anomaly Grid (2-arc-minute resolution), Version 3*. NOAA National Centers for Environmental Information. doi:10.7289/V5H70CVX
+- Morlighem, M., Williams, C. N., Rignot, E., An, L., Arndt, J. E., Bamber, J. L., et al. (2017). BedMachine v3: Complete bed topography and ocean bathymetry mapping of Greenland from multibeam echo sounding combined with mass conservation. *Geophysical Research Letters*, 44(21):11051–11061. doi:10.1002/2017GL074954
+- Morlighem, M., Rignot, E., Binder, T., Blankenship, D., Drews, R., Eagles, G., et al. (2020). Deep glacial troughs and stabilizing ridges unveiled beneath the margins of the Antarctic ice sheet. *Nature Geoscience*, 13:132–137. doi:10.1038/s41561-019-0510-8
+- Müller, R. D., Sdrolias, M., Gaina, C., & Roest, W. R. (2008). Age, spreading rates, and spreading asymmetry of the world's ocean crust. *Geochemistry, Geophysics, Geosystems*, 9:Q04006. doi:10.1029/2007GC001743
+- Müller, R. D., Zahirovic, S., Williams, S. E., Cannon, J., Seton, M., Bower, D. J., et al. (2019). A global plate model including lithospheric deformation along major rifts and orogens since the Triassic. *Tectonics*, 38(6):1884–1907. doi:10.1029/2018TC005462
+- Nagy, D. (1966). The gravitational attraction of a right rectangular prism. *Geophysics*, 31(2):362–371. doi:10.1190/1.1439779
+- Nagy, D., Papp, G., & Benedek, J. (2000). The gravitational potential and its derivatives for the prism. *Journal of Geodesy*, 74(7–8):552–560. doi:10.1007/s001900000116
+- Ogg, J. G. (2020). Geomagnetic polarity time scale. In F. M. Gradstein, J. G. Ogg, M. D. Schmitz, & G. M. Ogg (eds.), *Geologic Time Scale 2020*, Vol. 1, pp. 159–192. Elsevier. doi:10.1016/B978-0-12-824360-2.00005-X
+- Parker, R. L. (1973). The rapid calculation of potential anomalies. *Geophysical Journal of the Royal Astronomical Society*, 31(4):447–455. doi:10.1111/j.1365-246X.1973.tb06513.x
+- Parsons, B., & Sclater, J. G. (1977). An analysis of the variation of ocean floor bathymetry and heat flow with age. *Journal of Geophysical Research*, 82(5):803–827. doi:10.1029/JB082i005p00803
+- Pavlis, N. K., Holmes, S. A., Kenyon, S. C., & Factor, J. K. (2012). The development and evaluation of the Earth Gravitational Model 2008 (EGM2008). *Journal of Geophysical Research: Solid Earth*, 117:B04406. doi:10.1029/2011JB008916
 - Picard, K., Brooke, B., & Coffin, M. F. (2017). Geological insights from Malaysia Airlines flight MH370 search. *Eos*, 98. doi:10.1029/2017EO069015
-- Stein, C. A., & Stein, S. (1992). A model for the global variation in oceanic depth and heat flow with lithospheric age. *Nature*, 359:123–129.
-- Tinto, K. J., & Bell, R. E. (2011). Progressive unpinning of Thwaites Glacier from newly identified offshore ridge: Constraints from aerogravity. *Geophysical Research Letters*, 38:L20503.
-- Vine, F. J., & Matthews, D. H. (1963). Magnetic anomalies over oceanic ridges. *Nature*, 199:947–949.
+- Stein, C. A., & Stein, S. (1992). A model for the global variation in oceanic depth and heat flow with lithospheric age. *Nature*, 359:123–129. doi:10.1038/359123a0
+- Tinto, K. J., & Bell, R. E. (2011). Progressive unpinning of Thwaites Glacier from newly identified offshore ridge: Constraints from aerogravity. *Geophysical Research Letters*, 38:L20503. doi:10.1029/2011GL049026
+- Vine, F. J., & Matthews, D. H. (1963). Magnetic anomalies over oceanic ridges. *Nature*, 199:947–949. doi:10.1038/199947a0
 - Watts, A. B. (2001). *Isostasy and Flexure of the Lithosphere*. Cambridge University Press.
-- Wieczorek, M. A., & Meschede, M. (2018). SHTools: Tools for working with spherical harmonics. *Geochemistry, Geophysics, Geosystems*, 19(8):2574–2592.
-- Zhu, L., & Kanamori, H. (2000). Moho depth variation in southern California from teleseismic receiver functions. *Journal of Geophysical Research*, 105(B2):2969–2980.
+- Wieczorek, M. A., & Meschede, M. (2018). SHTools: Tools for working with spherical harmonics. *Geochemistry, Geophysics, Geosystems*, 19(8):2574–2592. doi:10.1029/2018GC007529
+- Zhu, L., & Kanamori, H. (2000). Moho depth variation in southern California from teleseismic receiver functions. *Journal of Geophysical Research*, 105(B2):2969–2980. doi:10.1029/1999JB900322

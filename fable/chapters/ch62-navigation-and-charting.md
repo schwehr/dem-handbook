@@ -75,7 +75,7 @@ Off-planet, the elevation map is built in advance from orbit and the robot local
 
 ## 62.6 Terrain-referenced navigation: the DEM as a sensor
 
-**Terrain-referenced navigation (TRN)** estimates position by matching a measured terrain profile against a stored DEM. **TERCOM** (Terrain Contour Matching; Golden 1980) correlated a radar-altimeter-minus-barometric-altitude profile along a cruise missile's track against DEM strips to fix position when inertial drift had accumulated; modern formulations (SITAN, and particle-filter TRN) run the match continuously inside a Bayesian filter. The same idea underlies **bathymetric navigation for AUVs**, which match multibeam or single-beam depth profiles against a prior bathymetric grid to bound INS drift during long dives without surfacing for GNSS ([Chapter 14](ch14-positioning-beyond-gnss.md)).
+**Terrain-referenced navigation (TRN)** estimates position by matching a measured terrain profile against a stored DEM. **TERCOM** (Terrain Contour Matching; Golden 1980) correlated a radar-altimeter-minus-barometric-altitude profile along a cruise missile's track against DEM strips to fix position when inertial drift had accumulated; modern formulations (SITAN, and particle-filter TRN; Bergman 1999) run the match continuously inside a Bayesian filter. The same idea underlies **bathymetric navigation for AUVs**, which match multibeam or single-beam depth profiles against a prior bathymetric grid to bound INS drift during long dives without surfacing for GNSS ([Chapter 14](ch14-positioning-beyond-gnss.md)).
 
 In all of these the DEM is a sensor with an error budget: the match's horizontal accuracy is bounded by the DEM's horizontal registration and by the terrain's information content—flat or self-similar terrain gives ambiguous matches regardless of DEM quality—and its vertical noise and bias enter the likelihood directly. A TRN system flying over a 30 m DEM with 10 m vertical error in rough terrain can fix position to a few tens of meters; over a plain it cannot fix position at all, and over a DEM with an unmodeled datum offset it converges confidently to the wrong place. The design questions are the DEM's resolution relative to terrain correlation length, its vertical error model (bias, noise, correlation), its epoch (sand dunes and glaciers move), and the availability of a **terrain-informativeness map** so the navigator knows where fixes are trustworthy.
 
@@ -93,7 +93,9 @@ The objects that cause accidents are disproportionately the ones that were not t
 
 ## Then & now
 
-Charts began as **lead-line soundings and visual pilotage** ⟨H⟩, with depths measured one at a time and positions by bearings; the sparse soundings and the convention of charting the shoalest value date from this era and survive in ENC sounding selection. Echo sounders (1920s) and then **multibeam sonar** (commercial systems from the late 1970s; routine hydrographic use from the 1990s) ⟨H⟩ produced full-coverage bathymetry, and the **ENC/ECDIS** combination (S-57 Edition 3 in 1996; ECDIS performance standards from IMO in 1995 and carriage requirements phased in 2012–2018) ⟨H⟩ replaced paper as the legal chart. The **S-100** framework (2010) and its product specifications—S-101 ENC, S-102 bathymetric surface, S-104 water levels, S-111 currents—make the chart a layered, time-varying product in the 2020s, with S-102 Edition 3 (2024) the first gridded bathymetry with per-node uncertainty intended for the bridge.
+Charts began as **lead-line soundings and visual pilotage**, with depths measured one at a time and positions by bearings; the sparse soundings and the convention of charting the shoalest value date from this era and survive in ENC sounding selection.
+Echo sounders (1920s) and then **multibeam sonar** (first commercial system SeaBeam in 1977 ⟨H⟩; routine hydrographic use from the 1990s) produced full-coverage bathymetry,
+and the **ENC/ECDIS** combination (S-57 Edition 3 in 1996; ECDIS performance standards from IMO in 1995 and carriage requirements phased in 2012–2018) replaced paper as the legal chart. The **S-100** framework (2010) and its product specifications—S-101 ENC, S-102 bathymetric surface, S-104 water levels, S-111 currents—make the chart a layered, time-varying product in the 2020s, with S-102 Edition 3 (2024) the first gridded bathymetry with per-node uncertainty intended for the bridge.
 
 Aviation went from **paper sectionals** and pilot judgment to the first **ground-proximity warning systems** (1970s, radar-altimeter-based, no database) and then to Honeywell's **EGPWS** (1996) with a worldwide terrain database and look-ahead alerting, which cut controlled-flight-into-terrain accidents sharply; ICAO's **eTOD** provisions (Annex 15 Amendment 33, 2004, with applicability dates through 2015) made terrain and obstacle datasets a State obligation with numerical requirements. Robotics moved from flat-world occupancy grids (1980s) to probabilistic 2.5D and 3D maps (OctoMap 2013; GridMap 2016), and planetary landing from ballistic targeting ellipses of hundreds of kilometers to **Mars 2020's TRN** (February 2021), the first use of an orbital DEM as a real-time landing sensor on another planet.
 
@@ -131,20 +133,24 @@ Navigation products are validated against a different question from general DEMs
 >
 > with h5py.File("channel_s102.h5") as f:
 >     g = f["BathymetryCoverage/BathymetryCoverage.01/Group_001"]
->     depth = g["values"]["depth"][:]            # S-102: depth positive down
->     unc   = g["values"]["uncertainty"][:]
+>     depth = g["values"]["depth"][:].astype(float)      # S-102: depth positive down; fillValue = 1e6
+>     unc   = g["values"]["uncertainty"][:].astype(float)
 >     attrs = f["BathymetryCoverage/BathymetryCoverage.01"].attrs
->     x0, y0 = attrs["gridOriginLongitude"], attrs["gridOriginLatitude"]
+>     x0, y0 = attrs["gridOriginLongitude"], attrs["gridOriginLatitude"]  # S-102 cell centre of (0,0)
 >     dx, dy = attrs["gridSpacingLongitudinal"], attrs["gridSpacingLatitudinal"]
 >
+> valid = np.isfinite(depth) & (depth < 1e5)
+> depth = np.where(valid, depth, np.nan)
+> unc   = np.where(valid & (unc < 1e5), unc, np.nan)
 > ny, nx = depth.shape
 > shoalest, *_ = binned_statistic_2d(x, y, d, statistic="min",
 >                                    bins=[nx, ny],
->                                    range=[[x0, x0+nx*dx], [y0, y0+ny*dy]])
+>                                    range=[[x0 - 0.5*dx, x0 + (nx - 0.5)*dx],
+>                                           [y0 - 0.5*dy, y0 + (ny - 0.5)*dy]])
 > shoalest = shoalest.T
 > deeper_than_source = (depth - shoalest) > 0.0     # product deeper than shoalest sounding
 > print("nodes violating shoal bias:", np.nansum(deeper_than_source),
->       "of", np.isfinite(shoalest).sum())
+>       "of", (np.isfinite(depth) & np.isfinite(shoalest)).sum())
 > print("median product uncertainty (m):", np.nanmedian(unc))
 > ```
 >
@@ -174,9 +180,9 @@ Navigation products are validated against a different question from general DEMs
 ## Standards & guides
 
 - **IHO S-44 Ed. 6.1.0 (2022)** *Standards for Hydrographic Surveys* — survey orders, TVU/THU, feature detection and search.
-- **IHO S-57 Ed. 3.1** and **S-101** (ENC product specifications); **S-52** (presentation); **S-4** (chart specifications); **S-67 Ed. 1.0.0 (2020)** *Mariners' Guide to Accuracy of Depth Information in ENCs*.
+- **IHO S-57 Ed. 3.1 (2000)** and **S-101 Ed. 2.0.0 (2024)** (ENC product specifications); **S-52 Ed. 6.1.1 (2015)** (presentation); **S-4 Ed. 4.10.0 (2026)** (chart specifications); **S-67 Ed. 1.0.0 (2020)** *Mariners' Guide to Accuracy of Depth Information in ENCs*.
 - **IHO S-102 Ed. 3.0.0 (2024)** bathymetric surface; **S-104** water level information for surface navigation; **S-111** surface currents.
-- **NOAA Hydrographic Surveys Specifications and Deliverables (HSSD, current edition)** and **Field Procedures Manual**; **USACE EM 1110-2-1003** *Hydrographic Surveying* (2013).
+- **NOAA Hydrographic Surveys Specifications and Deliverables (HSSD, 2024 edition)** and **Field Procedures Manual**; **USACE EM 1110-2-1003** *Hydrographic Surveying* (2013).
 - **PIANC WG 121 (2014)** *Harbour Approach Channels Design Guidelines* — UKC methodology.
 - **ICAO Annex 15** (AIS), **Annex 4** (charts), **Doc 10066 PANS-AIM** (eTOD areas and data quality), **Doc 9881** (eTOD guidelines).
 - **RTCA DO-276C / EUROCAE ED-98C (2015)** (terrain and obstacle data user requirements); **DO-200B / ED-76A** (processing aeronautical data).
@@ -212,15 +218,15 @@ Navigation products are validated against a different question from general DEMs
 ## References
 
 - Calder, B. R., and Wells, D. (2007). *CUBE User's Manual*, Version 1.13. Center for Coastal and Ocean Mapping, University of New Hampshire.
-- Fankhauser, P., and Hutter, M. (2016). A universal grid map library: Implementation and use case for rough terrain navigation. In A. Koubaa (ed.), *Robot Operating System (ROS): The Complete Reference (Volume 1)*, Studies in Computational Intelligence 625, Springer, pp. 99–120.
-- Golden, J. P. (1980). Terrain contour matching (TERCOM): A cruise missile guidance aid. *Proceedings of SPIE*, 238 (Image Processing for Missile Guidance):10–18.
-- Hornung, A., Wurm, K. M., Bennewitz, M., Stachniss, C., and Burgard, W. (2013). OctoMap: An efficient probabilistic 3D mapping framework based on octrees. *Autonomous Robots*, 34(3):189–206.
+- Fankhauser, P., and Hutter, M. (2016). A universal grid map library: Implementation and use case for rough terrain navigation. In A. Koubaa (ed.), *Robot Operating System (ROS): The Complete Reference (Volume 1)*, Studies in Computational Intelligence 625, Springer, pp. 99–120. https://doi.org/10.1007/978-3-319-26054-9_5
+- Golden, J. P. (1980). Terrain contour matching (TERCOM): A cruise missile guidance aid. *Proceedings of SPIE*, 238 (Image Processing for Missile Guidance):10–18. https://doi.org/10.1117/12.959127
+- Hornung, A., Wurm, K. M., Bennewitz, M., Stachniss, C., and Burgard, W. (2013). OctoMap: An efficient probabilistic 3D mapping framework based on octrees. *Autonomous Robots*, 34(3):189–206. https://doi.org/10.1007/s10514-012-9321-0
 - International Hydrographic Organization (2022). *IHO Standards for Hydrographic Surveys*, S-44 Edition 6.1.0. IHO, Monaco.
 - International Hydrographic Organization (2020). *Mariners' Guide to Accuracy of Depth Information in Electronic Navigational Charts (ENC)*, S-67 Edition 1.0.0. IHO, Monaco.
 - International Hydrographic Organization (2024). *S-102 Bathymetric Surface Product Specification*, Edition 3.0.0. IHO, Monaco.
 - International Civil Aviation Organization (2018). *Procedures for Air Navigation Services — Aeronautical Information Management (PANS-AIM)*, Doc 10066, First Edition. ICAO, Montréal.
 - International Civil Aviation Organization (2010). *Guidelines for Electronic Terrain, Obstacle and Aerodrome Mapping Information*, Doc 9881, First Edition. ICAO, Montréal.
-- Johnson, A. E., Aaron, S. B., Ansari, H., Bergh, C., Bourdu, H., Butler, J., Chang, J., Cheng, R., Cheng, Y., Clark, K., et al. (2022). Mars 2020 Lander Vision System flight performance. *AIAA SciTech 2022 Forum*, AIAA 2022-1214.
+- Johnson, A. E., Aaron, S. B., Ansari, H., Bergh, C., Bourdu, H., Butler, J., Chang, J., Cheng, R., Cheng, Y., Clark, K., et al. (2022). Mars 2020 Lander Vision System flight performance. *AIAA SciTech 2022 Forum*, AIAA 2022-1214. https://doi.org/10.2514/6.2022-1214
 - PIANC (2014). *Harbour Approach Channels Design Guidelines*, MarCom Working Group 121 report. PIANC, Brussels.
 - RTCA (2015). *Standards for Processing Aeronautical Data*, DO-200B. RTCA, Washington, DC.
 - RTCA (2015). *User Requirements for Terrain and Obstacle Data*, DO-276C. RTCA, Washington, DC.
@@ -229,4 +235,4 @@ Navigation products are validated against a different question from general DEMs
 - US Army Corps of Engineers (2013). *Hydrographic Surveying*, EM 1110-2-1003. USACE, Washington, DC.
 - Bergman, N. (1999). *Recursive Bayesian Estimation: Navigation and Tracking Applications*. PhD thesis, Linköping Studies in Science and Technology, Dissertation No. 579, Linköping University.
 - International Maritime Organization (2006). *Revised Performance Standards for Electronic Chart Display and Information Systems (ECDIS)*, Resolution MSC.232(82). IMO, London.
-- US Code of Federal Regulations. 14 CFR Part 77, *Safe, Efficient Use, and Preservation of the Navigable Airspace*; 14 CFR Part 107, *Small Unmanned Aircraft Systems* (§107.51).
+- US Code of Federal Regulations (current). 14 CFR Part 77, *Safe, Efficient Use, and Preservation of the Navigable Airspace*; 14 CFR Part 107, *Small Unmanned Aircraft Systems* (§107.51).

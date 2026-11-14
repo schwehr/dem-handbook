@@ -19,7 +19,7 @@ The phrase **fitness for use** entered geographic information science through Ch
 
 Each element is reported as a **measure** (e.g. RMSE$_z$, percentage of voids), evaluated by a **procedure** (direct external, direct internal, or indirect) and given a **result** with a **scope** (the whole dataset, a tile, a land-cover class). ISO 19157's usability element is the formal hook: a conformance statement says that for a *specified* use, with *specified* thresholds on *specified* elements, the dataset does or does not conform. That is the structure this chapter uses.
 
-The distinction between **"true"** and **"useful"** underlies everything that follows. A DEM is never true; it is a model with error. It is useful when the error it has does not change the decision it supports. A 30 m DSM with a 5 m RMSE$_z$ is useful for model orography at 10 km, useless for a floodplain, and actively misleading for sea-level-rise exposure (Gesch 2018). A 10 cm-accurate lidar DTM on a project datum is useful for a cut/fill quantity and useless for merging into a regional flood model until its datum is resolved. Fitness for use is the mapping from the error you have to the decision you are making; the rest of the chapter is about making that mapping explicit.
+The distinction between **"true"** and **"useful"** underlies everything that follows (Fisher and Tate 2006). A DEM is never true; it is a model with error, useful when its error does not change the decision it supports. A 30 m DSM with a 5 m RMSE$_z$ is useful for model orography at 10 km, useless for a floodplain, and actively misleading for sea-level-rise exposure (Gesch 2018). A 10 cm-accurate lidar DTM on a project datum is useful for a cut/fill quantity and useless for merging into a regional flood model until its datum is resolved. Fitness for use maps the error you have to the decision you are making; the rest of the chapter makes that mapping explicit.
 
 > **Definitions that bite.** *Accuracy* and *resolution* are independent axes, and *quality* is a third thing. A 1 m grid resampled from a 30 m DEM has 1 m resolution in name, 30 m (or worse) effective resolution, and exactly the accuracy of its source — plus interpolation error. A 1 m lidar DTM with a 2 m vertical datum blunder has excellent resolution and precision and is wrong by 2 m everywhere. "High-quality" in a catalogue entry tells you nothing until the element, measure, procedure, and scope are stated ([Chapter 4](ch04-names-and-definitions.md), [Chapter 5](ch05-error-and-uncertainty.md)).
 
@@ -27,9 +27,9 @@ The distinction between **"true"** and **"useful"** underlies everything that fo
 
 A complete requirement specifies a value, or a tolerance, for each of the following dimensions. Any dimension left unspecified will be decided by whoever produces the data — on cost grounds.
 
-**Surface type.** DTM (bare earth), DSM (first reflective surface), both, nDSM/CHM (their difference), a *reflective surface* consistent with a particular sensor (for terrain-referenced navigation), a *conservative* surface (never shallower/lower than truth, for navigation and TAWS), or a *topobathymetric* seamless surface. The requirement must also say how **buildings, bridges, culverts, water bodies, and vegetation** are treated, because "bare earth" has at least four defensible definitions at a bridge ([Chapter 32](ch32-dsm-to-dtm.md), [Chapter 34](ch34-water-in-dems.md)).
+**Surface type.** DTM (bare earth), DSM (first reflective surface), both, nDSM/CHM (their difference), a *reflective surface* consistent with a particular sensor (for terrain-referenced navigation), a *conservative* surface (never shallower/lower than truth, for navigation and TAWS), or a *topobathymetric* seamless surface (Guth et al. 2021). State how **buildings, bridges, culverts, water bodies, and vegetation** are treated, because "bare earth" has at least four defensible definitions at a bridge ([Chapter 32](ch32-dsm-to-dtm.md), [Chapter 34](ch34-water-in-dems.md)).
 
-**Nominal and effective resolution.** Nominal resolution is the cell size or post spacing; **effective resolution** is the smallest feature the data actually resolve, which depends on the measurement footprint, point density, filtering, and interpolation ([Chapter 44](ch44-resolution-and-sampling.md)). Specify the latter by the smallest feature that must be resolved and its minimum dimension, and derive the cell size from it (§3.5); specify the source **point density** (pulses/m²) or footprint rather than the grid alone. The USGS Lidar Base Specification does this with Quality Levels: QL1 ≥ 8 pulses/m², QL2 ≥ 2 pulses/m², QL3 ≥ 0.5 pulses/m², each paired with an accuracy class.
+**Nominal and effective resolution.** Nominal resolution is the cell size or post spacing; **effective resolution** is the smallest feature the data actually resolve, which depends on the measurement footprint, point density, filtering, and interpolation ([Chapter 44](ch44-resolution-and-sampling.md)). Specify the latter by the smallest feature that must be resolved and its minimum dimension, and derive the cell size from it (§3.5); specify source **point density** (pulses/m²) or footprint rather than the grid alone. The USGS Lidar Base Specification (Heidemann 2018) does this with Quality Levels: QL1 ≥ 8 pulses/m², QL2 ≥ 2 pulses/m², QL3 ≥ 0.5 pulses/m², each paired with an accuracy class.
 
 **Vertical and horizontal accuracy and its spatial structure.** State the statistic (RMSE$_z$, LE95, NVA/VVA, TVU/THU), the confidence level, the land-cover or depth stratification, the test procedure, and the minimum number of checkpoints. State separately the tolerances for **bias** (mean error) and for **spatially correlated error** (strip offsets, tilts, long-wavelength undulations), because the common statistics do not constrain them and because they dominate volumes, change detection, and hydrologic integrals. State horizontal accuracy, which lidar and bathymetric products often omit — yet on a 30° slope a 0.5 m horizontal error is a 0.29 m vertical error (§Mathematics).
 
@@ -51,7 +51,7 @@ A complete requirement specifies a value, or a tolerance, for each of the follow
 
 The requirement dimensions are not independent of the use; the use decides which one dominates. Eight uses, chosen for the way they conflict:
 
-**Hydrologic modelling — connectivity over absolute accuracy.** A watershed model is insensitive to a uniform 1 m datum offset and extremely sensitive to a single 0.3 m error at a culvert that turns a channel into a dam. The dominant requirement is *logical consistency* (hydrologic connectivity after enforcement), followed by effective resolution adequate to channels and embankments, with absolute accuracy a distant third. A DTM that fails NVA by 5 cm but is hydro-enforced beats one that passes and is not ([Chapter 61](ch61-hydrology.md)).
+**Hydrologic modelling — connectivity over absolute accuracy.** A watershed model is insensitive to a uniform 1 m datum offset and extremely sensitive to a single 0.3 m culvert error that turns a channel into a dam (Wechsler 2007). The dominant requirement is *logical consistency* (hydrologic connectivity after enforcement), followed by effective resolution adequate to channels and embankments, with absolute accuracy a distant third. A DTM that fails NVA by 5 cm but is hydro-enforced beats one that passes and is not ([Chapter 61](ch61-hydrology.md)).
 
 **Ship navigation — shoalest point, no false deeps.** The requirement is asymmetric: an error toward shallow costs cargo capacity; an error toward deep costs a ship. Hence conservative surfaces, feature detection, 95 % TVU, and a datum (chart datum) chosen so that the real water is almost always deeper than charted. Unbiased statistics are the wrong statistics; the requirement is on the *tail* ([Chapter 62](ch62-navigation-and-charting.md)).
 
@@ -173,11 +173,11 @@ Two tests of whether the requirement is well written: (a) could it be met by a p
 > slope = np.hypot(gx, gy)
 > aspect = np.arctan2(-gx, gy)                      # radians, 0 = north
 > ok = np.isfinite(dh) & (slope > 0.05) & (np.abs(dh) < 20)
-> # Model: dh / tan(slope) = a*cos(aspect) + b*sin(aspect) + c
-> A = np.c_[np.cos(aspect[ok]), np.sin(aspect[ok]), np.ones(ok.sum())]
+> # Model: dh / tan(slope) = a*cos(aspect) + b*sin(aspect) + dz / tan(slope)
+> A = np.c_[np.cos(aspect[ok]), np.sin(aspect[ok]), 1.0 / slope[ok]]
 > y = dh[ok] / slope[ok]
-> a_, b_, c_ = np.linalg.lstsq(A, y, rcond=None)[0]
-> print(f"shift north={a_:.2f} m, east={b_:.2f} m; dz bias={c_*np.mean(slope[ok]):.2f} m")
+> a_, b_, dz_ = np.linalg.lstsq(A, y, rcond=None)[0]
+> print(f"shift north={a_:.2f} m, east={b_:.2f} m; dz bias={dz_:.2f} m")
 > ```
 >
 > Expected outcome: for two well co-registered DEMs the fitted shifts are below a fraction of a cell. A shift of 0.5–2 m with a sinusoidal dependence of $\Delta h/\tan\beta$ on aspect is the signature of a horizontal mis-registration that no checkpoint on flat ground would reveal — and a reason to include slope-stratified checks in the requirement. The `xdem` package (`xdem.coreg.NuthKaab`) does this robustly and iteratively.
@@ -188,7 +188,7 @@ Fitness for use was not always a question anyone could ask. When a national mapp
 
 - **Accuracy standards for maps (1940s–1990s).** The US National Map Accuracy Standards (1947) stated vertical accuracy as a fraction of the contour interval tested at 90 %; the equivalent national standards elsewhere were similar. Accuracy was a property of the sheet, tested once, and resolution was the scale. This is the regime in which Chrisman (1991) and Veregin (1999) wrote: they were arguing that this single number could not serve the new digital uses.
 - **Digital standards (1998–2014).** The FGDC National Standard for Spatial Data Accuracy (1998) replaced the contour-interval rule with RMSE and 95 % statistics for digital data; ASPRS lidar guidelines (2004) added land-cover stratification (the "fundamental", "supplemental", and "consolidated" vertical accuracies that became NVA/VVA); IHO S-44 Ed. 4 (1998) introduced the $\sqrt{a^2 + (bd)^2}$ TVU formula and Ed. 5 (2008) the TPU philosophy. ISO 19113/19114/19138 (2002–2006) defined the data-quality elements later consolidated into ISO 19157 (2013). Requirements became explicit, but still mostly about absolute positional accuracy.
-- **Quality levels and program specifications (2012–).** The USGS Lidar Base Specification (2012; v2.1 2020; 2024 online) tied point density, accuracy, classification, and hydro-flattening into named Quality Levels, so that a user could specify "QL2" and mean a bundle of dimensions; the National Enhanced Elevation Assessment (Dewberry 2012) had derived the QL needed by each of several hundred uses. ASPRS Positional Accuracy Standards (2014; Ed. 2, 2023) added horizontal accuracy for lidar, checkpoint minimums by project area, and removed the practice of discarding outliers.
+- **Quality levels and program specifications (2012–).** The USGS Lidar Base Specification (2012; v2.1 2020; 2024 rev. A / 2025 rev. A online) tied point density, accuracy, classification, and hydro-flattening into named Quality Levels, so that a user could specify "QL2" and mean a bundle of dimensions; the National Enhanced Elevation Assessment (Dewberry 2012) had derived the QL needed by each of several hundred uses. ASPRS Positional Accuracy Standards (2014; Ed. 2, 2023/2024) added horizontal accuracy for lidar, checkpoint minimums by project area, and removed the practice of discarding outliers.
 - **Uncertainty as a deliverable (2000s–).** BAG (2006) and S-102 made per-node uncertainty part of the product; TanDEM-X shipped a height-error map; ICESat-2 ships per-photon confidence. The requirement conversation moved from "how accurate is it" to "how well does it know how accurate it is."
 - **Fitness for use for machine learning (2020s).** Training-data consistency, provenance, and label definitions became requirement dimensions as ML products (FABDEM, CoastalDEM, learned ground filters) entered operational use; the data-quality elements of ISO 19157 are being stretched to cover them, and the open problem of how to validate a learned product for a use it was not trained for is where [Chapter 73](ch73-open-problems.md) picks up.
 
@@ -237,7 +237,7 @@ Validating fitness for use means validating *against the requirement*, dimension
 1. *Document review.* Compare the delivered metadata against each requirement dimension; a dimension absent from the metadata is non-conformant until shown otherwise.
 2. *Surface-type audit.* Profiles across forest, buildings, bridges, water; difference against any trusted reference stratified by land cover; mean difference by canopy-height class.
 3. *Resolution audit.* Measure effective resolution directly — e.g. the width of the narrowest resolved linear feature, or the spectral roll-off of the DEM compared with a finer reference ([Chapter 44](ch44-resolution-and-sampling.md)); confirm point density from the point cloud, not the grid.
-4. *Accuracy test.* Independent checkpoints by stratum, with RMSE, mean error, and 95 % statistic per ASPRS Ed. 2 or S-44; strip/swath overlap statistics for relative accuracy; the slope-aspect co-registration test (§3.7 Try it) for horizontal error.
+4. *Accuracy test.* Independent checkpoints by stratum, with RMSE, mean error, and 95 % statistic per ASPRS Ed. 2 or S-44 (Mesa-Mingorance and Ariza-López 2020; Polidori and El Hage 2020); strip/swath overlap statistics for relative accuracy; the slope-aspect co-registration test (§3.7 Try it) for horizontal error.
 5. *Completeness test.* Void map and fill flags; object-detection trials; obstacle comparison against an independent list.
 6. *Temporal test.* Acquisition dates against the window and against known change events; leaf/snow/tide state from imagery of the same dates.
 7. *Datum test.* Occupy at least one benchmark of the target datum with the product's own positioning chain; compare the product at that point; verify the geoid/separation model version in the processing logs.
@@ -264,8 +264,8 @@ Validating fitness for use means validating *against the requirement*, dimension
 ## Standards & guides
 
 - **ISO 19157:2013 / ISO 19157-1:2023, *Geographic information — Data quality*** — the elements, measures, and conformance structure used throughout this chapter.
-- **ASPRS Positional Accuracy Standards for Digital Geospatial Data, Edition 2 (2023)** — NVA/VVA, horizontal accuracy for lidar, checkpoint numbers and distribution, accuracy classes.
-- **USGS Lidar Base Specification** (online edition, 2024; v2.1 2020) — Quality Levels QL0–QL3 as bundled requirements.
+- **ASPRS Positional Accuracy Standards for Digital Geospatial Data, Edition 2 (Version 1.0, 2023; Version 2, June 2024)** — NVA/VVA, horizontal accuracy for lidar, checkpoint numbers and distribution, accuracy classes.
+- **USGS Lidar Base Specification** (online edition, 2024 rev. A / 2025 rev. A; v2.1 2020) — Quality Levels QL0–QL3 as bundled requirements.
 - **IHO S-44 Ed. 6.x (2020/2022)** — orders as bundled requirements for bathymetry (TVU, THU, feature detection, coverage).
 - **ICAO Annex 15 and PANS-AIM (Doc 10066)** — terrain and obstacle data areas 1–4 with post spacing, accuracy, and confidence requirements.
 - **FEMA Guidelines and Standards for Flood Risk Analysis and Mapping — Elevation Guidance** (November 2022 revision; continuously maintained) — the flood-study requirement expressed in QLs.
@@ -300,21 +300,21 @@ Validating fitness for use means validating *against the requirement*, dimension
 
 ## References
 
-- ASPRS (2023). *ASPRS Positional Accuracy Standards for Digital Geospatial Data*, Edition 2, Version 1.0. American Society for Photogrammetry and Remote Sensing.
+- ASPRS (2023). *ASPRS Positional Accuracy Standards for Digital Geospatial Data*, Edition 2, Version 1.0 (Version 2, June 2024). American Society for Photogrammetry and Remote Sensing.
 - Chrisman, N. R. (1991). The error component in spatial data. In: Maguire, D. J., Goodchild, M. F., Rhind, D. W. (eds.), *Geographical Information Systems: Principles and Applications*, Vol. 1, pp. 165–174. Harlow: Longman.
 - Dewberry (2012). *National Enhanced Elevation Assessment — Final Report*. Prepared for the U.S. Geological Survey. Fairfax, VA: Dewberry.
 - FGDC (1998). *Geospatial Positioning Accuracy Standards, Part 3: National Standard for Spatial Data Accuracy*. FGDC-STD-007.3-1998. Federal Geographic Data Committee.
-- Fisher, P. F., Tate, N. J. (2006). Causes and consequences of error in digital elevation models. *Progress in Physical Geography* 30(4):467–489.
-- Gesch, D. B. (2018). Best practices for elevation-based assessments of sea-level rise and coastal flooding exposure. *Frontiers in Earth Science* 6:230.
-- Guth, P. L., Van Niekerk, A., Grohmann, C. H., Muller, J.-P., Hawker, L., Florinsky, I. V., Gesch, D., Reuter, H. I., Herrera-Cruz, V., Riazanoff, S., López-Vázquez, C., Carabajal, C. C., Albinet, C., Strobl, P. (2021). Digital elevation models: Terminology and definitions. *Remote Sensing* 13(18):3581.
-- Heidemann, H. K. (2018). *Lidar Base Specification* (ver. 2.1). U.S. Geological Survey Techniques and Methods 11-B4. (Superseded by the online edition, 2024.)
-- Hengl, T. (2006). Finding the right pixel size. *Computers & Geosciences* 32(9):1283–1298.
+- Fisher, P. F., Tate, N. J. (2006). Causes and consequences of error in digital elevation models. *Progress in Physical Geography* 30(4):467–489. doi:10.1191/0309133306pp492ra
+- Gesch, D. B. (2018). Best practices for elevation-based assessments of sea-level rise and coastal flooding exposure. *Frontiers in Earth Science* 6:230. doi:10.3389/feart.2018.00230
+- Guth, P. L., Van Niekerk, A., Grohmann, C. H., Muller, J.-P., Hawker, L., Florinsky, I. V., Gesch, D., Reuter, H. I., Herrera-Cruz, V., Riazanoff, S., López-Vázquez, C., Carabajal, C. C., Albinet, C., Strobl, P. (2021). Digital elevation models: Terminology and definitions. *Remote Sensing* 13(18):3581. doi:10.3390/rs13183581
+- Heidemann, H. K. (2012, ver. 2.1 2018). *Lidar Base Specification*. U.S. Geological Survey Techniques and Methods 11-B4. doi:10.3133/tm11B4 (Superseded by the online edition, 2024 rev. A / 2025 rev. A.)
+- Hengl, T. (2006). Finding the right pixel size. *Computers & Geosciences* 32(9):1283–1298. doi:10.1016/j.cageo.2005.11.008
 - IHO (2020, 2022). *S-44 Standards for Hydrographic Surveys*, Edition 6.0.0 / 6.1.0. Monaco: International Hydrographic Organization.
 - ISO (2013). *ISO 19157:2013 Geographic information — Data quality*. Geneva: International Organization for Standardization. (Revised as ISO 19157-1:2023.)
-- Kulp, S. A., Strauss, B. H. (2019). New elevation data triple estimates of global vulnerability to sea-level rise and coastal flooding. *Nature Communications* 10:4844.
-- Mesa-Mingorance, J. L., Ariza-López, F. J. (2020). Accuracy assessment of digital elevation models (DEMs): A critical review of practices of the past three decades. *Remote Sensing* 12(16):2630.
-- Nuth, C., Kääb, A. (2011). Co-registration and bias corrections of satellite elevation data sets for quantifying glacier thickness change. *The Cryosphere* 5(1):271–290.
-- Polidori, L., El Hage, M. (2020). Digital elevation model quality assessment methods: A critical review. *Remote Sensing* 12(21):3522.
+- Kulp, S. A., Strauss, B. H. (2019). New elevation data triple estimates of global vulnerability to sea-level rise and coastal flooding. *Nature Communications* 10:4844. doi:10.1038/s41467-019-12808-z
+- Mesa-Mingorance, J. L., Ariza-López, F. J. (2020). Accuracy assessment of digital elevation models (DEMs): A critical review of practices of the past three decades. *Remote Sensing* 12(16):2630. doi:10.3390/rs12162630
+- Nuth, C., Kääb, A. (2011). Co-registration and bias corrections of satellite elevation data sets for quantifying glacier thickness change. *The Cryosphere* 5(1):271–290. doi:10.5194/tc-5-271-2011
+- Polidori, L., El Hage, M. (2020). Digital elevation model quality assessment methods: A critical review. *Remote Sensing* 12(21):3522. doi:10.3390/rs12213522
 - Veregin, H. (1999). Data quality parameters. In: Longley, P. A., Goodchild, M. F., Maguire, D. J., Rhind, D. W. (eds.), *Geographical Information Systems: Principles and Technical Issues*, 2nd ed., Vol. 1, pp. 177–189. New York: Wiley.
-- Wechsler, S. P. (2007). Uncertainties associated with digital elevation models for hydrologic applications: a review. *Hydrology and Earth System Sciences* 11:1481–1500.
-- Zhang, W., Montgomery, D. R. (1994). Digital elevation model grid size, landscape representation, and hydrologic simulations. *Water Resources Research* 30(4):1019–1028.
+- Wechsler, S. P. (2007). Uncertainties associated with digital elevation models for hydrologic applications: a review. *Hydrology and Earth System Sciences* 11:1481–1500. doi:10.5194/hess-11-1481-2007
+- Zhang, W., Montgomery, D. R. (1994). Digital elevation model grid size, landscape representation, and hydrologic simulations. *Water Resources Research* 30(4):1019–1028. doi:10.1029/93WR03553
