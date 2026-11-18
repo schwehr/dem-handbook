@@ -16,12 +16,12 @@ Figures are still placeholders.
 
 | Item | Value |
 |---|---|
-| Chapters | 73 files, 578,575 words (`wc -w chapters/*.md`) |
-| Appendices | 9 files (A–I), 45,614 words (`wc -w appendices/*.md`) |
-| Total | 82 files, 624,189 words |
-| Figure placeholders (`<!-- figure: … -->`) | 186 |
+| Chapters | 73 files, 581,439 words (`wc -w chapters/*.md`) |
+| Appendices | 9 files (A–I), 45,837 words (`wc -w appendices/*.md`) |
+| Total | 82 files, 627,276 words |
+| Figure placeholders (`<!-- figure: … -->`) | 187 |
 | Remaining `(verify)` flags | 0 across all 73 chapters and 9 appendices (`check_facts.py`) |
-| Chapters over 8,500 words | 18 (see below) |
+| Chapters over 8,500 words | 19 (see below) |
 
 ## How to navigate
 
@@ -60,7 +60,7 @@ placeholders. `check_xrefs.py` reports 0 issues across all 82 files.
 ### Chapters currently over 8,500 words
 
 ch01, ch04, ch05, ch06, ch07, ch09, ch10, ch12, ch21, ch55, ch56, ch57, ch58,
-ch59, ch60, ch65, ch66, ch67 (18 chapters; the longest is ch59 at 9,947 words).
+ch59, ch60, ch63, ch65, ch66, ch67 (19 chapters; the longest is ch59 at 9,947 words).
 They are complete and reviewed; trimming is an editorial choice, not a defect.
 
 ## Conventions
@@ -87,13 +87,13 @@ They are complete and reviewed; trimming is an editorial choice, not a defect.
 
 ## Known limitations / next steps
 
-1. **Figures.** All 186 figures are `<!-- figure: … -->` placeholders with
+1. **Figures.** All 187 figures are `<!-- figure: … -->` placeholders with
    captions; none has been drawn.
 2. **Verification status.** The three-model Hydrogen/Argon/Carbon audit and
    Crossref DOI pass resolved all 106 original "(verify)" flags, confirmed DOIs,
    and checked editions in Appendix D against IHO/ASPRS/OGC/USGS/NOAA registries;
    keep a BibTeX export synchronized if generating print builds.
-3. **Long chapters.** Eighteen chapters exceed 8,500 words (list above);
+3. **Long chapters.** Nineteen chapters exceed 8,500 words (list above);
    decide whether to split, trim, or accept.
 4. **Appendix J (learning pathways / certification)** was deferred — see the
    open decisions in Appendix I (gap review), which also lists the remaining

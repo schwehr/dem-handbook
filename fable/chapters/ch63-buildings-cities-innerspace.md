@@ -2,7 +2,7 @@
 
 > **Part XIV — Domain deep dives.** The built environment, where "the surface" is a stack of surfaces, where the definition of a building decides its height, and where the most valuable spaces—under roads, inside buildings, below the street—are invisible to every sensor that looks down.
 
-**In this chapter.** Cities break the assumptions that make a DEM simple: one elevation per location, a clear line between ground and object, and a surface that stays put between surveys. You will be able to state what a building is for a given product—footprint rule, minimum size, attached structures, and above all which height reference (eave, ridge, mean roof, a percentile) the model reports—and why two correct models of the same city differ by meters; read CityGML and CityJSON levels of detail as specifications with known volume errors; explain how national programs such as the Dutch 3D BAG generate LoD1 and LoD2 models from lidar and footprints at scale; decide what "ground under a building" means for a city DTM; represent roads that pass under buildings and over other roads without forcing them into one surface; relate indoor models (IndoorGML, IFC/BIM) and underground utilities (ASCE 38-22 quality levels) to outdoor DEMs through registration you can test; and validate a city model per building, per LoD, and per epoch with tools such as val3dity.
+**In this chapter.** Cities break the assumptions that make a DEM simple: one elevation per location, a clear line between ground and object, and a surface that stays put between surveys. You will be able to state what a building is for a given product—footprint rule, minimum size, attached structures, and above all which height reference (eave, ridge, mean roof, a percentile) the model reports—and why two correct models of the same city differ by meters; tell 2D, 2.5D, 2.75D, and 3D building data apart by what each can represent; say where a building's bottom is, and how that depends on the DTM; read CityGML and CityJSON levels of detail as specifications with known volume errors; explain how national programs such as the Dutch 3D BAG generate LoD1 and LoD2 models from lidar and footprints at scale; decide what "ground under a building" means for a city DTM; represent roads that pass under buildings and over other roads without forcing them into one surface; relate indoor models (IndoorGML, IFC/BIM) and underground utilities (ASCE 38-22 quality levels) to outdoor DEMs through registration you can test; and validate a city model per building, per LoD, and per epoch with tools such as val3dity.
 
 ## 63.1 What is a building?
 
@@ -10,13 +10,76 @@ Every building dataset embodies a definition, and the definitions differ in ways
 
 **Minimum size** rules (typically 10–25 m² in national mapping; OSM has none) decide whether sheds, kiosks, and bus shelters are buildings. **Attached and ambiguous structures**—carports, canopies, greenhouses, covered walkways, ruins, buildings under construction, mobile homes, storage tanks—are included or excluded differently by every specification, and the differences show up directly as commission and omission errors when two datasets are compared ([Chapter 42](ch42-object-detection-semantics.md)). A rule such as "roofed, walled on at least three sides, permanent, ≥ 15 m² footprint" is typical, and the dataset's documentation should say so.
 
-**Height references** are where the definitions bite hardest. Biljecki, Ledoux, and Stoter (2014, 2016) catalogued the choices in common use for the single height of an LoD1 block model and showed how far they diverge: height to the **eave** (lowest roof edge), to the **ridge** (highest point), to the **mean roof** height, to the **median** or a **percentile** (e.g., the 50th or 70th percentile of roof lidar points), or to the roof's centroid; and the base can be the lowest ground point around the footprint, the highest, the mean, or the elevation at the main entrance. For a gabled house with a 4 m eave-to-ridge difference, the "building height" ranges over 4 m depending on the pair of choices, the LoD1 block's volume over roughly ± 30 %, and any application that consumes volume—energy demand, population estimates, noise barriers—inherits that spread. There is no right reference; there are documented and undocumented ones. The CityGML 3.0 `Height` property carries both a `highReference` and a `lowReference` attribute precisely so that the choice is explicit, and the 3D BAG delivers several heights per building (ground level as a percentile, roof heights at the 50th, 70th, max, and min percentiles) so the user can pick.
+**Height references** are where the definitions bite hardest. Biljecki, Ledoux, and Stoter (2014, 2016) catalogued the choices in common use for the single height of an LoD1 block model and showed how far they diverge: height to the **eave** (lowest roof edge), to the **ridge** (highest point), to the **mean roof** height, to the **median** or a **percentile** (e.g., the 50th or 70th percentile of roof lidar points), or to the roof's centroid; and the base can be the lowest ground point around the footprint, the highest, the mean, or the elevation at the main entrance. For a gabled house with a 4 m eave-to-ridge difference, the "building height" ranges over 4 m depending on the pair of choices, the LoD1 block's volume over roughly ± 30 %, and any application that consumes volume—energy demand, population estimates, noise barriers—inherits that spread. There is no right reference; there are documented and undocumented ones. The CityGML 3.0 `Height` property carries both a `highReference` and a `lowReference` attribute precisely so that the choice is explicit, and the 3D BAG delivers several heights per building (ground level as a percentile, roof heights at the 50th, 70th, max, and min percentiles) so the user can pick. Sections 63.1.2 and 63.1.3 catalogue the tops and the bottoms in use.
 
 **Roof shapes** (flat, gabled, hipped, mansard, shed, complex) matter for LoD2 modeling and for the applications that use roof planes (solar, drainage), and their classification from lidar depends on point density: at 2 points/m² a 6 m × 8 m gable roof has about 100 points, enough to fit two planes; a dormer has ten, not enough.
 
 > **Definitions that bite.** *Building height* in a national statistics table, an LoD1 city model, a tax assessment, a planning code, and an aviation obstacle database are five different numbers for the same structure: respectively perhaps the number of storeys × 3 m, the 70th-percentile roof height above the 5th-percentile ground, the eave height above the main entrance, the parapet height above the average grade, and the top of the rooftop antenna above mean sea level. Compare heights across datasets only after translating both to one reference, and expect residual differences of 1–3 m from the translation itself.
 
 <!-- figure: Figure 63.1 — One gabled building with an attached garage and rooftop equipment, annotated with roof-outline vs wall-base footprints, eave/ridge/mean/percentile heights, three candidate ground references, and the LoD0–LoD3 representations of the same building. -->
+
+### 63.1.1 How many dimensions? 2D, 2.5D, 2.75D, 3D
+
+Dimension labels on building data are used loosely, and one label names different things in different communities. Classify a dataset by what it can represent, not by the label on its download page.
+
+| Label | What is stored | Represents | Cannot represent | Typical building data |
+|---|---|---|---|---|
+| **2D** | Footprint polygon | Plan position, area | Any height | Cadastral and image-derived footprints |
+| **2D + attribute** (often sold as "2.5D" or "3D") | Polygon plus scalars: height, storeys, roof height | A prism, at render time | Roof shape; which height the scalar means | OSM `height` and `building:levels`; most footprint-with-height files |
+| **2.5D field** | One $z$ per $(x, y)$: raster or TIN | Roof tops as a height field | Vertical walls (they become steep slopes one cell wide), overhangs, anything under a roof | DSM, nDSM, gridded building-height rasters |
+| **2.5D vector** | Planar geometry with a Z per vertex, or a horizontal polygon at a stated level | An outline at its elevation | Vertical faces; two Z values at one XY | CityGML LoD0 footprint and roof-edge polygons; Simple Features `PolygonZ` ([Chapter 59](ch59-vector-data.md)) |
+| **2.75D** (also "2.8D") | One surface, a 2-manifold that need not project to the plane | Vertical walls, overhangs, arcades, tunnel mouths | Interiors and volumes: no object has an inside | Photogrammetric meshes, in effect; rare in GIS software |
+| **Layered 2.5D** | Several labelled single-valued surfaces | Stacked decks, a road under a building | Arbitrary geometry | §63.4 |
+| **3D (volumetric)** | Closed solids (boundary representation), voxels, or constructive solids | Volume, inside and outside, a bottom face | Nothing in principle; validity is the cost (§63.9) | CityGML/CityJSON LoD1–LoD3 solids; IFC |
+| **4D** | Any of the above, per epoch | Construction, demolition, alteration | — | Versioned city models (§63.6) |
+
+**2.5D** alone has at least three meanings. To a terrain modeler it is the single-valued field $z = f(x, y)$ ([Chapter 46](ch46-data-models.md)). To a vector GIS it is planar geometry carrying Z coordinates, with predicates still computed in the plane. To a city modeler it is a footprint with a height: CityGML LoD0 is described as 2.5D horizontal polygons at footprint level and optionally at roof level (Gröger and Plümer 2012), and block models extruded from footprints are widely called 2.5D as well. A specification that says "2.5D buildings" has not yet said which.
+
+**2.75D** names the gap between a height field and a solid. Ledoux et al. (2026) define it as a surface that, unlike the 2.5D case, is not restricted to be projectable to the plane, so more than one $z$ is allowed at a location and vertical walls are possible; the surface is the exterior of all objects together. They credit Tse and Gold (2004) with coining "2.75D GIS" for a triangulation extended with holes for tunnels, cliffs, and caves, and note that Gröger and Plümer (2005) call the same idea "2.8D". The fractions are not measurements—"more than 2.5D, less than 3D" is the whole derivation—so treat any fractional label by asking what it can represent.
+
+**Dimension and level of detail are separate axes.** An LoD1 block is a valid 3D solid that carries no more information than a 2D footprint and one number. In the Biljecki et al. (2016) refinement, LoD1.3 permits several top surfaces but never two at the same planar coordinate, so its top is still a single-valued step function; in LoD2.0–2.2 roof overhangs are optional, and walls are commonly dropped from the roof edge; only LoD2.3 requires overhangs longer than 0.2 m to be modeled, so that roof edge and footprint each sit at their true location and the model stops being single-valued. Three questions settle what you have: can it hold two elevations at one $(x, y)$? Does each building have a bottom face? Does it have an interior? Many datasets sold as "3D buildings" answer no to all three.
+
+<!-- figure: Figure 63.2 — One cross-section through a house with a roof overhang, an arcade, and a basement, drawn six times: as a 2D footprint, 2D + height attribute, 2.5D height field (walls smeared into slopes), 2.75D surface (walls and overhang, no interior), LoD1/LoD2 solids (with a flat bottom face), and a full 3D model with basement and interior. -->
+
+### 63.1.2 The top: a catalogue of height definitions
+
+A building height is three decisions—the **top reference**, the **bottom reference**, and **what counts as the building** (roof equipment, spires, antennas; §63.6)—plus a fourth that is often forgotten: whether the number is a *height* (a difference) or the *elevation* of the top in a vertical datum ([Chapter 9](ch09-vertical-datums.md)). None of the definitions below is wrong, and no two agree.
+
+| Source | Top | Bottom | Note |
+|---|---|---|---|
+| INSPIRE Buildings code list; CityGML 3.0 `Height` | One of 16 `ElevationReferenceValue` codes, e.g. `lowestEave`, `generalEave`, `generalRoof`, `highestRoofEdge`, `topOfConstruction`, `highestPoint` (includes chimneys and antennas) | `lowestGroundPoint`, `highestGroundPoint`, `generalGround`, `entrancePoint`, `lowestFloorAboveGround`, `bottomOfConstruction` | Stores the pair and a capture status; prefers no answer |
+| 3D BAG | Roof-surface minimum, 50th and 70th percentile, maximum; ridge height | 5th percentile of ground points within 4 m of the building | Elevations in the national datum; the user subtracts |
+| OSM Simple 3D Buildings | Top of roof, excluding antennas, spires, and roof-mounted equipment | Lowest position with ground contact | `roof:height` splits façade from roof; `min_height` for parts that start above ground |
+| International Building Code | Average height of the highest roof surface | **Grade plane**: average finished ground adjoining the exterior walls | Zoning ordinances define height separately and variously |
+| CTBUH tall-building criteria | Architectural top (spires yes, antennas no); highest occupied floor; tip | Lowest significant open-air pedestrian entrance | Three official heights per tower |
+| Aviation obstacle data | Highest point of anything attached | Ground at the structure (AGL) and a vertical datum (MSL) | [Chapter 59](ch59-vector-data.md), [Chapter 62](ch62-navigation-and-charting.md) |
+| Storey count | Levels × an assumed storey height | Ground floor | ± 1 storey at best |
+| DSM − DTM zonal statistic | Maximum, mean, median, or percentile of the nDSM in the footprint | Interpolated DTM under the footprint | State the statistic and the edge rule |
+| Gridded global products | A cell average, e.g. GHSL's *net* (over built area) and *gross* (over the whole 100 m cell) building height | Implied by the source surfaces | Not a per-building height at all |
+
+> **Worked example.** One house, six heights. A gabled house 10 m × 12 m stands on a 10 % slope: ground at the walls runs from 100.0 m (downhill) to 101.2 m (uphill), mean 100.6 m. The entrance threshold, uphill, is at 101.4 m; the basement floor at 98.9 m; eaves at 106.6 m; ridge at 110.6 m; chimney top at 111.4 m. The mid-roof (and median roof) elevation is (106.6 + 110.6)/2 = 108.6 m.
+>
+> | Definition | Arithmetic | Height |
+> |---|---|---|
+> | Eave above entrance | 106.6 − 101.4 | 5.2 m |
+> | Building-code style: mean roof above grade plane | 108.6 − 100.6 | 8.0 m |
+> | Lidar style: median roof above 5th-percentile ground in a 4 m buffer (≈ 99.7 m) | 108.6 − 99.7 | 8.9 m |
+> | OSM style: roof top above lowest ground contact | 110.6 − 100.0 | 10.6 m |
+> | Obstacle style: highest point above lowest ground | 111.4 − 100.0 | 11.4 m |
+> | Top to bottom of construction | 111.4 − 98.9 | 12.5 m |
+>
+> The spread is 7.3 m for a building whose every surface is known to the centimeter. The top reference accounts for 4.8 m of it (eave to chimney) and the bottom reference for 2.5 m (basement to threshold)—and on this slope the choice among *ground* bottoms alone is worth 1.7 m.
+
+### 63.1.3 The bottom: where a building starts
+
+The bottom gets less attention than the top and is no better defined. The candidates fall into four groups.
+
+- **On the ground surface.** The *lowest* ground point in contact with the building (INSPIRE `lowestGroundPoint`; OSM; FEMA's **lowest adjacent grade**, LAG); the *highest* (`highestGroundPoint`; FEMA's highest adjacent grade); a *general or mean* ground level, of which the building-code grade plane is the formal version (where the ground slopes away from the walls, the International Building Code takes the lowest points within 6 ft, 1.83 m, of the building or to the lot line if closer); a *percentile* of lidar ground points in a buffer (3D BAG); the *entrance* (INSPIRE `entrancePoint`, "generally the bottom of entrance door"; CTBUH). Lowest and highest differ by slope × footprint extent: 1.2 m for a 12 m house on a 10 % slope, 10 m for a 100 m warehouse.
+- **A curve, not a number.** CityGML's **terrain intersection curve** (TIC) is the 3D line along which the terrain touches the building, with one ring per courtyard. It is the only bottom that follows a slope, and it exists to stop buildings floating above or sinking into a terrain model.
+- **Above the ground.** `lowestFloorAboveGround` for buildings on stilts or over arcades; OSM `min_height` for building parts that begin in the air. The space beneath is not building, and a prism extruded from the ground overstates the volume.
+- **Below the ground.** `bottomOfConstruction` (the bottom of the usable part, i.e. the lowest basement floor) and, for structural and geotechnical work, the underside of the foundation. Flood insurance takes a view of its own: FEMA's *lowest floor* includes a basement, so the regulatory bottom of a house can be 2.5 m below anything a lidar sees.
+
+A fifth bottom is an artefact of modeling. An LoD1 or LoD2 solid is closed by a flat, horizontal ground surface at one elevation; on a slope the solid is either buried uphill (if a low ground level is used, as is common, since it keeps the solid from floating) or hangs in the air downhill. Its volume therefore includes a wedge of earth or omits a wedge of building, of size ½ × slope × depth × footprint area: 72 m³ for the house in the worked example, 7 % of the 1,032 m³ block from the 100.0 m base to the median roof.
 
 ## 63.2 City models: LoDs, national programs, and meshes
 
@@ -36,6 +99,22 @@ The question **what is ground under a building** has at least three answers: the
 
 > **Rule of thumb.** In a city DTM derived from airborne lidar, expect the interpolated ground under buildings to be within ± 0.3 m of the true ground-floor threshold for detached buildings on slopes below 5 %, within ± 1 m for row houses and small blocks, and unreliable (several meters) under podiums, large-footprint buildings on slopes, and anything over a cutting or embankment. The rule fails on terraced hillsides (retaining walls make the "surrounding ground" ambiguous) and in cities built on fill or over covered rivers.
 
+### 63.3.1 Does the bottom change when you make a DTM?
+
+Yes, in kind. A building model stores a bottom as a property of the building; a DTM stores no building at all, and what it holds under the footprint is a filled void—interpolated in a lidar DTM, predicted in a modeled one such as FABDEM ([Chapter 32](ch32-dsm-to-dtm.md)). Several consequences follow.
+
+**The DTM is the source of most bottoms, so its rules enter every height.** The on-surface bottoms of §63.1.3 are different samplings of one DTM: its minimum along the building outline (lowest ground point), its maximum (highest), its mean along the outline (general ground, approximating a grade plane), a low percentile in a buffer (3D BAG), its value at the entrance, the outline draped on it (the terrain intersection curve). The mean of the DTM *inside* the footprint—what a zonal statistic of DSM − DTM uses—samples only filled cells. The ground filter's behaviour within a meter or two of the walls, where shrubs, parked cars, steps, and ramps are kept in or thrown out of ground, and the interpolation across the footprint both move the bottom, and so the height, with no change to the building.
+
+**Some bottoms cannot come from a DTM.** Basement floors, underground car parks, and foundations lie below it; the lowest floor of a building on stilts lies above it; a threshold is usually a step above it. These need plans, BIM, or survey (§63.5).
+
+**Open-to-sky sunken features are terrain to a filter.** Light wells, basement stairs, sunken patios, and car-park ramps return ground-like lidar points a storey below the street and are usually classified as ground. A lowest-ground-point bottom then drops by about 3 m, and every height measured from it grows by as much; a low percentile is less sensitive than a minimum, not immune. Decide whether such features are terrain, and say so.
+
+**Finished grade is not natural grade.** A lidar DTM records the graded surface at the survey epoch, cut, fill, and landscaping included. Building-code grade planes use finished ground, but some planning rules measure height from the existing or natural grade so that fill cannot raise the allowance; that surface exists only in a DTM from before construction ([Chapter 37](ch37-time-scales-of-change.md)).
+
+**For flood work the building goes back in.** Water flows straight through a block on a bare-earth DTM, so hydraulic models reinsert buildings as blocks or porosity ([Chapter 61](ch61-hydrology.md)), and damage models need neither the DTM's filled ground nor the lowest ground point but the lowest floor elevation—in FEMA practice, first-floor height above lowest adjacent grade, with a basement counted as the lowest floor.
+
+**Heights and DTMs travel together.** A height above ground is only as portable as its ground. Place heights computed against one DTM on another—a different epoch, resolution, or vertical datum—and each roof elevation inherits the difference between the two terrains at that building, which on steep or regraded sites is meters. Store the roof elevation in a stated datum as well as the height, and name the DTM that supplied the bottom. When a city model ships with a terrain, make the two agree at the terrain intersection curves; CityGML allows the DTM to be warped locally to fit them, which is one more way a "bare-earth" surface near a building comes to depend on the building.
+
 ## 63.4 Roads under buildings, buildings over roads: multi-valued surfaces
 
 A 2.5D surface stores one elevation per $(x, y)$; a city has many. A road passing beneath a building (an air-rights development over a highway, a railway under a station concourse, a covered market street, a parking structure with five decks) has at least two surfaces at the same location, and a DSM/DTM pair represents neither correctly: the DSM shows the building roof, the DTM shows an interpolated ground, and the road—the navigable surface a vehicle or a flood model needs—vanishes from both. Multi-level intersections (stacked interchanges with four levels), tunnels, and underpasses are the same problem at the network scale. [Chapter 35](ch35-voids-and-overhangs.md) treats multi-valued surfaces generically; the urban solutions are three.
@@ -48,7 +127,7 @@ A 2.5D surface stores one elevation per $(x, y)$; a city has many. A road passin
 
 The failure to do any of these shows up as a flood model in which an underpass cannot flood ([Chapter 61](ch61-hydrology.md)), a line-of-sight analysis in which a tunnel portal has a view, a drone geofence that treats a covered road as a building, and a vehicle energy model whose grade profile jumps 8 m at every overpass because the DSM sampled the deck and then the road beneath.
 
-<!-- figure: Figure 63.2 — Cross-section through a city block with an air-rights building over a highway, a railway in a cutting, a parking structure, and a basement; shows what a DSM, a DTM, a "navigable road surface" layer, a network Z-level graph, and an IndoorGML cell graph each represent of the same geometry. -->
+<!-- figure: Figure 63.3 — Cross-section through a city block with an air-rights building over a highway, a railway in a cutting, a parking structure, and a basement; shows what a DSM, a DTM, a "navigable road surface" layer, a network Z-level graph, and an IndoorGML cell graph each represent of the same geometry. -->
 
 ## 63.5 Innerspace: indoor, underground, and the registration problem
 
@@ -146,7 +225,7 @@ Building outlines began as an insurance and tax instrument: the **Sanborn fire-i
 
 Errors in city models arise from four sources that should be reported separately, because they have different fixes.
 
-**Definitional error** is the largest and least recognized: footprint convention (roof outline vs wall base, ± 0.5 m per side), height reference (eave vs ridge vs percentile, up to several meters), inclusion rules for attached structures and rooftop equipment. It is not reduced by better sensors; it is reduced by documentation and by translating all datasets to one convention before comparison. Test for it by comparing two "correct" datasets of the same city and attributing the differences: if the height residual histogram is bimodal with a mode near the typical eave-to-ridge difference, the references differ.
+**Definitional error** is the largest and least recognized: footprint convention (roof outline vs wall base, ± 0.5 m per side), height reference (eave vs ridge vs percentile, up to several meters), bottom reference (lowest vs highest adjacent ground: slope × footprint extent), inclusion rules for attached structures and rooftop equipment. It is not reduced by better sensors; it is reduced by documentation and by translating all datasets to one convention before comparison. Test for it by comparing two "correct" datasets of the same city and attributing the differences: if the height residual histogram is bimodal with a mode near the typical eave-to-ridge difference, the references differ.
 
 **Measurement error** is the lidar or photogrammetric height error on roofs (small: 0.05–0.15 m for lidar on planar roofs) and the much larger error on the *ground* reference under and around buildings (§63.3), which dominates height-above-ground uncertainty on slopes. Test with surveyed thresholds and roof points; report RMSE and the 95th percentile by terrain slope class.
 
@@ -184,6 +263,8 @@ For **indoor and underground** data the uncertainty structure is different: SLAM
 - **ASCE 38-22** *Standard Guideline for Investigating and Documenting Existing Utilities* — quality levels A–D; companion **ASCE 75-22** for recording utility data.
 - **ISO 19107:2019** Spatial schema — the geometric validity rules val3dity implements; **ISO 19152 (LADM)** for 3D cadastre.
 - **AdV (Germany) LoD1/LoD2 product specification** and **Kadaster/3D BAG documentation (NL)**; **swisstopo swissBUILDINGS3D 3.0** specification — national height references and footprint rules.
+- **INSPIRE D2.8.III.2 Data Specification on Buildings – Technical Guidelines (v3.0, 2013)** — the `ElevationReferenceValue` code list of high and low height references that CityGML 3.0 follows.
+- **International Building Code** (ICC; Chapter 2 definitions of *building height* and *grade plane*), **CTBUH Height Criteria**, the **FEMA NFIP Elevation Certificate** (lowest and highest adjacent grade, lowest floor), and the **OSM Simple 3D Buildings** tagging scheme — non-geospatial and community definitions of height and base that building datasets inherit.
 - **USGS Lidar Base Specification** (2024 rev. A; 2025 rev. A, June 2025; building class 6, bridge deck 17, ignored ground 20) — point-cloud classification feeding footprints and DTMs.
 - **GDPR** and national open-data licenses for building-level attributes ([Chapter 68](ch68-legal-issues.md), [Chapter 69](ch69-security-sovereignty-privacy-ethics.md)).
 
@@ -197,6 +278,9 @@ For **indoor and underground** data the uncertainty structure is different: SLAM
 - **Counting rooftop PV, HVAC, or green-roof growth as building height change** → DSM differencing is blind to semantics → classify rooftop equipment; store several roof heights; apply a minimum change area and height.
 - **LoD1 volumes used for energy or population models with ± 30 % error** → height reference and roof shape ignored → use percentile heights near the median, document the reference, or use LoD2 volumes.
 - **Footprints and lidar from different epochs** → reconstruction produces buildings with no points or points with no buildings → check footprint–point agreement per building before reconstruction; reconcile epochs.
+- **Reading "2.5D" or "3D" on a building dataset as a statement of content** → the labels cover footprint-plus-attribute, height fields, and extruded solids alike → ask whether it can hold two elevations at one (x, y), has a bottom face, and has an interior (§63.1.1).
+- **Height above "ground" with the ground unstated** → lowest, highest, mean, percentile, and entrance bottoms differ by slope × footprint extent, and light wells or garage ramps pull a lowest-point bottom down a storey → state the bottom reference and the DTM; compare lowest- and highest-adjacent heights to flag sloping and sunken sites.
+- **Placing heights-above-ground on a different DTM** → roof elevations inherit the difference between the two terrains → store roof elevations in a stated datum alongside heights; keep model and terrain consistent at the terrain intersection curve.
 - **Treating OSM `building:levels` × 3 m as measured height** → levels are crowd-sourced and floor heights vary 2.7–4.5 m → use as a prior with ± 1 storey; prefer lidar where available.
 - **Utility depth from records treated as surveyed** → QL-D records refer to a ground surface that no longer exists → carry the ASCE 38 quality level; convert depths to invert elevations in a datum when exposed.
 - **Flattened or removed sensitive sites mistaken for real terrain** → published models edit security-sensitive areas → check the provider's statement of edits; cross-check with imagery.
@@ -205,6 +289,8 @@ For **indoor and underground** data the uncertainty structure is different: SLAM
 ## Key takeaways
 
 - Define "building" and "ground" per product—footprint convention, minimum size, attached structures, height reference, ground reference—and translate before comparing; the definitional error is usually larger than the measurement error.
+- "2.5D" means a height field, Z-carrying planar vectors, or a footprint with a height, depending on who says it; 2.75D is a surface with walls and overhangs but no insides; an LoD1 solid is 3D geometry holding 2D-plus-one-number information.
+- A building height is a top, a bottom, and an inclusion rule. The bottom—lowest, highest, or mean ground, an entrance, a terrain intersection curve, a basement floor—is mostly sampled from a DTM, so the DTM's filtering and filling under and beside the building are part of every height; basements, stilts, and natural grade cannot come from the DTM at all.
 - CityGML/CityJSON LoDs and the Biljecki sub-levels make the content of a model explicit; LoD1 volume is sensitive to height reference by tens of percent, and the 3D BAG practice of delivering several heights per building is the right answer.
 - Cities are multi-valued: keep separate DTM, DSM, road-surface, and below-ground layers or a 3D network rather than forcing one surface; the road under the building is the case that breaks everything.
 - "Ground under a building" in a DTM is an interpolation; test it against surveyed thresholds, and expect meters of error under podiums and on slopes.
@@ -230,3 +316,12 @@ For **indoor and underground** data the uncertainty structure is different: SLAM
 - American Society of Civil Engineers (2022). *Standard Guideline for Investigating and Documenting Existing Utilities*, ASCE/UESI/CI 38-22. ASCE, Reston, VA. https://doi.org/10.1061/9780784415870
 - Huang, J., Stoter, J., Peters, R., and Nan, L. (2022). City3D: Large-scale building reconstruction from airborne LiDAR point clouds. *Remote Sensing*, 14(9):2254. https://doi.org/10.3390/rs14092254
 - Rottensteiner, F., Sohn, G., Gerke, M., Wegner, J. D., Breitkopf, U., and Jung, J. (2014). Results of the ISPRS benchmark on urban object detection and 3D building reconstruction. *ISPRS Journal of Photogrammetry and Remote Sensing*, 93:256–271. https://doi.org/10.1016/j.isprsjprs.2013.10.004
+- Tse, R. O. C., and Gold, C. (2004). TIN meets CAD—extending the TIN concept in GIS. *Future Generation Computer Systems*, 20(7):1171–1184. https://doi.org/10.1016/j.future.2003.11.007
+- Gröger, G., and Plümer, L. (2005). How to get 3-D for the price of 2-D—topology and consistency of 3-D urban GIS. *GeoInformatica*, 9(2):139–158. https://doi.org/10.1007/s10707-005-6431-2
+- Ledoux, H., Arroyo Ohori, K., Peters, R., and Pronk, M. (2026). *Computational modelling of terrains*, v2026.1. Open textbook, TU Delft; §1.1 Dimensionality of DTMs. https://github.com/tudelft3d/terrainbook
+- INSPIRE Thematic Working Group Buildings (2013). *D2.8.III.2 INSPIRE Data Specification on Buildings – Technical Guidelines*, version 3.0. European Commission Joint Research Centre. (`ElevationReferenceValue` code list: https://inspire.ec.europa.eu/codelist/ElevationReferenceValue)
+- International Code Council (2024). *2024 International Building Code*, Chapter 2: Definitions (*Height, building*; *Grade plane*). ICC, Country Club Hills, IL.
+- Council on Tall Buildings and Urban Habitat (n.d.). *CTBUH Height Criteria for Measuring & Defining Tall Buildings*. CTBUH, Chicago.
+- Federal Emergency Management Agency (2023). *National Flood Insurance Program Elevation Certificate and Instructions*. FEMA, Washington, DC.
+- OpenStreetMap contributors (n.d.). Simple 3D Buildings. *OpenStreetMap Wiki*. https://wiki.openstreetmap.org/wiki/Simple_3D_Buildings
+- Pesaresi, M., and Politis, P. (2023). *GHS-BUILT-H R2023A — GHS building height, derived from AW3D30, SRTM30, and Sentinel-2 composite (2018)*. European Commission, Joint Research Centre.

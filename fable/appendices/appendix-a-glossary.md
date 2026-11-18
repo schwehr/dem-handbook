@@ -32,6 +32,7 @@ Terms used across the handbook, in alphabetical order (acronyms sorted as spelle
 - **BlueTopo** — NOAA's public best-available bathymetric compilation derived from the National Bathymetric Source — *Ch. 48, 55*
 - **Boresight** — angular misalignment between a sensor's axes and the IMU body frame, estimated by calibration — *Ch. 13, 25*
 - **Breakline** — vector line (hard or soft) constraining surface interpolation along edges such as curbs and banks — *Ch. 59*
+- **Building height** — vertical distance from a bottom reference to a top reference of a building — ⚠ meaningless until both references (eave/ridge/percentile/highest point; lowest/mean ground/entrance) and the inclusion rule for roof equipment are stated — *Ch. 59, 63*
 - **Bundle adjustment** — simultaneous least-squares estimation of camera poses, calibration, and 3D points from image observations — *Ch. 22*
 
 ## C
@@ -124,6 +125,7 @@ Terms used across the handbook, in alphabetical order (acronyms sorted as spelle
 - **GeoZarr** — draft OGC convention for geospatial Zarr stores — *Ch. 47*
 - **GNSS** — Global Navigation Satellite Systems (GPS, GLONASS, Galileo, BeiDou) — *Ch. 12*
 - **GRAV-D** — NGS airborne gravity programme underpinning GEOID2022 — *Ch. 7, 73*
+- **Grade plane** — building-code reference plane at the average finished ground level adjoining a building's exterior walls; the base of code-defined building height — ⚠ finished, not natural, grade — *Ch. 63*
 - **Grid registration (pixel-is-area / pixel-is-point)** — whether a cell value refers to the cell centre or the cell area; GeoTIFF RasterPixelIs — ⚠ half-cell shift — *Ch. 10, 47*
 - **Ground filtering** — classification of point-cloud returns as ground vs non-ground — *Ch. 30*
 - **GSD** — ground sample distance; pixel size of imagery on the ground — *Ch. 22, 44*
@@ -185,6 +187,7 @@ Terms used across the handbook, in alphabetical order (acronyms sorted as spelle
 - **Lidar** — light detection and ranging; laser pulse ranging — *Ch. 18, 19*
 - **Lidar Base Specification (LBS)** — USGS requirements for 3DEP lidar deliverables (`2024 rev. A`, Jan 2024; `2025 rev. A`, June 2025; QL0–QL3) — *Ch. 70*
 - **Lineage** — documented history of a dataset's sources and processing — *Ch. 49, 50*
+- **Lowest adjacent grade (LAG)** — FEMA term for the lowest ground elevation touching a building; with highest adjacent grade (HAG) and lowest floor elevation, the flood-insurance description of a building's base — *Ch. 63*
 
 ## M
 
@@ -312,8 +315,11 @@ Terms used across the handbook, in alphabetical order (acronyms sorted as spelle
 
 ## T
 
+- **2.5D** — (i) a single-valued surface $z = f(x, y)$ (raster, TIN); (ii) planar vector geometry carrying a Z per vertex; (iii) a footprint with a height attribute or extrusion — ⚠ three meanings; none can hold two elevations at one location — *Ch. 46, 59, 63*
+- **2.75D** — a surface (2-manifold) not required to project to the plane, so vertical walls and overhangs are allowed but objects have no interior or volume; also "2.8D" — *Ch. 63*
 - **TanDEM-X** — DLR formation-flying X-band InSAR mission; source of the 12 m global DEM and Copernicus DEM — *Ch. 21, 55*
 - **Terrain-aided navigation** — positioning by matching sensed terrain to a stored DEM — *Ch. 14*
+- **Terrain intersection curve (TIC)** — CityGML 3D curve marking exactly where the terrain touches a building or other object; ties a city model to its DTM — *Ch. 63*
 - **THU** — total horizontal uncertainty (IHO, 95 %) — *Ch. 53, 70*
 - **TID** — GEBCO Type Identifier; per-cell source-type code — *Ch. 48, 55*
 - **Tidal datum** — vertical reference defined from tide observations over an epoch — *Ch. 9*

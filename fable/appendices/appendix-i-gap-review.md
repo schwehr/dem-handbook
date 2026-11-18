@@ -149,7 +149,7 @@ The TOC's review section listed forty candidate additions. A heading-level and k
 | 11 | Human factors in manual editing | ✓ | 30.7, 42.8 |
 | 12 | Economics / value of information | ✓ | 28.6 |
 | 13 | Licence NC/SA contamination | ✓ | 68.3, 43.8, H.7 |
-| 14 | 2.5D vs 3D decision aid | ◐ | 46, 63.4; no one-page aid yet |
+| 14 | 2.5D vs 3D decision aid | ◐ | 46, 63.1.1 (2D/2.5D/2.75D/3D table for buildings), 63.4; no one-page aid yet |
 | 15 | Hazard-specific DEM requirements | ◐ | Keywords in 11 chapters; no consolidated section — candidate for 61 |
 | 16 | UNCLOS Art. 121 worked case | ✓ | 68.1, 69 |
 | 17 | Caves, karst, tunnels, subsurface voxels | ◐ | 63.5, 65.6 |
